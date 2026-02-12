@@ -1,18 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { client } from '../../lib/microcms';
+import { getArticles, microcmsEnabled } from '../../lib/content.js';
 
-const data = await client.get({
-  endpoint: 'articles'
-});
-const articles = data.contents;
+const articles = await getArticles();
+const enabled = microcmsEnabled();
 ---
 
 <BaseLayout title="記事一覧">
-<h2>記事一覧</h2>
-<ul>
-  {articles.map(article => (
-    <li><a href={`/articles/${article.slug}/`}>{article.title}</a></li>
-  ))}
-</ul>
+  <h2>記事一覧</h2>
+
+  {!enabled && (
+    <p style="color:#666;">
+      ※ microCMS が未設定のため、サンプル記事を表示しています（デプロイ確認用）。
+    </p>
+  )}
+
+  <ul>
+    {articles.map((article) => (
+      <li><a href={`/articles/${article.slug}/`}>{article.title}</a></li>
+    ))}
+  </ul>
 </BaseLayout>

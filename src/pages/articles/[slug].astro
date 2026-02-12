@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { client } from '../../../lib/microcms';
+
+export async function getStaticPaths() {
+  const data = await client.get({ endpoint: 'articles' });
+  return data.contents.map(article => ({
+    params: { slug: article.slug }
+  }));
+}
+
+const { slug } = Astro.params;
+
+const article = await client.get({
+  endpoint: 'articles',
+  queries: { filters: `slug[equals]${slug}` }
+});
+
+const content = article.contents[0];
+---
+
+<BaseLayout title={content.title}>
+<article>
+  <h2>{content.title}</h2>
+  <div set:html={content.body}></div>
+</article>
+</BaseLayout>

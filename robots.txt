@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-
-Sitemap: https://shiolab.co.jp/sitemap.xml

@@ -1,216 +1,64 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const articles = await getCollection("articles");
+
+// 新しい順
+articles.sort((a,b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const latest = articles.slice(0,6);
+
+// カテゴリ自動抽出
+const categories = [...new Set(
+  articles.map(a => a.data.category)
+)];
 ---
 
 <BaseLayout
-  title="SHIOLAB QUIZ｜4択で学ぶ、解いて覚える学習クイズ"
-  description="SHIOLAB QUIZ は、英検・中学理科/社会・IT系資格などの4択問題を解説つきで反復できる学習サービスです。短時間で続けられる設計で、理解を積み上げます。"
->
+  title="SHIOLAB｜資格・受験・学習の攻略メディア"
+  description="SHIOLABは、資格・受験・学校学習などの“4択試験攻略パターン”を解説する学習メディアです。"
+/>
 
-  <section class="card hero">
-    <h1>4択で学ぶ。解いて覚える。</h1>
-    <p>
-      SHIOLAB QUIZ は、英検・中学理科/社会・IT系資格などの
-      <strong>4択問題を「解説つき」で反復</strong>できる学習サービスです。
-      短時間で回せる設計なので、毎日の学習が続きます。
-    </p>
+<section class="card">
+  <h1>SHIOLAB</h1>
+  <p>
+    SHIOLAB は、資格試験や受験対策における
+    「選択肢の切り方」「瞬時に絞る技術」を体系化する学習メディアです。
+  </p>
+</section>
 
-    <div class="pillRow">
-      <span class="pill">1回あたり最大25問</span>
-      <span class="pill">回答後すぐ解説</span>
-      <span class="pill">苦手を優先出題</span>
-      <span class="pill">端末内で学習履歴</span>
-    </div>
+<h2 style="margin-top:32px;">最新記事</h2>
 
-    <div class="btnRow">
-      <a class="btn" href="https://quiz.shiolab.co.jp/">クイズを開く</a>
-      <a class="btn sub" href="https://quiz.shiolab.co.jp/articles/">学習記事を見る</a>
-    </div>
+<section class="grid">
+  {latest.map(article => (
+    <article class="card">
+      <h3>
+        <a href={`/articles/${article.slug}/`}>
+          {article.data.title}
+        </a>
+      </h3>
+      <p style="font-size:14px; color:#666;">
+        {article.data.description}
+      </p>
+    </article>
+  ))}
+</section>
 
-    <p class="note">
-      ※ クイズ本体は <a href="https://quiz.shiolab.co.jp/">quiz.shiolab.co.jp</a> で提供しています。
-    </p>
-  </section>
+<h2 style="margin-top:40px;">カテゴリ</h2>
 
-  <h2>カテゴリ</h2>
-
-  <section class="categoryGrid">
-    <a class="cat" href="https://quiz.shiolab.co.jp/?category=eiken">
-      <div>
-        <div class="catTitle">英語・英検系</div>
-        <div class="catDesc">語彙・文法・会話問題など</div>
-      </div>
-      <div class="arrow">→</div>
-    </a>
-
-    <a class="cat" href="https://quiz.shiolab.co.jp/?category=jhs_science">
-      <div>
-        <div class="catTitle">中学理科</div>
-        <div class="catDesc">用語・計算・重要ポイント</div>
-      </div>
-      <div class="arrow">→</div>
-    </a>
-
-    <a class="cat" href="https://quiz.shiolab.co.jp/?category=jhs_social">
-      <div>
-        <div class="catTitle">中学社会</div>
-        <div class="catDesc">歴史・地理・公民</div>
-      </div>
-      <div class="arrow">→</div>
-    </a>
-
-    <a class="cat" href="https://quiz.shiolab.co.jp/?category=it_passport">
-      <div>
-        <div class="catTitle">ITパスポート</div>
-        <div class="catDesc">用語・仕組み・基礎知識</div>
-      </div>
-      <div class="arrow">→</div>
-    </a>
-  </section>
-
-  <h2>学習の考え方</h2>
-
-  <section class="card">
-    <p>
-      4択問題は、単に正解を選ぶ練習ではなく、
-      <strong>「どの選択肢がなぜ切れるか」</strong>を理解することで、
-      次に同じ形式が出たときに迷わなくなります。
-    </p>
-
-    <p>
-      SHIOLAB QUIZ では、正解だけでなく、
-      不正解の選択肢についても「なぜ違うのか」を説明する設計を目指しています。
-      試験対策にも、基礎の確認にも使える構造です。
-    </p>
-  </section>
-
-  <h2>このサイトについて</h2>
-
-  <section class="card">
-    <p>
-      本サイト（shiolab.co.jp）は SHIOLAB のサービス案内ページです。
-      クイズ本体および学習記事は
-      <a href="https://quiz.shiolab.co.jp/">quiz.shiolab.co.jp</a> で公開しています。
-    </p>
-
-    <p class="note">
-      更新日：<time datetime="2026-02-12">2026-02-12</time>
-    </p>
-  </section>
-
-  <style>
-    .hero {
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      font-size: 28px;
-      margin: 0 0 12px;
-      line-height: 1.3;
-    }
-
-    h2 {
-      margin-top: 32px;
-      margin-bottom: 12px;
-    }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-
-    .pillRow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .pill {
-      background: #f3f4f6;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      color: #333;
-    }
-
-    .btnRow {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn {
-      background: #2563eb;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn.sub {
-      background: #f3f4f6;
-      color: #111;
-      border: 1px solid #e5e7eb;
-    }
-
-    .note {
-      font-size: 13px;
-      color: #666;
-      margin-top: 12px;
-    }
-
-    .categoryGrid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-      margin-bottom: 16px;
-    }
-
-    @media (min-width: 760px) {
-      .categoryGrid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .cat {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      background: #fff;
-      text-decoration: none;
-      color: #111;
-    }
-
-    .cat:hover {
-      background: #fafafa;
-    }
-
-    .catTitle {
-      font-weight: 800;
-    }
-
-    .catDesc {
-      font-size: 13px;
-      color: #666;
-      margin-top: 4px;
-    }
-
-    .arrow {
-      color: #999;
-      font-weight: bold;
-    }
-  </style>
-
-</BaseLayout>
+<section class="grid">
+  {categories.map(cat => (
+    <article class="card">
+      <h3>{cat}</h3>
+      <p>
+        {cat} に関する攻略パターン記事をまとめています。
+      </p>
+      <p>
+        <a href={`/category/${cat}/`}>一覧を見る →</a>
+      </p>
+    </article>
+  ))}
+</section>

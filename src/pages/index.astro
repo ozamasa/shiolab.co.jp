@@ -1,8 +1,53 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAllArticles } from "../lib/articles";
+import ArticleCard from "../components/ArticleCard.astro";
+
+const articles = await getAllArticles();
+const latest = [...articles].slice(0, 6);
+const tags = Array.from(new Set(articles.flatMap(a => a.tags || []))).slice(0, 12);
+
+const title = "SHIOLAB｜英検クイズと「選択肢を切る」学習記事";
+const description = "英検対策のクイズと、選択肢を素早く消去するための学習記事を提供します。";
 ---
-<BaseLayout title="ホーム">
-<h2>英検対策メディア</h2>
-<p>英検4級・3級・準2級対策の記事とクイズを公開中。</p>
-<p><a href="/articles/">記事一覧へ</a></p>
+<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/">
+  <section class="card">
+    <div class="h1">英検は「解く」より、まず「切る」</div>
+    <p class="p">
+      SHIOLAB は、英検の問題で <span style="font-weight:800;">「なぜこの選択肢は切れるのか」</span> を
+      具体的に説明する学習記事と、練習用のクイズを提供します。
+      文法用語を暗記するより、試験本番で迷いを減らすことを目的にしています。
+    </p>
+    <div class="btnRow">
+      <a class="btn" href="/articles/">学習記事を見る</a>
+      <a class="btn sub" href="/quiz/">クイズを開く</a>
+    </div>
+  </section>
+
+  <h2 class="h2">型から探す</h2>
+  <section class="card">
+    <p class="p" style="margin:0 0 10px;">
+      まずは「型（パターン）」から入ると、同じミスを減らせます。
+    </p>
+    <div class="badges">
+      {tags.map((t) => <a class="badge" href={`/articles/?tag=${encodeURIComponent(t)}`}>{t}</a>)}
+    </div>
+  </section>
+
+  <h2 class="h2">新着の学習記事</h2>
+  <section class="grid">
+    {latest.map((a) => <ArticleCard item={a} />)}
+  </section>
+
+  <h2 class="h2">まずの使い方</h2>
+  <section class="card">
+    <ol class="p" style="margin:0; padding-left:18px;">
+      <li>記事で「切り方」を覚える</li>
+      <li>クイズで同じ型を短時間で反復する</li>
+      <li>間違えた型の記事に戻って修正する</li>
+    </ol>
+    <div style="margin-top:12px;">
+      <a class="btn sub" href="/guide/">詳しい使い方</a>
+    </div>
+  </section>
 </BaseLayout>

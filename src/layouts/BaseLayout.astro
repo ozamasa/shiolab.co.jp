@@ -1,21 +1,52 @@
 ---
-const { title } = Astro.props;
+import "../styles/global.css";
+
+const {
+  title = "SHIOLAB",
+  description = "学習・教育をテーマにしたWebサービス",
+  canonical = "",
+} = Astro.props;
 ---
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title ? title + "｜SHIOLAB" : "SHIOLAB"}</title>
-</head>
-<body style="font-family: system-ui; max-width: 920px; margin: 40px auto; line-height:1.8;">
-  <header>
-    <h1><a href="/" style="text-decoration:none;color:black;">SHIOLAB</a></h1>
-  </header>
-  <main>
-    <slot />
-  </main>
-  <footer style="margin-top:40px;font-size:14px;color:#666;">
-    © SHIOLAB
-  </footer>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical ? <link rel="canonical" href={canonical} /> : null}
+    <link rel="icon" href="/favicon.png" type="image/png" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="header">
+        <a class="brand" href="/">
+          <span class="logo">S</span>
+          <span class="siteTitle">SHIOLAB</span>
+        </a>
+        <nav class="nav" aria-label="サイト内ナビゲーション">
+          <a href="/articles/">学習記事</a>
+          <a href="/quiz/">クイズ</a>
+          <a href="/guide/">使い方</a>
+          <a href="/about/">運営</a>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="footer">
+        <a href="https://shiolab.com/">運営：shiolab.com</a>
+        <span class="sep">｜</span>
+        <a href="/privacy/">プライバシーポリシー</a>
+        <span class="sep">｜</span>
+        <a href="/terms/">利用規約</a>
+        <span class="sep">｜</span>
+        <a href="/disclaimer/">免責事項</a>
+        <span class="sep">｜</span>
+        <span>© SHIOLAB</span>
+      </footer>
+    </div>
+  </body>
 </html>

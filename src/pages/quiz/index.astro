@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "クイズ｜SHIOLAB";
+const description = "学習記事で理解した「切り方」を、クイズで反復練習します。";
+---
+<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/quiz/">
+  <section class="card">
+    <h1 class="h1" style="font-size:24px;">クイズ</h1>
+    <p class="p">
+      クイズは、学習記事で理解した「型」を短時間で反復するための練習です。
+      まず記事で切り方を確認し、次にクイズで同じ型を5〜25問ほど繰り返すのがおすすめです。
+    </p>
+    <div class="btnRow">
+      <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズを開く</a>
+      <a class="btn sub" href="/articles/">学習記事を見る</a>
+    </div>
+    <div class="hr"></div>
+    <p class="muted" style="margin:0; font-size:13px;">
+      ※ クイズ本体が別ドメインでも、ここは「入口」として機能します。
+    </p>
+  </section>
+</BaseLayout>

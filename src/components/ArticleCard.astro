@@ -1,0 +1,20 @@
+---
+import type { ArticleItem } from "../lib/articles";
+const { item } = Astro.props as { item: ArticleItem };
+---
+<div class="card">
+  <div class="muted" style="font-size:12px;">
+    {item.updatedAt ? `更新: ${item.updatedAt}` : ""}
+  </div>
+  <h3 style="margin:6px 0 6px; font-size:18px;">{item.title}</h3>
+  {item.description ? <p class="p" style="margin:0 0 10px;">{item.description}</p> : null}
+
+  <div class="badges">
+    {item.tags?.slice(0, 6).map((t) => <span class="badge">{t}</span>)}
+    {item.levels?.slice(0, 4).map((l) => <span class="badge">{l}</span>)}
+  </div>
+
+  <div style="margin-top:12px;">
+    <a class="btn sub" href={`/articles/${item.slug}/`}>記事を読む</a>
+  </div>
+</div>

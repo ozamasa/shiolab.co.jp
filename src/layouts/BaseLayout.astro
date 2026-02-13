@@ -1,52 +1,42 @@
 ---
-import "../styles/global.css";
-
-const {
-  title = "SHIOLAB",
-  description = "学習・教育をテーマにしたWebサービス",
-  canonical = "",
-} = Astro.props;
+const { title, description } = Astro.props;
 ---
+
 <!doctype html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    {canonical ? <link rel="canonical" href={canonical} /> : null}
-    <link rel="icon" href="/favicon.png" type="image/png" />
-  </head>
-  <body>
-    <div class="wrap">
-      <header class="header">
-        <a class="brand" href="/">
-          <span class="logo">S</span>
-          <span class="siteTitle">SHIOLAB</span>
-        </a>
-        <nav class="nav" aria-label="サイト内ナビゲーション">
-          <a href="/articles/">学習記事</a>
-          <a href="/quiz/">クイズ</a>
-          <a href="/guide/">使い方</a>
-          <a href="/about/">運営</a>
-        </nav>
-      </header>
+<head>
+  <meta charset="utf-8" />
+  <title>{title}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <link rel="canonical" href={Astro.site ?? ""} />
+  <style>
+    body{margin:0;font-family:system-ui;background:#f6f7fb;color:#111}
+    .wrap{max-width:960px;margin:0 auto;padding:24px}
+    .card{background:#fff;padding:20px;border-radius:16px;border:1px solid #e5e7eb;margin-bottom:20px}
+    .grid{display:grid;gap:16px}
+    @media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
+    h1{margin:0 0 16px}
+    h2{margin:30px 0 10px}
+    a{color:#2563eb;text-decoration:none}
+    a:hover{text-decoration:underline}
+    footer{margin-top:40px;font-size:14px;color:#666;text-align:center}
+  </style>
+</head>
 
-      <main>
-        <slot />
-      </main>
+<body>
+<div class="wrap">
+  <slot />
 
-      <footer class="footer">
-        <a href="https://shiolab.com/">運営：shiolab.com</a>
-        <span class="sep">｜</span>
-        <a href="/privacy/">プライバシーポリシー</a>
-        <span class="sep">｜</span>
-        <a href="/terms/">利用規約</a>
-        <span class="sep">｜</span>
-        <a href="/disclaimer/">免責事項</a>
-        <span class="sep">｜</span>
-        <span>© SHIOLAB</span>
-      </footer>
-    </div>
-  </body>
+  <footer>
+    <a href="/">トップ</a>｜
+    <a href="/articles/">記事一覧</a>｜
+    <a href="/about/">運営</a>｜
+    <a href="/privacy/">プライバシーポリシー</a>｜
+    <a href="/terms/">利用規約</a>｜
+    <a href="/disclaimer/">免責事項</a>｜
+    <a href="/contact/">お問い合わせ</a>
+  </footer>
+</div>
+</body>
 </html>

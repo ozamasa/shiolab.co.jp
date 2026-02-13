@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { microcms } from "../../lib/microcms";
+
+export async function getStaticPaths() {
+  if (!microcms) return [];
+  const res = await microcms.getList({
+    endpoint: "articles",
+    queries: { limit: 100, fields: "id" },
+  });
+
+  return res.contents.map((a) => ({
+    params: { id: a.id },
+  }));
+}
+
+const { id } = Astro.params;
+
+const article = microcms
+  ? await microcms.getListDetail({
+      endpoint: "articles",
+      contentId: id,
+    })
+  : null;
+---
+
+<BaseLayout title={article?.title} description={article?.description}>
+  <article class="card">
+    <h1>{article?.title}</h1>
+    <div set:html={article?.body ?? ""} />
+  </article>
+</BaseLayout>

@@ -1,69 +1,30 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getAllArticles } from "../../lib/articles";
-import ArticleCard from "../../components/ArticleCard.astro";
+import { microcms } from "../../lib/microcms";
 
-const articles = await getAllArticles();
+const res = microcms
+  ? await microcms.getList({
+      endpoint: "articles",
+      queries: { limit: 100, orders: "-publishedAt" },
+    })
+  : { contents: [] };
 
-const url = new URL(Astro.request.url);
-const selectedTag = url.searchParams.get("tag") || "";
-const selectedLevel = url.searchParams.get("level") || "";
-
-const filtered = articles.filter(a => {
-  const okTag = selectedTag ? (a.tags || []).includes(selectedTag) : true;
-  const okLevel = selectedLevel ? (a.levels || []).includes(selectedLevel) : true;
-  return okTag && okLevel;
-});
-
-const tags = Array.from(new Set(articles.flatMap(a => a.tags || []))).sort();
-const levels = Array.from(new Set(articles.flatMap(a => a.levels || []))).sort();
-
-const title = "学習記事｜SHIOLAB";
-const description = "英検の選択肢を切る（消去法）に焦点を当てた学習記事一覧。";
+const articles = res.contents ?? [];
 ---
-<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/articles/">
+
+<BaseLayout title="記事一覧｜SHIOLAB" description="記事一覧">
   <section class="card">
-    <div class="h1" style="font-size:24px;">学習記事</div>
-    <p class="p" style="margin:0;">
-      「この形が来たら、どれが切れるか」を短い手順で説明します。
-    </p>
-
-    <div class="hr"></div>
-
-    <div class="muted" style="font-size:13px; margin-bottom:6px;">型（タグ）</div>
-    <div class="tagbar">
-      <a class="tagbtn" href="/articles/" aria-pressed={selectedTag === "" ? "true" : "false"}>すべて</a>
-      {tags.map((t) => (
-        <a class="tagbtn"
-          href={`/articles/?tag=${encodeURIComponent(t)}${selectedLevel ? `&level=${encodeURIComponent(selectedLevel)}` : ""}`}
-          aria-pressed={selectedTag === t ? "true" : "false"}>
-          {t}
-        </a>
-      ))}
-    </div>
-
-    <div class="muted" style="font-size:13px; margin:14px 0 6px;">対象レベル</div>
-    <div class="tagbar">
-      <a class="tagbtn"
-        href={`/articles/${selectedTag ? `?tag=${encodeURIComponent(selectedTag)}` : ""}`}
-        aria-pressed={selectedLevel === "" ? "true" : "false"}>
-        すべて
-      </a>
-      {levels.map((l) => (
-        <a class="tagbtn"
-          href={`/articles/?${selectedTag ? `tag=${encodeURIComponent(selectedTag)}&` : ""}level=${encodeURIComponent(l)}`}
-          aria-pressed={selectedLevel === l ? "true" : "false"}>
-          {l}
-        </a>
-      ))}
-    </div>
-
-    <div class="muted" style="font-size:13px; margin-top:14px;">
-      表示: {filtered.length} 件
-    </div>
+    <h1>記事一覧</h1>
   </section>
 
-  <section class="grid" style="margin-top:12px;">
-    {filtered.map((a) => <ArticleCard item={a} />)}
+  <section class="grid">
+    {articles.map((a) => (
+      <article class="card">
+        <h3>
+          <a href={`/articles/${a.id}/`}>{a.title}</a>
+        </h3>
+        {a.description ? <p>{a.description}</p> : null}
+      </article>
+    ))}
   </section>
 </BaseLayout>

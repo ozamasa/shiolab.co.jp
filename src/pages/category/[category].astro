@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { microcms, normalizeCategory } from "../../lib/microcms";
+
+const { category } = Astro.params;
+
+if (!microcms) throw new Error("microCMS未設定");
+
+const res = await microcms.getList({
+  endpoint: "articles",
+  queries: { limit: 100 },
+});
+
+const articles = res.contents.filter((a) =>
+  normalizeCategory(a.category).includes(category)
+);
+---
+
+<BaseLayout title={`${category}｜SHIOLAB`} description={`${category}の記事一覧`}>
+  <section class="card">
+    <h1>{category}</h1>
+  </section>
+
+  <section class="grid">
+    {articles.map((a) => (
+      <article class="card">
+        <h3>
+          <a href={`/articles/${a.id}/`}>{a.title}</a>
+        </h3>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

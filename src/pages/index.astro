@@ -9,37 +9,31 @@ const res = microcms
     })
   : { contents: [] };
 
-const latest = res.contents ?? [];
+const latest = res.contents;
 ---
 
 <BaseLayout
   title="SHIOLAB｜試験攻略メディア"
-  description="資格・受験・学校試験などの4択攻略パターンを解説する学習メディア"
+  description="資格・受験・学校試験などの攻略パターンを体系化する学習メディア"
 >
   <section class="card">
     <h1>SHIOLAB</h1>
     <p>
-      SHIOLABは、資格・受験・学校試験などの
-      「選択肢の切り方」を解説する学習メディアです。
+      SHIOLABは、各種試験の4択問題における
+      「選択肢の切り方」を体系化する学習メディアです。
     </p>
   </section>
 
   <h2>最新記事</h2>
 
-  {latest.length === 0 ? (
-    <section class="card">
-      <p>記事を追加するとここに表示されます。</p>
-    </section>
-  ) : (
-    <section class="grid">
-      {latest.map((a) => (
-        <article class="card">
-          <h3>
-            <a href={`/articles/${a.id}/`}>{a.title}</a>
-          </h3>
-          {a.description ? <p>{a.description}</p> : null}
-        </article>
-      ))}
-    </section>
-  )}
+  <section class="grid">
+    {latest.map((a) => (
+      <article class="card">
+        <h3>
+          <a href={`/articles/${a.id}/`}>{a.title}</a>
+        </h3>
+        {a.description && <p>{a.description}</p>}
+      </article>
+    ))}
+  </section>
 </BaseLayout>

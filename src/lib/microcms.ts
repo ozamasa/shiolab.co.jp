@@ -1,19 +1,29 @@
 import { createClient } from "microcms-js-sdk";
 
+const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = import.meta.env.MICROCMS_API_KEY;
+
 export const microcms =
-  import.meta.env.MICROCMS_SERVICE_DOMAIN &&
-  import.meta.env.MICROCMS_API_KEY
-    ? createClient({
-        serviceDomain: import.meta.env.MICROCMS_SERVICE_DOMAIN,
-        apiKey: import.meta.env.MICROCMS_API_KEY,
-      })
+  serviceDomain && apiKey
+    ? createClient({ serviceDomain, apiKey })
     : null;
 
-export type Article = {
-  id: string;
-  title: string;
-  description?: string;
-  body: string;
-  category?: string | string[] | { name?: string; title?: string } | any;
-  publishedAt?: string;
-};
+export function normalizeCategory(category: any): string[] {
+  if (!category) return [];
+
+  if (Array.isArray(category)) {
+    return category.map((c) =>
+      typeof c === "string"
+        ? c
+        : c?.name || c?.title || ""
+    ).filter(Boolean);
+  }
+
+  if (typeof category === "string") return [category];
+
+  if (typeof category === "object") {
+    return [category.name || category.title].filter(Boolean);
+  }
+
+  return [];
+}

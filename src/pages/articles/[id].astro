@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { microcms } from "../../lib/microcms";
+import { microcms, normalizeCategory } from "../../lib/microcms";
 
 export async function getStaticPaths() {
   if (!microcms) return [];
+
   const res = await microcms.getList({
     endpoint: "articles",
     queries: { limit: 100, fields: "id" },
@@ -16,17 +17,31 @@ export async function getStaticPaths() {
 
 const { id } = Astro.params;
 
-const article = microcms
-  ? await microcms.getListDetail({
-      endpoint: "articles",
-      contentId: id,
-    })
-  : null;
+if (!microcms) throw new Error("microCMS未設定");
+
+const article = await microcms.getListDetail({
+  endpoint: "articles",
+  contentId: id,
+});
+
+const categories = normalizeCategory(article.category);
 ---
 
-<BaseLayout title={article?.title} description={article?.description}>
+<BaseLayout title={article.title} description={article.description}>
   <article class="card">
-    <h1>{article?.title}</h1>
-    <div set:html={article?.body ?? ""} />
+    <h1>{article.title}</h1>
+
+    {categories.length > 0 && (
+      <p style="font-size:14px;color:#666;">
+        カテゴリ：
+        {categories.map((c) => (
+          <>
+            <a href={`/category/${encodeURIComponent(c)}/`}>{c}</a>{" "}
+          </>
+        ))}
+      </p>
+    )}
+
+    <div set:html={article.body} />
   </article>
 </BaseLayout>

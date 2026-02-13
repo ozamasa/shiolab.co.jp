@@ -1,144 +1,97 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import { microcms, type Article } from "../lib/microcms";
 
-const articles = await getCollection("articles");
+let latest: Article[] = [];
+let categories: string[] = [];
+let errorMsg = "";
 
-// 新しい順
-articles.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+// microCMSから最新6件
+try {
+  if (!microcms) throw new Error("microCMSの環境変数が未設定です");
 
-const latest = articles.slice(0, 6);
+  const res = await microcms.getList<Article>({
+    endpoint: "articles",
+    queries: {
+      limit: 6,
+      orders: "-publishedAt",
+      fields: "id,title,description,category,publishedAt",
+    },
+  });
 
-// “クイズ”のURLは将来変えやすいようにここでまとめる（今は外部でもOK）
-const QUIZ_URL = "https://quiz.shiolab.co.jp/";
-const ARTICLES_URL = "/articles/";
+  latest = res.contents ?? [];
+  categories = [...new Set(latest.map(a => a.category).filter(Boolean))] as string[];
+} catch (e: any) {
+  errorMsg = e?.message ?? String(e);
+}
 ---
 
 <BaseLayout
-  title="SHIOLAB｜資格・受験・学習の攻略メディア"
-  description="SHIOLABは、資格・受験・学校学習などの“4択試験攻略パターン”を、短いルールと具体例で解説する学習メディアです。"
+  title="SHIOLAB｜学習を“解ける形”にする"
+  description="SHIOLABは、勉強を続けやすい形に整える学習メディアです。選択問題は「選択肢の切り方」から身につけます。"
 >
-  <section class="card" style="padding:22px;">
-    <p style="margin:0 0 6px; font-size:12px; color:#666;">
-      資格・受験・学校学習の「4択」対策
+  <section class="card">
+    <h1>SHIOLAB</h1>
+    <p>
+      SHIOLAB は、試験や学習でつまずきやすいポイントを「解ける形」に整理して、
+      迷わず練習できるようにする学習メディアです。
     </p>
-    <h1 style="margin:0 0 10px;">SHIOLAB</h1>
-
-    <p style="margin:0 0 12px;">
-      SHIOLAB は、4択試験でよく出る「型」を集めて、
-      <strong>迷う前に切る</strong>ための判断ルールをまとめる学習メディアです。
-      英検だけでなく、中学理科・社会、ITパスポートなど、幅広い分野に展開できるように設計しています。
-    </p>
-
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-      <a class="primaryBtn" href={ARTICLES_URL} style="text-decoration:none;">
-        攻略記事を読む
-      </a>
-      <a class="secondary" href={QUIZ_URL} style="text-decoration:none;">
-        クイズで練習
-      </a>
-    </div>
-  </section>
-
-  <section class="card" style="margin-top:14px;">
-    <h2 style="margin:0 0 10px;">SHIOLABの学び方（4択に強くなる手順）</h2>
-    <ol style="margin:0; padding-left:18px; line-height:1.9; color:#333;">
-      <li>
-        <strong>まず記事で「切り方」を覚える</strong>（例：主語を見た瞬間に形で落とす、時制の目印を見る、など）
-      </li>
-      <li>
-        <strong>次にクイズで反復する</strong>（同じ型の問題を何度も解いて、判断を自動化する）
-      </li>
-      <li>
-        <strong>間違えた理由を言語化する</strong>（「なぜその選択肢がダメか」を1行で言えるようにする）
-      </li>
-    </ol>
-
-    <div style="margin-top:12px; padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; background:#f8fafc;">
-      <p style="margin:0 0 8px;">
-        例：<strong>三単現のs</strong>（英検5級/4級あたり）
-      </p>
-      <ul style="margin:0; padding-left:18px; line-height:1.9;">
-        <li>主語が <em>He / She / It / 1人</em> なら、動詞に <strong>s</strong> が付く形を探す</li>
-        <li><strong>go</strong>（原形）や <strong>going</strong>（ing）など、形が合わないものは先に落とす</li>
-        <li>意味より先に「形」で切ると、迷いとミスが減る</li>
-      </ul>
-    </div>
-
-    <p style="margin:12px 0 0; color:#666; font-size:14px;">
-      この「切断ルール」を増やしていくのがSHIOLABの中身です。トップページ自体も随時改善します。
+    <p>
+      記事では「この形ならこの選択肢は切れる」という判断のしかたを、具体例つきで解説します。
     </p>
   </section>
 
   <h2 style="margin-top:32px;">最新記事</h2>
 
-  {latest.length === 0 ? (
+  {errorMsg ? (
     <section class="card">
-      <p style="margin:0;">
-        まだ記事がありません。最初の記事を追加するとここに表示されます。
-      </p>
-      <p style="margin:10px 0 0; color:#666; font-size:14px;">
-        審査を通す目的なら、まずは「4択で切れるルール」をテーマに、短めでもよいので5本以上ある状態が理想です。
-      </p>
-      <p style="margin:12px 0 0;">
-        <a href={ARTICLES_URL}>記事一覧へ →</a>
+      <p style="color:#b91c1c; margin:0;">記事の読み込みに失敗しました：{errorMsg}</p>
+      <p style="color:#666; margin-top:8px;">
+        microCMS の serviceDomain / apiKey と、コンテンツAPI名（articles）を確認してください。
       </p>
     </section>
+  ) : latest.length === 0 ? (
+    <section class="card">
+      <p>まだ記事がありません。</p>
+    </section>
   ) : (
-    <>
-      <section class="grid">
-        {latest.map((article) => (
-          <article class="card">
-            <h3 style="margin:0 0 8px;">
-              <a href={`/articles/${article.slug}/`}>{article.data.title}</a>
-            </h3>
-
-            {article.data.description ? (
-              <p style="font-size:14px; color:#666; margin:0;">
-                {article.data.description}
-              </p>
-            ) : (
-              <p style="font-size:14px; color:#666; margin:0;">
-                4択問題で迷いを減らすための考え方・切り方を、具体例つきで整理します。
-              </p>
-            )}
-
+    <section class="grid">
+      {latest.map((a) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px;">
+            <a href={`/articles/${a.id}/`}>{a.title}</a>
+          </h3>
+          {a.description ? (
+            <p style="font-size:14px; color:#666; margin:0;">{a.description}</p>
+          ) : null}
+          {a.category ? (
             <p style="font-size:12px; color:#888; margin-top:10px;">
-              {article.data.category ? `カテゴリ：${article.data.category}　/　` : ""}
-              <time datetime={article.data.date}>
-                {new Date(article.data.date).toISOString().slice(0, 10)}
-              </time>
+              カテゴリ：{a.category}
             </p>
-          </article>
-        ))}
-      </section>
-
-      <p style="margin-top:12px;">
-        <a href={ARTICLES_URL}>記事一覧をすべて見る →</a>
-      </p>
-    </>
+          ) : null}
+        </article>
+      ))}
+    </section>
   )}
 
-  <section class="card" style="margin-top:28px;">
-    <h2 style="margin:0 0 10px;">よくある質問</h2>
-    <details style="padding:10px 0; border-top:1px solid #eee;">
-      <summary style="cursor:pointer;">英検だけのサイトですか？</summary>
-      <p style="margin:10px 0 0; color:#333; line-height:1.9;">
-        いいえ。英検は入口として分かりやすいため扱っていますが、4択の「切り方」は他分野にも共通します。
-        今後は中学理科・社会、ITパスポートなども追加できる構造にしています。
-      </p>
-    </details>
-    <details style="padding:10px 0; border-top:1px solid #eee;">
-      <summary style="cursor:pointer;">記事とクイズはどちらから始める？</summary>
-      <p style="margin:10px 0 0; color:#333; line-height:1.9;">
-        まず記事で「型」を理解し、次にクイズで反復するのが最短です。
-      </p>
-    </details>
-    <details style="padding:10px 0; border-top:1px solid #eee; border-bottom:1px solid #eee;">
-      <summary style="cursor:pointer;">問い合わせや運営情報は？</summary>
-      <p style="margin:10px 0 0; color:#333; line-height:1.9;">
-        サイトフッターの「プライバシー」「利用規約」「免責」「運営者情報（About）」をご覧ください。
-      </p>
-    </details>
-  </section>
+  <h2 style="margin-top:40px;">カテゴリ</h2>
+  {categories.length === 0 ? (
+    <section class="card">
+      <p>カテゴリは記事と一緒に表示されます。</p>
+    </section>
+  ) : (
+    <section class="grid">
+      {categories.map((cat) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px;">{cat}</h3>
+          <p style="margin:0 0 10px;">
+            {cat} の「選択肢の切り方」をまとめています。
+          </p>
+          <p style="margin:0;">
+            <a href={`/category/${encodeURIComponent(cat)}/`}>一覧を見る →</a>
+          </p>
+        </article>
+      ))}
+    </section>
+  )}
 </BaseLayout>

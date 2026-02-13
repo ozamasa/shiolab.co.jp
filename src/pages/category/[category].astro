@@ -6,64 +6,63 @@ import { fetchAllArticles } from "../../lib/microcms";
 export async function getStaticPaths() {
   const articles = await fetchAllArticles();
 
-  const categories = [
-    ...new Set(
-      articles
-        .map((a) => (a.category ?? "").trim())
-        .filter((v) => v.length > 0)
-    ),
-  ].sort();
+  // categoryは「文字列」に正規化
+  const categorySet = new Set<string>();
 
-  return categories.map((cat) => ({
-    params: { category: encodeURIComponent(cat) },
-    props: { cat },
+  for (const article of articles) {
+    if (article.category && typeof article.category === "string") {
+      categorySet.add(article.category);
+    }
+  }
+
+  return Array.from(categorySet).map((cat) => ({
+    params: {
+      category: cat, // ← 文字列のみ
+    },
   }));
 }
 
-const { cat } = Astro.props;
+// URLパラメータ取得
+const { category } = Astro.params;
 
-// このカテゴリの記事だけ
-const articles = await fetchAllArticles();
-const filtered = articles
-  .filter((a) => (a.category ?? "").trim() === cat)
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+// 全記事取得
+const allArticles = await fetchAllArticles();
+
+// 該当カテゴリのみ抽出
+const filtered = allArticles.filter(
+  (a) => a.category === category
+);
 ---
 
-<BaseLayout
-  title={`${cat}の記事一覧｜SHIOLAB`}
-  description={`${cat}に関する攻略パターン記事一覧です。`}
->
+<BaseLayout title={`${category}の記事一覧｜SHIOLAB`}>
+
   <section class="card">
-    <h1 style="margin:0 0 8px;">カテゴリ：{cat}</h1>
-    <p style="margin:0; color:#555;">{cat}に関する記事をまとめています。</p>
+    <h1>{category}</h1>
+    <p>{category}に関する攻略記事の一覧です。</p>
   </section>
 
   {filtered.length === 0 ? (
-    <section class="card" style="margin-top:16px;">
-      <p>このカテゴリの記事はまだありません。</p>
+    <section class="card">
+      <p>まだ記事がありません。</p>
     </section>
   ) : (
-    <section class="grid" style="margin-top:16px;">
-      {filtered.map((a) => (
+    <section class="grid">
+      {filtered.map((article) => (
         <article class="card">
-          <p style="margin:0 0 6px; font-size:12px; color:#666;">
-            {a.category ? `カテゴリ：${a.category}` : ""}
-          </p>
-          <h2 style="margin:0 0 10px; font-size:18px; line-height:1.4;">
-            <a href={`/articles/${a.id}/`}>{a.title}</a>
-          </h2>
-          {a.description ? (
-            <p style="margin:0; color:#555; line-height:1.8;">{a.description}</p>
+          <h3 style="margin:0 0 8px;">
+            <a href={`/articles/${article.id}/`}>
+              {article.title}
+            </a>
+          </h3>
+
+          {article.description ? (
+            <p style="font-size:14px; color:#666;">
+              {article.description}
+            </p>
           ) : null}
-          <p style="margin:10px 0 0; font-size:12px; color:#888;">
-            <time datetime={a.date}>{a.date}</time>
-          </p>
         </article>
       ))}
     </section>
   )}
 
-  <p style="margin-top:18px;">
-    <a href="/articles/">記事一覧へ →</a>
-  </p>
 </BaseLayout>

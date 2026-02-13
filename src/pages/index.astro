@@ -5,60 +5,68 @@ import { getCollection } from "astro:content";
 const articles = await getCollection("articles");
 
 // 新しい順
-articles.sort((a,b) =>
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+articles.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const latest = articles.slice(0,6);
+const latest = articles.slice(0, 6);
 
-// カテゴリ自動抽出
-const categories = [...new Set(
-  articles.map(a => a.data.category)
-)];
+// カテゴリ自動抽出（空は除外）
+const categories = [...new Set(articles.map((a) => a.data.category).filter(Boolean))];
 ---
 
 <BaseLayout
   title="SHIOLAB｜資格・受験・学習の攻略メディア"
   description="SHIOLABは、資格・受験・学校学習などの“4択試験攻略パターン”を解説する学習メディアです。"
-/>
+>
+  <section class="card">
+    <h1>SHIOLAB</h1>
+    <p>
+      SHIOLAB は、資格試験や受験対策における「選択肢の切り方」「瞬時に絞る技術」を体系化する学習メディアです。
+    </p>
+  </section>
 
-<section class="card">
-  <h1>SHIOLAB</h1>
-  <p>
-    SHIOLAB は、資格試験や受験対策における
-    「選択肢の切り方」「瞬時に絞る技術」を体系化する学習メディアです。
-  </p>
-</section>
+  <h2 style="margin-top:32px;">最新記事</h2>
 
-<h2 style="margin-top:32px;">最新記事</h2>
+  {latest.length === 0 ? (
+    <section class="card">
+      <p>まだ記事がありません。最初の記事を追加するとここに表示されます。</p>
+    </section>
+  ) : (
+    <section class="grid">
+      {latest.map((article) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px;">
+            <a href={`/articles/${article.slug}/`}>{article.data.title}</a>
+          </h3>
+          {article.data.description ? (
+            <p style="font-size:14px; color:#666; margin:0;">{article.data.description}</p>
+          ) : null}
+          <p style="font-size:12px; color:#888; margin-top:10px;">
+            {article.data.category ? `カテゴリ：${article.data.category}` : ""}
+          </p>
+        </article>
+      ))}
+    </section>
+  )}
 
-<section class="grid">
-  {latest.map(article => (
-    <article class="card">
-      <h3>
-        <a href={`/articles/${article.slug}/`}>
-          {article.data.title}
-        </a>
-      </h3>
-      <p style="font-size:14px; color:#666;">
-        {article.data.description}
-      </p>
-    </article>
-  ))}
-</section>
+  <h2 style="margin-top:40px;">カテゴリ</h2>
 
-<h2 style="margin-top:40px;">カテゴリ</h2>
+  {categories.length === 0 ? (
+    <section class="card">
+      <p>記事にカテゴリが付いていないため、カテゴリ一覧はまだ表示されません。</p>
+    </section>
+  ) : (
+    <section class="grid">
+      {categories.map((cat) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px;">{cat}</h3>
+          <p style="margin:0 0 10px;">{cat} に関する攻略パターン記事をまとめています。</p>
 
-<section class="grid">
-  {categories.map(cat => (
-    <article class="card">
-      <h3>{cat}</h3>
-      <p>
-        {cat} に関する攻略パターン記事をまとめています。
-      </p>
-      <p>
-        <a href={`/category/${cat}/`}>一覧を見る →</a>
-      </p>
-    </article>
-  ))}
-</section>
+          <!-- 注意：このリンク先ページは、次に category/[category].astro を作るまで 404 になります -->
+          <p style="margin:0;">
+            <a href={`/category/${encodeURIComponent(cat)}/`}>一覧を見る →</a>
+          </p>
+        </article>
+      ))}
+    </section>
+  )}
+</BaseLayout>

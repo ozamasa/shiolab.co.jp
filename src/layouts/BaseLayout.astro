@@ -1,5 +1,10 @@
 ---
-const { title, description } = Astro.props;
+const {
+  title = "SHIOLAB",
+  description = "資格・受験・学習の攻略パターンをまとめる学習メディア。",
+} = Astro.props;
+
+const canonical = Astro.url?.toString?.() ?? "";
 ---
 
 <!doctype html>
@@ -9,34 +14,70 @@ const { title, description } = Astro.props;
   <title>{title}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content={description} />
-  <link rel="canonical" href={Astro.site ?? ""} />
+  {canonical ? <link rel="canonical" href={canonical} /> : null}
+
+  <!-- OG（最低限） -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  {canonical ? <meta property="og:url" content={canonical} /> : null}
+
   <style>
-    body{margin:0;font-family:system-ui;background:#f6f7fb;color:#111}
-    .wrap{max-width:960px;margin:0 auto;padding:24px}
-    .card{background:#fff;padding:20px;border-radius:16px;border:1px solid #e5e7eb;margin-bottom:20px}
-    .grid{display:grid;gap:16px}
+    :root { --primary:#2563eb; --bg:#f6f7fb; --border:#e5e7eb; --text:#111; --muted:#666; }
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:980px;margin:0 auto;padding:22px 16px 40px}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+    .logo{width:34px;height:34px;border-radius:10px;background:var(--primary);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:900}
+    .site{font-weight:900}
+    .nav{display:flex;gap:12px;flex-wrap:wrap;font-size:14px}
+    .nav a{color:var(--primary);text-decoration:none}
+    .nav a:hover{text-decoration:underline}
+
+    .card{background:#fff;padding:18px;border-radius:16px;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,.04)}
+    .grid{display:grid;gap:14px}
     @media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
-    h1{margin:0 0 16px}
-    h2{margin:30px 0 10px}
-    a{color:#2563eb;text-decoration:none}
+    h1{margin:0 0 12px}
+    h2{margin:28px 0 10px}
+    p,li{line-height:1.85;color:#333}
+    a{color:var(--primary);text-decoration:none}
     a:hover{text-decoration:underline}
-    footer{margin-top:40px;font-size:14px;color:#666;text-align:center}
+
+    footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);text-align:center}
+    footer a{color:#555}
+    .sep{margin:0 6px;color:#bbb}
   </style>
 </head>
 
 <body>
-<div class="wrap">
-  <slot />
+  <div class="wrap">
+    <header class="header">
+      <a class="brand" href="/">
+        <span class="logo">S</span>
+        <span class="site">SHIOLAB</span>
+      </a>
 
-  <footer>
-    <a href="/">トップ</a>｜
-    <a href="/articles/">記事一覧</a>｜
-    <a href="/about/">運営</a>｜
-    <a href="/privacy/">プライバシーポリシー</a>｜
-    <a href="/terms/">利用規約</a>｜
-    <a href="/disclaimer/">免責事項</a>｜
-    <a href="/contact/">お問い合わせ</a>
-  </footer>
-</div>
+      <nav class="nav" aria-label="主要メニュー">
+        <a href="/articles/">記事</a>
+        <a href="https://quiz.shiolab.co.jp/" rel="noopener">クイズ</a>
+        <a href="/about/">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <a href="/">トップ</a><span class="sep">｜</span>
+      <a href="/articles/">記事一覧</a><span class="sep">｜</span>
+      <a href="/about/">運営</a><span class="sep">｜</span>
+      <a href="/privacy/">プライバシーポリシー</a><span class="sep">｜</span>
+      <a href="/terms/">利用規約</a><span class="sep">｜</span>
+      <a href="/disclaimer/">免責事項</a><span class="sep">｜</span>
+      <a href="/contact/">お問い合わせ</a>
+      <div style="margin-top:10px;">© SHIOLAB</div>
+    </footer>
+  </div>
 </body>
 </html>

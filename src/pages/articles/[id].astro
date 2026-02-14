@@ -1,47 +1,86 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { microcms, normalizeCategory } from "../../lib/microcms";
+import {
+  fetchAllArticles,
+  fetchArticleById,
+  normalizeCategory,
+} from "../../lib/microcms";
 
+// 静的生成に必須
 export async function getStaticPaths() {
-  if (!microcms) return [];
-
-  const res = await microcms.getList({
-    endpoint: "articles",
-    queries: { limit: 100, fields: "id" },
-  });
-
-  return res.contents.map((a) => ({
+  const all = await fetchAllArticles();
+  return all.map((a) => ({
     params: { id: a.id },
   }));
 }
 
 const { id } = Astro.params;
+const article = await fetchArticleById(String(id));
 
-if (!microcms) throw new Error("microCMS未設定");
+// microCMS側で null が来ることがあるので全部ガード
+const title = (article?.title ?? "記事が見つかりません").toString();
+const description = (article?.description ?? "").toString();
+const contentHtml = (article?.content ?? "").toString();
+const dateText =
+  (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
 
-const article = await microcms.getListDetail({
-  endpoint: "articles",
-  contentId: id,
-});
-
-const categories = normalizeCategory(article.category);
+const cat = normalizeCategory(article?.category);
 ---
 
-<BaseLayout title={article.title} description={article.description}>
-  <article class="card">
-    <h1>{article.title}</h1>
-
-    {categories.length > 0 && (
-      <p style="font-size:14px;color:#666;">
-        カテゴリ：
-        {categories.map((c) => (
-          <>
-            <a href={`/category/${encodeURIComponent(c)}/`}>{c}</a>{" "}
-          </>
-        ))}
+<BaseLayout
+  title={title}
+  description={description || "SHIOLABの記事ページです。"}
+>
+  {!article ? (
+    <section class="card">
+      <h1 style="margin:0 0 8px;">記事が見つかりません</h1>
+      <p style="margin:0 0 12px;">
+        URL が間違っているか、記事が非公開になっている可能性があります。
       </p>
-    )}
+      <p style="margin:0;">
+        <a href="/articles/">記事一覧へ戻る →</a>
+      </p>
+    </section>
+  ) : (
+    <>
+      <article class="card">
+        <h1 style="margin:0 0 10px;">{title}</h1>
 
-    <div set:html={article.body} />
-  </article>
+        <div style="font-size:13px; color:#666; display:flex; gap:10px; flex-wrap:wrap;">
+          {cat ? (
+            <span>
+              カテゴリ：
+              <a href={`/category/${cat.slug}/`}>{cat.label}</a>
+            </span>
+          ) : (
+            <span>カテゴリ：未設定</span>
+          )}
+          {dateText ? <span>更新：{dateText.slice(0, 10)}</span> : null}
+        </div>
+
+        {description ? (
+          <p style="margin:14px 0 0; color:#444; line-height:1.8;">
+            {description}
+          </p>
+        ) : null}
+      </article>
+
+      <section class="card" style="margin-top:14px;">
+        {contentHtml.trim().length === 0 ? (
+          <p style="margin:0;">
+            この記事は本文が未入力です（microCMS の <code>content</code> を確認してください）。
+          </p>
+        ) : (
+          // microCMSのリッチテキストHTMLをそのまま表示
+          <div class="prose" set:html={contentHtml} />
+        )}
+      </section>
+
+      <section class="card" style="margin-top:14px;">
+        <p style="margin:0;">
+          <a href="/articles/">← 記事一覧へ</a>
+        </p>
+      </section>
+    </>
+  )}
 </BaseLayout>

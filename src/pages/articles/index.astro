@@ -1,15 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
+import { fetchAllArticles, normalizeCategories } from "../../lib/microcms";
 
-const articles = await fetchAllArticles();
-
-// 新しい順（date -> publishedAt -> createdAt -> updatedAt）
-articles.sort((a, b) => {
-  const ta = new Date(a.date ?? a.publishedAt ?? a.createdAt ?? a.updatedAt ?? 0).getTime();
-  const tb = new Date(b.date ?? b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0).getTime();
-  return tb - ta;
-});
+const articles = (await fetchAllArticles()).sort(
+  (a, b) =>
+    new Date(String(b.date ?? b.publishedAt ?? b.createdAt ?? 0)).getTime() -
+    new Date(String(a.date ?? a.publishedAt ?? a.createdAt ?? 0)).getTime()
+);
 ---
 
 <BaseLayout
@@ -28,13 +25,12 @@ articles.sort((a, b) => {
   ) : (
     <section class="grid" style="margin-top:20px;">
       {articles.map((a) => {
-        const cats = normalizeCategory(a.category);
-        const dateText = (a.date ?? a.publishedAt ?? a.createdAt ?? "").toString();
-
+        const cats = normalizeCategories(a.category);
+        const dateText = String(a.date ?? a.publishedAt ?? a.createdAt ?? "");
         return (
           <article class="card">
             <h2 style="margin:0 0 10px; font-size:18px;">
-              <a href={`/articles/${a.id}/`}>{a.title ?? "（無題）"}</a>
+              <a href={`/articles/${a.id}/`}>{a.title}</a>
             </h2>
 
             {a.description ? (
@@ -44,12 +40,12 @@ articles.sort((a, b) => {
             ) : null}
 
             <div style="font-size:12px; color:#888; display:flex; gap:10px; flex-wrap:wrap;">
-              {cats.length > 0 ? (
+              {cats.length ? (
                 <span>
                   カテゴリ：
                   {cats.map((c, i) => (
                     <>
-                      {i > 0 ? " / " : ""}
+                      {i ? ", " : ""}
                       <a href={`/category/${c.slug}/`}>{c.label}</a>
                     </>
                   ))}

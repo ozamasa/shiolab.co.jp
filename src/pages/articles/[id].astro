@@ -4,39 +4,33 @@ import {
   fetchAllArticles,
   fetchArticleById,
   normalizeCategory,
-  getArticleBody,
 } from "../../lib/microcms";
 
 // 静的生成に必須
 export async function getStaticPaths() {
   const all = await fetchAllArticles();
-  return all.map((a) => ({
-    params: { id: a.id },
-  }));
+  return all.map((a) => ({ params: { id: a.id } }));
 }
 
 const { id } = Astro.params;
 const article = await fetchArticleById(String(id));
 
-// microCMS側で null が来ることがあるので全部ガード
-const title = (article?.title ?? "記事が見つかりません").toString();
-const description = (article?.description ?? "").toString();
+const title = String(article?.title ?? "記事が見つかりません");
+const description = String(article?.description ?? "");
 
-// 本文は body のみ（contentは使わない）
-const bodyHtml = getArticleBody(article);
+// 本文は body を使う（null / 非文字列でも落ちないように）
+const bodyRaw = (article as any)?.body;
+const bodyHtml = typeof bodyRaw === "string" ? bodyRaw : "";
 
 // 日付
-const dateText =
-  (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
+const dateText = String(
+  article?.date ?? article?.publishedAt ?? article?.createdAt ?? ""
+);
 
-// カテゴリは配列で返る
-const cats = normalizeCategory(article?.category);
+const cat = normalizeCategory(article?.category);
 ---
 
-<BaseLayout
-  title={title}
-  description={description || "SHIOLABの記事ページです。"}
->
+<BaseLayout title={title} description={description || "SHIOLABの記事ページです。"}>
   {!article ? (
     <section class="card">
       <h1 style="margin:0 0 8px;">記事が見つかりません</h1>
@@ -53,20 +47,14 @@ const cats = normalizeCategory(article?.category);
         <h1 style="margin:0 0 10px;">{title}</h1>
 
         <div style="font-size:13px; color:#666; display:flex; gap:10px; flex-wrap:wrap;">
-          {cats.length > 0 ? (
+          {cat ? (
             <span>
               カテゴリ：
-              {cats.map((c, i) => (
-                <>
-                  {i > 0 ? " / " : ""}
-                  <a href={`/category/${c.slug}/`}>{c.label}</a>
-                </>
-              ))}
+              <a href={`/category/${cat.slug}/`}>{cat.label}</a>
             </span>
           ) : (
             <span>カテゴリ：未設定</span>
           )}
-
           {dateText ? <span>更新：{dateText.slice(0, 10)}</span> : null}
         </div>
 
@@ -77,16 +65,11 @@ const cats = normalizeCategory(article?.category);
         ) : null}
       </article>
 
-      <section class="card" style="margin-top:14px;">
-        {bodyHtml.trim().length === 0 ? (
-          <p style="margin:0;">
-            この記事は本文が未入力です（microCMS の <code>body</code> を確認してください）。
-          </p>
-        ) : (
-          // microCMSのHTMLをそのまま表示（bodyにHTMLが入る前提）
+      {bodyHtml ? (
+        <section class="card" style="margin-top:14px;">
           <div class="prose" set:html={bodyHtml} />
-        )}
-      </section>
+        </section>
+      ) : null}
 
       <section class="card" style="margin-top:14px;">
         <p style="margin:0;">

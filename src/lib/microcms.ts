@@ -1,27 +1,33 @@
 // src/lib/microcms.ts
 import { createClient } from "microcms-js-sdk";
 
-// microCMSの環境変数（Cloudflare Pages の Environment variables に設定）
+// Cloudflare Pages の Environment variables に設定
 const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
 
 // microCMS側の「コンテンツAPI名」
-// もしあなたのmicroCMSで違う名前なら、ここだけ合わせればOK
 const ENDPOINT_ARTICLES = "articles";
 
-// 型（必要最低限）
-export type MicroCMSCategory =
+// category は「文字列 / オブジェクト / 配列」どれでも来うる
+export type MicroCMSCategoryItem =
   | string
   | { id?: string; name?: string; slug?: string }
   | null
   | undefined;
 
+export type MicroCMSCategory = MicroCMSCategoryItem | MicroCMSCategoryItem[];
+
+// 記事（body固定）
 export type MicroCMSArticle = {
   id: string;
   title?: string;
   description?: string;
-  content?: string;
+
+  // 本文は body のみを使う
+  body?: string;
+
   category?: MicroCMSCategory;
+
   date?: string;
   publishedAt?: string;
   revisedAt?: string;
@@ -29,11 +35,17 @@ export type MicroCMSArticle = {
   updatedAt?: string;
 };
 
-// categoryを「表示名」と「URL用slug」に正規化（[object Object] 対策）
-export function normalizeCategory(cat: MicroCMSCategory): {
-  label: string;
-  slug: string;
-} | null {
+// 本文を安全に取り出す（undefined対策）
+export function getArticleBody(a: MicroCMSArticle | null | undefined): string {
+  return (a?.body ?? "").toString();
+}
+
+// ---- カテゴリ正規化 ----
+
+// 1要素を label/slug に
+function normalizeCategoryItem(
+  cat: MicroCMSCategoryItem
+): { label: string; slug: string } | null {
   if (!cat) return null;
 
   if (typeof cat === "string") {
@@ -42,34 +54,36 @@ export function normalizeCategory(cat: MicroCMSCategory): {
     return { label: s, slug: encodeURIComponent(s) };
   }
 
-  // objectの場合
   const label = (cat.name || cat.slug || cat.id || "").trim();
   if (!label) return null;
 
-  // URLはslug優先、なければid、最後にlabel
   const raw =
-    (cat.slug && cat.slug.trim()) ||
-    (cat.id && cat.id.trim()) ||
-    label;
+    (cat.slug && cat.slug.trim()) || (cat.id && cat.id.trim()) || label;
 
   return { label, slug: encodeURIComponent(raw) };
 }
 
-// envが未設定のとき、ビルドを落とさず空配列で返す（審査・開発時に便利）
+// 複数カテゴリに対応（配列なら全部返す）
+export function normalizeCategory(
+  cat: MicroCMSCategory
+): { label: string; slug: string }[] {
+  if (!cat) return [];
+  const arr = Array.isArray(cat) ? cat : [cat];
+  return arr
+    .map(normalizeCategoryItem)
+    .filter((x): x is { label: string; slug: string } => Boolean(x));
+}
+
+// envが未設定のとき、ビルドを落とさず空配列で返す
 function canUseMicroCMS() {
   return Boolean(serviceDomain && apiKey);
 }
 
-// clientは「使えるときだけ」作る
-const client = canUseMicroCMS()
-  ? createClient({ serviceDomain, apiKey })
-  : null;
+const client = canUseMicroCMS() ? createClient({ serviceDomain, apiKey }) : null;
 
-// 全記事（一覧用）
 export async function fetchAllArticles(): Promise<MicroCMSArticle[]> {
   if (!client) return [];
 
-  // microCMSは 1回で全件取れないのでループ
   const limit = 100;
   let offset = 0;
   let all: MicroCMSArticle[] = [];
@@ -90,8 +104,9 @@ export async function fetchAllArticles(): Promise<MicroCMSArticle[]> {
   return all;
 }
 
-// 単記事（詳細ページ用）
-export async function fetchArticleById(id: string): Promise<MicroCMSArticle | null> {
+export async function fetchArticleById(
+  id: string
+): Promise<MicroCMSArticle | null> {
   if (!client) return null;
   try {
     const res = await client.getListDetail<MicroCMSArticle>({
@@ -104,7 +119,4 @@ export async function fetchArticleById(id: string): Promise<MicroCMSArticle | nu
   }
 }
 
-export const microcms = client ?? {
-  getList: async () => ({ contents: [], totalCount: 0, offset: 0, limit: 0 }),
-  getListDetail: async () => null,
-};
+export const microcms = client;

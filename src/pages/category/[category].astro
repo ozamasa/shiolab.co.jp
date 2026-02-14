@@ -6,33 +6,45 @@ import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
 export async function getStaticPaths() {
   const articles = await fetchAllArticles();
 
+  // slug(生) -> label
   const categorySet = new Map<string, string>();
 
   for (const article of articles) {
     const normalized = normalizeCategory(article.category);
     if (!normalized) continue;
 
-    // slug を key, label を value にして重複排除
-    if (!categorySet.has(normalized.slug)) {
-      categorySet.set(normalized.slug, normalized.label);
+    // normalizeCategory が今「1個」しか返さない前提で一旦対応
+    // （配列対応は microcms.ts で直すのが本筋）
+    const slugRaw = decodeURIComponent(normalized.slug); // 念のため生に寄せる
+    if (!categorySet.has(slugRaw)) {
+      categorySet.set(slugRaw, normalized.label);
     }
   }
 
-  return Array.from(categorySet.entries()).map(([slug, label]) => ({
-    params: { category: slug },
-    props: { label },
+  return Array.from(categorySet.entries()).map(([slugRaw, label]) => ({
+    params: { category: slugRaw }, // ここは「生」を渡す（AstroがURL化してくれる）
+    props: { label, slugRaw },
   }));
 }
 
 const { category } = Astro.params;
-const { label } = Astro.props;
+const { label, slugRaw } = Astro.props;
 
 const articles = await fetchAllArticles();
 
 const filtered = articles.filter((article) => {
   const normalized = normalizeCategory(article.category);
   if (!normalized) return false;
-  return normalized.slug === category;
+
+  const s = decodeURIComponent(normalized.slug);
+  return s === category;
+});
+
+// 新しい順（カテゴリ内でも）
+filtered.sort((a, b) => {
+  const ta = new Date(a.date ?? a.publishedAt ?? a.createdAt ?? a.updatedAt ?? 0).getTime();
+  const tb = new Date(b.date ?? b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0).getTime();
+  return tb - ta;
 });
 ---
 
@@ -45,15 +57,16 @@ const filtered = articles.filter((article) => {
   {filtered.length === 0 ? (
     <section class="card">
       <p>まだ記事がありません。</p>
+      <p style="margin:8px 0 0;">
+        <a href="/articles/">記事一覧へ戻る →</a>
+      </p>
     </section>
   ) : (
     <section class="grid" style="margin-top:24px;">
       {filtered.map((article) => (
         <article class="card">
           <h3 style="margin:0 0 8px;">
-            <a href={`/articles/${article.id}/`}>
-              {article.title}
-            </a>
+            <a href={`/articles/${article.id}/`}>{article.title ?? "（無題）"}</a>
           </h3>
 
           {article.description ? (

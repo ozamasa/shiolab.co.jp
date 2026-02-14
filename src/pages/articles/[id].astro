@@ -4,6 +4,7 @@ import {
   fetchAllArticles,
   fetchArticleById,
   normalizeCategory,
+  getArticleBody,
 } from "../../lib/microcms";
 
 // 静的生成に必須
@@ -20,11 +21,16 @@ const article = await fetchArticleById(String(id));
 // microCMS側で null が来ることがあるので全部ガード
 const title = (article?.title ?? "記事が見つかりません").toString();
 const description = (article?.description ?? "").toString();
-const contentHtml = (article?.content ?? "").toString();
+
+// 本文は body のみ（contentは使わない）
+const bodyHtml = getArticleBody(article);
+
+// 日付
 const dateText =
   (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
 
-const cat = normalizeCategory(article?.category);
+// カテゴリは配列で返る
+const cats = normalizeCategory(article?.category);
 ---
 
 <BaseLayout
@@ -47,14 +53,20 @@ const cat = normalizeCategory(article?.category);
         <h1 style="margin:0 0 10px;">{title}</h1>
 
         <div style="font-size:13px; color:#666; display:flex; gap:10px; flex-wrap:wrap;">
-          {cat ? (
+          {cats.length > 0 ? (
             <span>
               カテゴリ：
-              <a href={`/category/${cat.slug}/`}>{cat.label}</a>
+              {cats.map((c, i) => (
+                <>
+                  {i > 0 ? " / " : ""}
+                  <a href={`/category/${c.slug}/`}>{c.label}</a>
+                </>
+              ))}
             </span>
           ) : (
             <span>カテゴリ：未設定</span>
           )}
+
           {dateText ? <span>更新：{dateText.slice(0, 10)}</span> : null}
         </div>
 
@@ -66,13 +78,13 @@ const cat = normalizeCategory(article?.category);
       </article>
 
       <section class="card" style="margin-top:14px;">
-        {contentHtml.trim().length === 0 ? (
+        {bodyHtml.trim().length === 0 ? (
           <p style="margin:0;">
-            この記事は本文が未入力です（microCMS の <code>content</code> を確認してください）。
+            この記事は本文が未入力です（microCMS の <code>body</code> を確認してください）。
           </p>
         ) : (
-          // microCMSのリッチテキストHTMLをそのまま表示
-          <div class="prose" set:html={contentHtml} />
+          // microCMSのHTMLをそのまま表示（bodyにHTMLが入る前提）
+          <div class="prose" set:html={bodyHtml} />
         )}
       </section>
 

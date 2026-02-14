@@ -1,10 +1,15 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles } from "../../lib/microcms";
+import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
 
-const articles = (await fetchAllArticles()).sort(
-  (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
-);
+const articles = await fetchAllArticles();
+
+// 新しい順（date -> publishedAt -> createdAt -> updatedAt）
+articles.sort((a, b) => {
+  const ta = new Date(a.date ?? a.publishedAt ?? a.createdAt ?? a.updatedAt ?? 0).getTime();
+  const tb = new Date(b.date ?? b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0).getTime();
+  return tb - ta;
+});
 ---
 
 <BaseLayout
@@ -13,9 +18,7 @@ const articles = (await fetchAllArticles()).sort(
 >
   <section class="card">
     <h1>記事一覧</h1>
-    <p>
-      SHIOLAB に掲載している攻略パターン記事の一覧です。
-    </p>
+    <p>SHIOLAB に掲載している攻略パターン記事の一覧です。</p>
   </section>
 
   {articles.length === 0 ? (
@@ -24,26 +27,42 @@ const articles = (await fetchAllArticles()).sort(
     </section>
   ) : (
     <section class="grid" style="margin-top:20px;">
-      {articles.map((a) => (
-        <article class="card">
-          <h2 style="margin:0 0 10px; font-size:18px;">
-            <a href={`/articles/${a.id}/`}>{a.title}</a>
-          </h2>
+      {articles.map((a) => {
+        const cats = normalizeCategory(a.category);
+        const dateText = (a.date ?? a.publishedAt ?? a.createdAt ?? "").toString();
 
-          {a.description && (
-            <p style="font-size:14px; color:#666; margin:0 0 10px;">
-              {a.description}
-            </p>
-          )}
+        return (
+          <article class="card">
+            <h2 style="margin:0 0 10px; font-size:18px;">
+              <a href={`/articles/${a.id}/`}>{a.title ?? "（無題）"}</a>
+            </h2>
 
-          <div style="font-size:12px; color:#888;">
-            {a.category ? <span>カテゴリ：{a.category}</span> : null}
-            {a.date ? (
-              <span style="margin-left:10px;">{a.date}</span>
+            {a.description ? (
+              <p style="font-size:14px; color:#666; margin:0 0 10px;">
+                {a.description}
+              </p>
             ) : null}
-          </div>
-        </article>
-      ))}
+
+            <div style="font-size:12px; color:#888; display:flex; gap:10px; flex-wrap:wrap;">
+              {cats.length > 0 ? (
+                <span>
+                  カテゴリ：
+                  {cats.map((c, i) => (
+                    <>
+                      {i > 0 ? " / " : ""}
+                      <a href={`/category/${c.slug}/`}>{c.label}</a>
+                    </>
+                  ))}
+                </span>
+              ) : (
+                <span>カテゴリ：未設定</span>
+              )}
+
+              {dateText ? <span>{dateText.slice(0, 10)}</span> : null}
+            </div>
+          </article>
+        );
+      })}
     </section>
   )}
 </BaseLayout>

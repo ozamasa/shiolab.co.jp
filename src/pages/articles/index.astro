@@ -1,30 +1,49 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { microcms } from "../../lib/microcms";
+import { fetchAllArticles } from "../../lib/microcms";
 
-const res = microcms
-  ? await microcms.getList({
-      endpoint: "articles",
-      queries: { limit: 100, orders: "-publishedAt" },
-    })
-  : { contents: [] };
-
-const articles = res.contents ?? [];
+const articles = (await fetchAllArticles()).sort(
+  (a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()
+);
 ---
 
-<BaseLayout title="記事一覧｜SHIOLAB" description="記事一覧">
+<BaseLayout
+  title="記事一覧｜SHIOLAB"
+  description="SHIOLABの記事一覧ページです。資格試験・受験対策に役立つ攻略パターンをまとめています。"
+>
   <section class="card">
     <h1>記事一覧</h1>
+    <p>
+      SHIOLAB に掲載している攻略パターン記事の一覧です。
+    </p>
   </section>
 
-  <section class="grid">
-    {articles.map((a) => (
-      <article class="card">
-        <h3>
-          <a href={`/articles/${a.id}/`}>{a.title}</a>
-        </h3>
-        {a.description ? <p>{a.description}</p> : null}
-      </article>
-    ))}
-  </section>
+  {articles.length === 0 ? (
+    <section class="card" style="margin-top:20px;">
+      <p>まだ記事がありません。</p>
+    </section>
+  ) : (
+    <section class="grid" style="margin-top:20px;">
+      {articles.map((a) => (
+        <article class="card">
+          <h2 style="margin:0 0 10px; font-size:18px;">
+            <a href={`/articles/${a.id}/`}>{a.title}</a>
+          </h2>
+
+          {a.description && (
+            <p style="font-size:14px; color:#666; margin:0 0 10px;">
+              {a.description}
+            </p>
+          )}
+
+          <div style="font-size:12px; color:#888;">
+            {a.category ? <span>カテゴリ：{a.category}</span> : null}
+            {a.date ? (
+              <span style="margin-left:10px;">{a.date}</span>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </section>
+  )}
 </BaseLayout>

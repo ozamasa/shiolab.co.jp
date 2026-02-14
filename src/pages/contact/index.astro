@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "お問い合わせ｜SHIOLAB";
+const description =
+  "SHIOLAB（shiolab.co.jp）へのお問い合わせページ。ご意見・不具合報告・掲載内容についての連絡はこちら。";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="card">
+    <h1>お問い合わせ</h1>
+
+    <p>
+      ご意見・不具合報告・掲載内容に関するご連絡は、下記よりお願いいたします。
+      返信にはお時間をいただく場合があります。
+    </p>
+
+    <h2>連絡先</h2>
+    <ul>
+      <li>
+        メール：
+        <a href="mailto:contact@shiolab.com">contact@shiolab.com</a>
+      </li>
+    </ul>
+
+    <h2>よくあるご連絡</h2>
+    <ul>
+      <li>記事の誤り・改善提案</li>
+      <li>サイト表示の不具合（ページURLと端末・ブラウザもあると助かります）</li>
+      <li>掲載内容に関するお問い合わせ</li>
+    </ul>
+
+    <p style="color:#666; margin-top:14px;">
+      ※ 当サイトは学習目的の情報提供です。個別の合否や学習計画の保証はできません。
+    </p>
+  </section>
+</BaseLayout>

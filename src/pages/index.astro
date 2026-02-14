@@ -1,39 +1,117 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { microcms } from "../lib/microcms";
+import { fetchAllArticles } from "../lib/microcms";
 
-const res = microcms
-  ? await microcms.getList({
-      endpoint: "articles",
-      queries: { limit: 6, orders: "-publishedAt" },
-    })
-  : { contents: [] };
+// microCMS: 全記事を取得（無い場合は lib 側で空配列を返す想定）
+const articles = await fetchAllArticles();
 
-const latest = res.contents;
+// 新しい順
+articles.sort((a, b) => {
+  const da = new Date(a.date || a.publishedAt || a.createdAt || 0).getTime();
+  const db = new Date(b.date || b.publishedAt || b.createdAt || 0).getTime();
+  return db - da;
+});
+
+const latest = articles.slice(0, 9);
+
+// category が「文字列」でも「オブジェクト」でも壊れないように正規化
+const toCategoryName = (v: any) => {
+  if (!v) return "";
+  if (typeof v === "string") return v.trim();
+  // microCMSの参照/選択肢系でありがちな候補
+  return String(v.name || v.title || v.label || v.value || "").trim();
+};
+
+const categories = [...new Set(articles.map(a => toCategoryName(a.category)).filter(Boolean))].sort();
 ---
 
 <BaseLayout
-  title="SHIOLAB｜試験攻略メディア"
-  description="資格・受験・学校試験などの攻略パターンを体系化する学習メディア"
+  title="SHIOLAB｜学習の攻略パターン集（資格・受験・試験対策）"
+  description="SHIOLABは、資格試験・受験・学校学習などの4択試験で使える『選択肢の切り方』を、わかりやすい攻略パターンとしてまとめる学習メディアです。"
 >
   <section class="card">
-    <h1>SHIOLAB</h1>
-    <p>
-      SHIOLABは、各種試験の4択問題における
-      「選択肢の切り方」を体系化する学習メディアです。
+    <h1 style="margin:0 0 8px;">SHIOLAB</h1>
+    <p style="margin:0;">
+      4択の試験は「知っているか」だけでなく、「迷わず切れるか」で差がつきます。<br />
+      SHIOLAB は、問題を見た瞬間に絞り込むための <strong>攻略パターン</strong> を、短く・具体的にまとめます。
     </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="btn" href="/articles/">記事一覧を見る</a>
+      <a class="btn sub" href="https://quiz.shiolab.co.jp/" rel="noopener">クイズ（別サイト）</a>
+      <a class="btn sub" href="/about/">このサイトについて</a>
+    </div>
   </section>
 
-  <h2>最新記事</h2>
+  <h2 style="margin-top:32px;">最新記事</h2>
 
-  <section class="grid">
-    {latest.map((a) => (
-      <article class="card">
-        <h3>
-          <a href={`/articles/${a.id}/`}>{a.title}</a>
-        </h3>
-        {a.description && <p>{a.description}</p>}
-      </article>
-    ))}
+  {latest.length === 0 ? (
+    <section class="card">
+      <p style="margin:0;">まだ記事がありません。microCMSに記事を追加するとここに表示されます。</p>
+      <p style="margin:10px 0 0; font-size:14px; color:#666;">
+        まずは「選択肢の切り方（パターン）」の記事を数本入れるのがおすすめです。
+      </p>
+    </section>
+  ) : (
+    <section class="grid">
+      {latest.map((a) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px; line-height:1.4;">
+            <a href={`/articles/${a.id}/`}>{a.title}</a>
+          </h3>
+
+          {a.description ? (
+            <p style="font-size:14px; color:#666; margin:0;">{a.description}</p>
+          ) : null}
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; font-size:12px; color:#777;">
+            {toCategoryName(a.category) ? (
+              <a href={`/category/${encodeURIComponent(toCategoryName(a.category))}/`} style="color:#555;">
+                カテゴリ：{toCategoryName(a.category)}
+              </a>
+            ) : (
+              <span>カテゴリ：未設定</span>
+            )}
+            <span>
+              {new Date(a.date || a.publishedAt || a.createdAt || Date.now()).toISOString().slice(0,10)}
+            </span>
+          </div>
+        </article>
+      ))}
+    </section>
+  )}
+
+  <div style="margin-top:14px;">
+    <a href="/articles/">記事一覧へ →</a>
+  </div>
+
+  <h2 style="margin-top:40px;">カテゴリ</h2>
+
+  {categories.length === 0 ? (
+    <section class="card">
+      <p style="margin:0;">カテゴリがまだありません（記事にカテゴリを付けると表示されます）。</p>
+    </section>
+  ) : (
+    <section class="grid">
+      {categories.map((cat) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px;">{cat}</h3>
+          <p style="margin:0 0 10px; color:#555;">
+            {cat} の攻略パターン記事をまとめています。
+          </p>
+          <p style="margin:0;">
+            <a href={`/category/${encodeURIComponent(cat)}/`}>一覧を見る →</a>
+          </p>
+        </article>
+      ))}
+    </section>
+  )}
+
+  <section class="card" style="margin-top:40px;">
+    <h2 style="margin:0 0 10px;">クイズについて</h2>
+    <p style="margin:0;">
+      記事で「切り方」を理解したら、クイズで反復して定着させます。<br />
+      <a href="https://quiz.shiolab.co.jp/" rel="noopener">SHIOLAB QUIZ を開く →</a>
+    </p>
   </section>
 </BaseLayout>

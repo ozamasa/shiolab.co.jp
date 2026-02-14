@@ -1,64 +1,105 @@
 // src/lib/microcms.ts
-import { createClient, type MicroCMSClient } from "microcms-js-sdk";
+import { createClient } from "microcms-js-sdk";
 
-const SERVICE_DOMAIN =
-  import.meta.env.MICROCMS_SERVICE_DOMAIN || process.env.MICROCMS_SERVICE_DOMAIN;
-const API_KEY =
-  import.meta.env.MICROCMS_API_KEY || process.env.MICROCMS_API_KEY;
+// microCMSの環境変数（Cloudflare Pages の Environment variables に設定）
+const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = import.meta.env.MICROCMS_API_KEY;
 
-/**
- * microCMS クライアント（未設定なら null）
- * - Cloudflare Pages: 環境変数に MICROCMS_SERVICE_DOMAIN / MICROCMS_API_KEY を設定する
- */
-export const microcms: MicroCMSClient | null =
-  SERVICE_DOMAIN && API_KEY
-    ? createClient({ serviceDomain: SERVICE_DOMAIN, apiKey: API_KEY })
-    : null;
+// microCMS側の「コンテンツAPI名」
+// もしあなたのmicroCMSで違う名前なら、ここだけ合わせればOK
+const ENDPOINT_ARTICLES = "articles";
 
-/**
- * microCMS 側の category が「文字列」「配列」「未設定」でも扱えるようにする
- */
-export function normalizeCategory(input: unknown): string[] {
-  if (!input) return [];
-  if (Array.isArray(input)) {
-    return input.map((v) => String(v).trim()).filter(Boolean);
-  }
-  return [String(input).trim()].filter(Boolean);
-}
+// 型（必要最低限）
+export type MicroCMSCategory =
+  | string
+  | { id?: string; name?: string; slug?: string }
+  | null
+  | undefined;
 
-export type ArticleSummary = {
+export type MicroCMSArticle = {
   id: string;
-  title: string;
+  title?: string;
   description?: string;
-  category?: string; // 既存ページ互換のため「1つ」に丸める
-  categories?: string[]; // 必要なら将来使えるように残す
+  content?: string;
+  category?: MicroCMSCategory;
   date?: string;
+  publishedAt?: string;
+  revisedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-/**
- * 記事一覧をまとめて取得（静的生成で使う）
- * - microCMS未設定でもビルドできるように [] を返す
- */
-export async function fetchAllArticles(limit = 100): Promise<ArticleSummary[]> {
-  if (!microcms) return [];
+// categoryを「表示名」と「URL用slug」に正規化（[object Object] 対策）
+export function normalizeCategory(cat: MicroCMSCategory): {
+  label: string;
+  slug: string;
+} | null {
+  if (!cat) return null;
 
-  const res = await microcms.getList({
-    endpoint: "articles",
-    queries: {
-      limit,
-      fields: "id,title,description,category,date",
-    },
-  });
+  if (typeof cat === "string") {
+    const s = cat.trim();
+    if (!s) return null;
+    return { label: s, slug: encodeURIComponent(s) };
+  }
 
-  return res.contents.map((a: any) => {
-    const cats = normalizeCategory(a.category);
-    return {
-      id: a.id,
-      title: a.title,
-      description: a.description,
-      category: cats[0] ?? "",
-      categories: cats,
-      date: a.date,
-    };
-  });
+  // objectの場合
+  const label = (cat.name || cat.slug || cat.id || "").trim();
+  if (!label) return null;
+
+  // URLはslug優先、なければid、最後にlabel
+  const raw =
+    (cat.slug && cat.slug.trim()) ||
+    (cat.id && cat.id.trim()) ||
+    label;
+
+  return { label, slug: encodeURIComponent(raw) };
+}
+
+// envが未設定のとき、ビルドを落とさず空配列で返す（審査・開発時に便利）
+function canUseMicroCMS() {
+  return Boolean(serviceDomain && apiKey);
+}
+
+// clientは「使えるときだけ」作る
+const client = canUseMicroCMS()
+  ? createClient({ serviceDomain, apiKey })
+  : null;
+
+// 全記事（一覧用）
+export async function fetchAllArticles(): Promise<MicroCMSArticle[]> {
+  if (!client) return [];
+
+  // microCMSは 1回で全件取れないのでループ
+  const limit = 100;
+  let offset = 0;
+  let all: MicroCMSArticle[] = [];
+
+  while (true) {
+    const res = await client.getList<MicroCMSArticle>({
+      endpoint: ENDPOINT_ARTICLES,
+      queries: { limit, offset, orders: "-publishedAt" },
+    });
+
+    all = all.concat(res.contents || []);
+    offset += limit;
+
+    if (all.length >= (res.totalCount || 0)) break;
+    if (!res.contents || res.contents.length === 0) break;
+  }
+
+  return all;
+}
+
+// 単記事（詳細ページ用）
+export async function fetchArticleById(id: string): Promise<MicroCMSArticle | null> {
+  if (!client) return null;
+  try {
+    const res = await client.getListDetail<MicroCMSArticle>({
+      endpoint: ENDPOINT_ARTICLES,
+      contentId: id,
+    });
+    return res ?? null;
+  } catch {
+    return null;
+  }
 }

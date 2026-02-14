@@ -43,40 +43,166 @@ const canonical = Astro.url?.toString?.() ?? "";
     a{color:var(--primary);text-decoration:none}
     a:hover{text-decoration:underline}
 
+    .site-header{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(246,247,251,.9);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .header-inner{
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #111;
+      font-weight: 900;
+    }
+
+    .brand-mark{
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #2563eb;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .brand-name{
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+
+    .header-nav{
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-nav a{
+      color: #444;
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+
+    .header-nav a:hover{
+      background: #eef2ff;
+    }
+
+    .nav-cta{
+      background: #2563eb;
+      color: #fff !important;
+      font-weight: 800;
+    }
+
+    .nav-cta:hover{
+      filter: brightness(.95);
+    }
+
+    @media (max-width: 520px){
+      .brand-name{ display:none; }
+      .header-nav{ gap: 8px; }
+    }
+
     footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);text-align:center}
     footer a{color:#555}
     .sep{margin:0 6px;color:#bbb}
+
+    .site-footer {
+      margin-top: 60px;
+      padding: 40px 20px;
+      background: #f8fafc;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .footer-links a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .copyright {
+      font-size: 13px;
+      color: #888;
+      margin: 0;
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <header class="header">
-      <a class="brand" href="/">
-        <span class="logo">S</span>
-        <span class="site">SHIOLAB</span>
-      </a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/">
+          <span class="brand-mark">S</span>
+          <span class="brand-name">SHIOLAB</span>
+        </a>
 
-      <nav class="nav" aria-label="主要メニュー">
-        <a href="/articles/">記事</a>
-        <a href="https://quiz.shiolab.co.jp/" rel="noopener">クイズ</a>
-        <a href="/about/">About</a>
-      </nav>
+        <nav class="header-nav" aria-label="主要ナビゲーション">
+          <a href="/articles/">記事</a>
+          <a href="/about/">このサイトについて</a>
+          <a class="nav-cta" href="https://quiz.shiolab.co.jp/" rel="noopener noreferrer">
+            クイズ
+          </a>
+        </nav>
+      </div>
     </header>
 
     <main>
       <slot />
     </main>
 
-    <footer>
-      <a href="/">トップ</a><span class="sep">｜</span>
-      <a href="/articles/">記事一覧</a><span class="sep">｜</span>
-      <a href="/about/">運営</a><span class="sep">｜</span>
-      <a href="/privacy/">プライバシーポリシー</a><span class="sep">｜</span>
-      <a href="/terms/">利用規約</a><span class="sep">｜</span>
-      <a href="/disclaimer/">免責事項</a><span class="sep">｜</span>
-      <a href="/contact/">お問い合わせ</a>
-      <div style="margin-top:10px;">© SHIOLAB</div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <nav class="footer-links">
+          <a href="/articles/">記事一覧</a>
+          <a href="/about/">このサイトについて</a>
+          <a href="/privacy/">プライバシーポリシー</a>
+          <a href="/terms/">利用規約</a>
+          <a href="/disclaimer/">免責事項</a>
+          <a href="/contact/">お問い合わせ</a>
+        </nav>
+
+        <p class="copyright">
+          © {new Date().getFullYear()} SHIOLAB
+        </p>
+      </div>
     </footer>
   </div>
 </body>

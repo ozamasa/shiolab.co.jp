@@ -1,13 +1,46 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+
 const title = "免責事項｜SHIOLAB";
-const description = "免責事項のページ。";
+const description =
+  "SHIOLAB（shiolab.co.jp）の免責事項。掲載情報の取り扱い、外部リンク、損害等の責任範囲について。";
 ---
-<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/disclaimer/">
+
+<BaseLayout title={title} description={description}>
   <section class="card">
-    <h1 class="h1" style="font-size:24px;">免責事項</h1>
-    <div class="p">
-      <p>（ここに本文を入れてください。必要ならこちらで整形します）</p>
-    </div>
+    <h1>免責事項</h1>
+
+    <p>
+      SHIOLAB（以下「当サイト」）に掲載する情報は、学習の参考として提供するものです。
+      内容の正確性・完全性・最新性について可能な限り配慮しますが、これらを保証するものではありません。
+    </p>
+
+    <h2>情報の利用について</h2>
+    <p>
+      当サイトの情報を利用したことにより生じた損害・不利益等について、当サイトは一切の責任を負いません。
+      学習や受験・資格試験の結果は、最終的にご自身の判断と責任でご対応ください。
+    </p>
+
+    <h2>掲載内容の変更・中断</h2>
+    <p>
+      当サイトは、予告なく掲載内容の変更、更新の停止、運営の中断・終了を行う場合があります。
+      これらにより生じた損害等についても責任を負いません。
+    </p>
+
+    <h2>外部リンクについて</h2>
+    <p>
+      当サイトには外部サイトへのリンクが含まれる場合があります。
+      外部サイトの内容やサービスについて、当サイトは一切の責任を負いません。
+    </p>
+
+    <h2>著作権について</h2>
+    <p>
+      当サイトに掲載されている文章・画像などの著作物の無断転載・無断利用を禁止します。
+      引用の範囲を超える利用が必要な場合は、事前にお問い合わせください。
+    </p>
+
+    <p style="color:#666; margin-top:14px;">
+      最終更新日：<time datetime="2026-02-14">2026-02-14</time>
+    </p>
   </section>
 </BaseLayout>

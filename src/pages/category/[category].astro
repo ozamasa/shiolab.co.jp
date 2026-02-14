@@ -1,44 +1,45 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles } from "../../lib/microcms";
+import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
 
 // 静的生成に必須
 export async function getStaticPaths() {
   const articles = await fetchAllArticles();
 
-  // categoryは「文字列」に正規化
-  const categorySet = new Set<string>();
+  const categorySet = new Map<string, string>();
 
   for (const article of articles) {
-    if (article.category && typeof article.category === "string") {
-      categorySet.add(article.category);
+    const normalized = normalizeCategory(article.category);
+    if (!normalized) continue;
+
+    // slug を key, label を value にして重複排除
+    if (!categorySet.has(normalized.slug)) {
+      categorySet.set(normalized.slug, normalized.label);
     }
   }
 
-  return Array.from(categorySet).map((cat) => ({
-    params: {
-      category: cat, // ← 文字列のみ
-    },
+  return Array.from(categorySet.entries()).map(([slug, label]) => ({
+    params: { category: slug },
+    props: { label },
   }));
 }
 
-// URLパラメータ取得
 const { category } = Astro.params;
+const { label } = Astro.props;
 
-// 全記事取得
-const allArticles = await fetchAllArticles();
+const articles = await fetchAllArticles();
 
-// 該当カテゴリのみ抽出
-const filtered = allArticles.filter(
-  (a) => a.category === category
-);
+const filtered = articles.filter((article) => {
+  const normalized = normalizeCategory(article.category);
+  if (!normalized) return false;
+  return normalized.slug === category;
+});
 ---
 
-<BaseLayout title={`${category}の記事一覧｜SHIOLAB`}>
-
+<BaseLayout title={`${label} の記事一覧`}>
   <section class="card">
-    <h1>{category}</h1>
-    <p>{category}に関する攻略記事の一覧です。</p>
+    <h1>{label}</h1>
+    <p>{label} に関する攻略記事一覧です。</p>
   </section>
 
   {filtered.length === 0 ? (
@@ -46,7 +47,7 @@ const filtered = allArticles.filter(
       <p>まだ記事がありません。</p>
     </section>
   ) : (
-    <section class="grid">
+    <section class="grid" style="margin-top:24px;">
       {filtered.map((article) => (
         <article class="card">
           <h3 style="margin:0 0 8px;">
@@ -64,5 +65,4 @@ const filtered = allArticles.filter(
       ))}
     </section>
   )}
-
 </BaseLayout>

@@ -41,9 +41,7 @@ export function getArticleBody(a: MicroCMSArticle | null | undefined): string {
 }
 
 // ---- カテゴリ正規化 ----
-
-// 1要素を label/slug に
-function normalizeCategoryItem(
+export function normalizeCategoryItem(
   cat: MicroCMSCategoryItem
 ): { label: string; slug: string } | null {
   if (!cat) return null;
@@ -51,27 +49,42 @@ function normalizeCategoryItem(
   if (typeof cat === "string") {
     const s = cat.trim();
     if (!s) return null;
-    return { label: s, slug: encodeURIComponent(s) };
+    return { label: s, slug: s }; // ★encodeしない
   }
 
   const label = (cat.name || cat.slug || cat.id || "").trim();
   if (!label) return null;
 
-  const raw =
-    (cat.slug && cat.slug.trim()) || (cat.id && cat.id.trim()) || label;
+  const raw = (cat.slug && cat.slug.trim()) || (cat.id && cat.id.trim()) || label;
 
-  return { label, slug: encodeURIComponent(raw) };
+  return { label, slug: raw }; // ★encodeしない
 }
 
-// 複数カテゴリに対応（配列なら全部返す）
-export function normalizeCategory(
+export function normalizeCategories(
   cat: MicroCMSCategory
 ): { label: string; slug: string }[] {
   if (!cat) return [];
-  const arr = Array.isArray(cat) ? cat : [cat];
-  return arr
-    .map(normalizeCategoryItem)
+
+  const items = Array.isArray(cat) ? cat : [cat];
+
+  const normalized = items
+    .map((c) => normalizeCategoryItem(c))
     .filter((x): x is { label: string; slug: string } => Boolean(x));
+
+  // slugで重複排除
+  const map = new Map<string, { label: string; slug: string }>();
+  for (const n of normalized) {
+    if (!map.has(n.slug)) map.set(n.slug, n);
+  }
+
+  return Array.from(map.values());
+}
+
+export function normalizeCategory(
+  cat: MicroCMSCategory
+): { label: string; slug: string } | null {
+  const list = normalizeCategories(cat);
+  return list.length ? list[0] : null;
 }
 
 // envが未設定のとき、ビルドを落とさず空配列で返す

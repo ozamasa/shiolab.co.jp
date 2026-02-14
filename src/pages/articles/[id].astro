@@ -1,70 +1,91 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles, fetchArticleById, normalizeCategories } from "../../lib/microcms";
+import {
+  fetchAllArticles,
+  fetchArticleById,
+  normalizeCategory,
+} from "../../lib/microcms";
 
+// 静的生成
 export async function getStaticPaths() {
   const all = await fetchAllArticles();
-  return all.map((a) => ({ params: { id: a.id } }));
+  return all.map((a) => ({
+    params: { id: a.id },
+  }));
 }
 
 const { id } = Astro.params;
 const article = await fetchArticleById(String(id));
 
-const title = (article?.title ?? "記事が見つかりません").toString();
-const description = (article?.description ?? "").toString();
-
-// content は使わない方針：microCMS 側の body（リッチテキストHTML想定）を優先
-const bodyHtml = (article?.body ?? "").toString();
-
-// 日付はあるものを優先表示
-const dateText = (article?.date ?? article?.publishedAt ?? article?.updatedAt ?? article?.createdAt ?? "").toString();
-
-// カテゴリ（複数対応）
-const cats = normalizeCategories(article?.category);
+// 安全ガード
+const title = article?.title ?? "記事が見つかりません";
+const description = article?.description ?? "";
+const dateText =
+  article?.date ?? article?.publishedAt ?? article?.createdAt ?? "";
+const normalized = normalizeCategory(article?.category);
 ---
 
-<BaseLayout title={title} description={description || "SHIOLABの記事ページです。"}>
+<BaseLayout
+  title={title}
+  description={description || "SHIOLABの記事ページです。"}
+>
   {!article ? (
     <section class="card">
-      <h1 style="margin:0 0 8px;">記事が見つかりません</h1>
-      <p style="margin:0 0 12px;">URL が間違っているか、記事が非公開になっている可能性があります。</p>
-      <p style="margin:0;">
-        <a class="smallLink" href="/articles/">記事一覧へ戻る →</a>
-      </p>
+      <h1>記事が見つかりません</h1>
+      <p>URLが間違っているか、記事が非公開になっている可能性があります。</p>
+      <p><a href="/articles/">記事一覧へ戻る →</a></p>
     </section>
   ) : (
     <>
+      <!-- 記事ヘッダー -->
       <article class="card">
-        <h1 style="margin:0 0 10px;">{title}</h1>
-
-        <div class="metaRow" style="margin-bottom:10px;">
-          {cats.length > 0 ? (
-            <div class="tagRow">
-              <span class="muted">カテゴリ：</span>
-              {cats.map((c) => (
-                <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
-              ))}
-            </div>
+        <div class="meta" style="margin-bottom:10px;">
+          {normalized ? (
+            <a
+              class="pill"
+              href={`/category/${normalized.slug}/`}
+              style="text-decoration:none;"
+            >
+              {normalized.label}
+            </a>
           ) : (
-            <span class="muted">カテゴリ：未設定</span>
+            <span class="pill">カテゴリ未設定</span>
           )}
 
-          {dateText ? <span class="muted">更新：{dateText.slice(0, 10)}</span> : null}
+          {dateText && (
+            <span class="pill">
+              更新 {dateText.toString().slice(0, 10)}
+            </span>
+          )}
         </div>
 
-        {description ? <p class="lead" style="margin:0;">{description}</p> : null}
+        <h1 style="margin:0 0 16px; line-height:1.4;">
+          {title}
+        </h1>
+
+        {description && (
+          <p style="font-size:16px; color:#334155; line-height:1.8;">
+            {description}
+          </p>
+        )}
       </article>
 
-      {bodyHtml.trim().length > 0 ? (
-        <section class="card" style="margin-top:14px;">
-          <div class="prose" set:html={bodyHtml} />
-        </section>
-      ) : null}
-
+      <!-- 本文なしメッセージ（content使わない方針） -->
       <section class="card" style="margin-top:14px;">
-        <p style="margin:0;">
-          <a class="smallLink" href="/articles/">← 記事一覧へ</a>
+        <p style="margin:0; line-height:1.8;">
+          本文はこの記事内に記載されています。
+          問題 → 切り方 → 判定ロジック → 練習、
+          の順で読み進めてください。
         </p>
+      </section>
+
+      <!-- ナビ -->
+      <section class="card" style="margin-top:14px;">
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="/articles/">← 記事一覧へ</a>
+          <a href="/">トップへ</a>
+          <a href="/quiz/">クイズで練習 →</a>
+        </div>
       </section>
     </>
   )}

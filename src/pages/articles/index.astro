@@ -1,60 +1,82 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategories } from "../../lib/microcms";
+import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
 
-const articles = (await fetchAllArticles()).sort(
-  (a, b) =>
-    new Date(String(b.date ?? b.publishedAt ?? b.createdAt ?? 0)).getTime() -
-    new Date(String(a.date ?? a.publishedAt ?? a.createdAt ?? 0)).getTime()
-);
+const all = await fetchAllArticles();
+
+// 新しい順（date -> publishedAt -> createdAt）
+const articles = all.sort((a, b) => {
+  const ad = new Date((a.date || a.publishedAt || a.createdAt || 0) as any).getTime();
+  const bd = new Date((b.date || b.publishedAt || b.createdAt || 0) as any).getTime();
+  return bd - ad;
+});
 ---
 
 <BaseLayout
   title="記事一覧｜SHIOLAB"
-  description="SHIOLABの記事一覧ページです。資格試験・受験対策に役立つ攻略パターンをまとめています。"
+  description="SHIOLABの記事一覧。4択試験の攻略パターン（選択肢の切り方・瞬時に絞る技術）をまとめています。"
 >
   <section class="card">
-    <h1>記事一覧</h1>
-    <p>SHIOLAB に掲載している攻略パターン記事の一覧です。</p>
+    <h1 style="margin:0 0 10px;">記事一覧</h1>
+    <p style="margin:0;">
+      4択問題の「選択肢の切り方」「瞬時に2択へ絞る型」を、短く・実戦寄りにまとめています。
+      気になるカテゴリから探すこともできます。
+    </p>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="pill" href="/" style="border:none; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;">
+        トップへ
+      </a>
+      <a class="pill" href="/quiz/">クイズで練習</a>
+    </div>
   </section>
 
   {articles.length === 0 ? (
-    <section class="card" style="margin-top:20px;">
-      <p>まだ記事がありません。</p>
+    <section class="card" style="margin-top:14px;">
+      <p style="margin:0;">まだ記事がありません。microCMS に記事を追加するとここに表示されます。</p>
+      <p style="margin:10px 0 0;">
+        <a href="/guide/">使い方を見る →</a>
+      </p>
     </section>
   ) : (
-    <section class="grid" style="margin-top:20px;">
+    <section class="grid" style="margin-top:14px;">
       {articles.map((a) => {
-        const cats = normalizeCategories(a.category);
-        const dateText = String(a.date ?? a.publishedAt ?? a.createdAt ?? "");
+        const c = normalizeCategory(a.category);
+        const dateText = (a.date || a.publishedAt || a.createdAt || "").toString();
+
         return (
           <article class="card">
-            <h2 style="margin:0 0 10px; font-size:18px;">
-              <a href={`/articles/${a.id}/`}>{a.title}</a>
+            <h2 style="margin:0 0 8px; font-size:18px;">
+              <a href={`/articles/${a.id}/`}>{a.title ?? "（無題）"}</a>
             </h2>
 
             {a.description ? (
-              <p style="font-size:14px; color:#666; margin:0 0 10px;">
+              <p style="margin:0; font-size:14px; color:#475569; line-height:1.7;">
                 {a.description}
               </p>
             ) : null}
 
-            <div style="font-size:12px; color:#888; display:flex; gap:10px; flex-wrap:wrap;">
-              {cats.length ? (
-                <span>
-                  カテゴリ：
-                  {cats.map((c, i) => (
-                    <>
-                      {i ? ", " : ""}
-                      <a href={`/category/${c.slug}/`}>{c.label}</a>
-                    </>
-                  ))}
+            <div class="meta" style="margin-top:12px;">
+              {c ? (
+                <span class="pill">
+                  <span style="opacity:.75;">カテゴリ</span>
+                  <a
+                    href={`/category/${c.slug}/`}
+                    style="color:inherit; text-decoration:none;"
+                  >
+                    {c.label}
+                  </a>
                 </span>
               ) : (
-                <span>カテゴリ：未設定</span>
+                <span class="pill">カテゴリ未設定</span>
               )}
 
-              {dateText ? <span>{dateText.slice(0, 10)}</span> : null}
+              {dateText ? (
+                <span class="pill">
+                  <span style="opacity:.75;">更新</span>
+                  {dateText.slice(0, 10)}
+                </span>
+              ) : null}
             </div>
           </article>
         );

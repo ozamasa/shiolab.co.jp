@@ -1,78 +1,110 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
+import { fetchAllArticles, normalizeCategory } from "../lib/microcms";
 
-const articles = await fetchAllArticles();
+// microCMSから全記事
+const all = await fetchAllArticles();
 
-// 新しい順（date が無い場合は publishedAt / updatedAt を使う）
-const toTime = (a: any) =>
-  new Date(a.date || a.publishedAt || a.updatedAt || a.createdAt || 0).getTime();
+// 新しい順（date -> publishedAt -> createdAt）
+const sorted = all.sort((a, b) => {
+  const ad = new Date((a.date || a.publishedAt || a.createdAt || 0) as any).getTime();
+  const bd = new Date((b.date || b.publishedAt || b.createdAt || 0) as any).getTime();
+  return bd - ad;
+});
 
-articles.sort((a, b) => toTime(b) - toTime(a));
+const latest = sorted.slice(0, 8);
 
-const latest = articles.slice(0, 8);
-
-// カテゴリ一覧（slug -> label の重複排除）
-const categoryMap = new Map<string, string>();
-for (const a of articles) {
-  for (const c of normalizeCategories(a.category)) {
-    if (!categoryMap.has(c.slug)) categoryMap.set(c.slug, c.label);
+// カテゴリ集計（slug重複排除、記事数も数える）
+const catMap = new Map<string, { label: string; slug: string; count: number }>();
+for (const a of all) {
+  const c = normalizeCategory(a.category);
+  if (!c) continue;
+  const key = c.slug;
+  const prev = catMap.get(key);
+  if (prev) {
+    prev.count += 1;
+  } else {
+    catMap.set(key, { label: c.label, slug: c.slug, count: 1 });
   }
 }
-const categories = Array.from(categoryMap.entries()).map(([slug, label]) => ({ slug, label }));
+
+// 表示用：記事数が多い順
+const categories = Array.from(catMap.values()).sort((x, y) => y.count - x.count);
+const topCategories = categories.slice(0, 10);
 ---
 
 <BaseLayout
-  title="SHIOLAB｜資格・受験・学習の攻略メディア"
-  description="SHIOLABは、資格試験・受験・学校学習などの“4択試験攻略パターン”を、記事と演習で学べる学習メディアです。"
+  title="SHIOLAB｜4択試験の攻略パターンメディア"
+  description="資格試験・受験・学校学習などの4択問題で使える“選択肢の切り方”を、短く分かりやすく解説します。"
 >
-  <section class="hero">
-    <h1>SHIOLAB</h1>
-    <p class="lead">
-      4択問題の「選択肢の切り方」を、短い型として整理していきます。<br />
-      勉強の内容そのものよりも、試験で点につながる「判断の型」を増やすことが目的です。
+  <!-- ヒーロー -->
+  <section class="card">
+    <h1 style="margin:0 0 10px;">4択問題は「選び方」で点が伸びる</h1>
+
+    <p style="margin:0;">
+      SHIOLAB は、資格試験・受験・学校学習などの<strong>4択（選択式）</strong>で使える
+      「この選択肢は切れる」「この形が出たら2択になる」といった<strong>攻略パターン</strong>をまとめる学習メディアです。
+      記事で理解して、クイズで確認できる構成にしています。
     </p>
 
-    <div class="heroActions">
-      <a class="btn primary" href="/articles/">記事を読む</a>
-      <a class="btn" href="/quiz/">クイズへ（準備中）</a>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+      <a class="pill" href="/articles/" style="border:none; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;">
+        記事を見る
+      </a>
+      <a class="pill" href="/quiz/">クイズで練習</a>
+      <a class="pill" href="/guide/">使い方</a>
+    </div>
+
+    <div style="margin-top:14px; font-size:12px; color:#64748b;">
+      例：英検 / ITパスポート / 中学（理科・社会）など、カテゴリは増やしていけます。
     </div>
   </section>
 
-  <section class="sectionHead">
-    <h2>最新記事</h2>
-    <a class="smallLink" href="/articles/">一覧を見る →</a>
-  </section>
+  <!-- 最新記事 -->
+  <h2>最新記事</h2>
 
   {latest.length === 0 ? (
     <section class="card">
-      <p>まだ記事がありません。microCMS から記事を追加するとここに表示されます。</p>
+      <p style="margin:0;">まだ記事がありません。microCMS に記事を追加するとここに表示されます。</p>
+      <p style="margin:10px 0 0;">
+        <a href="/guide/">使い方を見る →</a>
+      </p>
     </section>
   ) : (
     <section class="grid">
       {latest.map((a) => {
-        const cats = normalizeCategories(a.category);
-        const date = (a.date || a.publishedAt || a.updatedAt || a.createdAt || "").toString();
+        const c = normalizeCategory(a.category);
+        const dateText = (a.date || a.publishedAt || a.createdAt || "").toString();
         return (
           <article class="card">
-            <h3 class="cardTitle">
+            <h3 style="margin:0 0 8px;">
               <a href={`/articles/${a.id}/`}>{a.title ?? "（無題）"}</a>
             </h3>
 
-            {a.description ? <p class="cardDesc">{a.description}</p> : null}
+            {a.description ? (
+              <p style="margin:0; font-size:14px; color:#475569;">
+                {a.description}
+              </p>
+            ) : null}
 
-            <div class="metaRow">
-              {cats.length > 0 ? (
-                <div class="tagRow">
-                  {cats.map((c) => (
-                    <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
-                  ))}
-                </div>
+            <div class="meta">
+              {c ? (
+                <span class="pill">
+                  <span style="opacity:.75;">カテゴリ</span>
+                  <a href={`/category/${c.slug}/`} style="color:inherit; text-decoration:none;">
+                    {c.label}
+                  </a>
+                </span>
               ) : (
-                <span class="muted">カテゴリ未設定</span>
+                <span class="pill">カテゴリ未設定</span>
               )}
 
-              {date ? <span class="muted">{date.slice(0, 10)}</span> : null}
+              {dateText ? (
+                <span class="pill">
+                  <span style="opacity:.75;">更新</span>
+                  {dateText.slice(0, 10)}
+                </span>
+              ) : null}
             </div>
           </article>
         );
@@ -80,25 +112,46 @@ const categories = Array.from(categoryMap.entries()).map(([slug, label]) => ({ s
     </section>
   )}
 
-  <section class="sectionHead" style="margin-top:34px;">
-    <h2>カテゴリ</h2>
-  </section>
+  <div style="margin-top:12px;">
+    <a href="/articles/">記事一覧へ →</a>
+  </div>
 
-  {categories.length === 0 ? (
+  <!-- カテゴリ -->
+  <h2>カテゴリ</h2>
+
+  {topCategories.length === 0 ? (
     <section class="card">
-      <p>カテゴリ付きの記事がまだありません。</p>
+      <p style="margin:0;">カテゴリ付きの記事がまだありません。</p>
+      <p style="margin:10px 0 0; color:#64748b;">
+        microCMS 側で記事にカテゴリを設定すると、ここに自動で出ます。
+      </p>
     </section>
   ) : (
     <section class="grid">
-      {categories.map((c) => (
+      {topCategories.map((c) => (
         <article class="card">
-          <h3 class="cardTitle" style="margin-bottom:6px;">{c.label}</h3>
-          <p class="cardDesc" style="margin-bottom:12px;">
-            {c.label} の攻略パターンをまとめて見られます。
+          <h3 style="margin:0 0 6px;">{c.label}</h3>
+          <p style="margin:0 0 10px; font-size:14px;">
+            {c.label} の攻略パターン記事（{c.count}本）
           </p>
-          <a class="smallLink" href={`/category/${c.slug}/`}>カテゴリを見る →</a>
+          <p style="margin:0;">
+            <a href={`/category/${c.slug}/`}>一覧を見る →</a>
+          </p>
         </article>
       ))}
     </section>
   )}
+
+  <div style="margin-top:12px;">
+    <a href="/quiz/">クイズで練習する →</a>
+  </div>
+
+  <!-- 信頼補強（短く、言い訳しない） -->
+  <h2>このサイトについて</h2>
+  <section class="card">
+    <p style="margin:0;">
+      SHIOLAB は「暗記」よりも「判断の型」を重視して、4択問題の正答率を上げるための解説を掲載しています。
+      まずは気になる記事を1本読んでから、クイズで確認してください。
+    </p>
+  </section>
 </BaseLayout>

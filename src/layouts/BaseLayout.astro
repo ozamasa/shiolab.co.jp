@@ -1,200 +1,278 @@
 ---
-const {
-  title = "SHIOLAB",
-  description = "資格・受験・学習の攻略パターンをまとめる学習メディア。",
-} = Astro.props;
+// src/layouts/BaseLayout.astro
+type Props = {
+  title?: string;
+  description?: string;
+};
 
-const canonical = Astro.url?.toString?.() ?? "";
+const {
+  title = "SHIOLAB｜学習の攻略パターンメディア",
+  description = "資格試験・受験・学校学習の“4択攻略パターン”を、短く分かりやすく解説します。",
+} = Astro.props as Props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString();
 ---
 
 <!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <title>{title}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content={description} />
-  {canonical ? <link rel="canonical" href={canonical} /> : null}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- OG（最低限） -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  {canonical ? <meta property="og:url" content={canonical} /> : null}
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
-  <style>
-:root{
-  --bg:#0b1220;
-  --panel:#0f172a;
-  --card:#111b33;
-  --text:#e5e7eb;
-  --muted:#a6adbb;
-  --line:rgba(148,163,184,.18);
-  --brand:#60a5fa;
-  --brand2:#a78bfa;
-  --shadow: 0 10px 30px rgba(0,0,0,.28);
-}
-*{box-sizing:border-box}
-html{color-scheme:dark}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: radial-gradient(1000px 600px at 10% 0%, rgba(96,165,250,.18), transparent 55%),
-              radial-gradient(900px 520px at 80% 10%, rgba(167,139,250,.14), transparent 60%),
-              var(--bg);
-  color:var(--text);
-}
-a{color:inherit; text-decoration:none}
-a:hover{opacity:.92}
+    <link rel="icon" href="/favicon.png" type="image/png" />
 
-.wrap{max-width:980px; margin:0 auto; padding:28px 16px 64px}
-.header{
-  display:flex; justify-content:space-between; align-items:center; gap:14px;
-  margin-bottom:18px;
-}
-.brand{display:flex; align-items:center; gap:10px}
-.logo{
-  width:36px;height:36px;border-radius:12px;
-  background: linear-gradient(135deg, var(--brand), var(--brand2));
-  box-shadow: 0 10px 24px rgba(96,165,250,.18);
-}
-.siteTitle{font-weight:900; letter-spacing:.02em}
-.nav{display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:14px}
-.nav a{padding:8px 10px; border-radius:10px; border:1px solid transparent}
-.nav a:hover{border-color:var(--line); background:rgba(255,255,255,.04)}
+    <!-- AdSense（審査用。ユニット配置は審査通過後でOK） -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6767052617363894"
+      crossorigin="anonymous"
+    ></script>
 
-.card, .hero{
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-  box-shadow: var(--shadow);
-}
-.hero{
-  padding:22px 20px;
-}
-h1{font-size:30px; margin:0 0 10px}
-h2{font-size:18px; margin:0}
-h3{font-size:16px}
-.lead{line-height:1.85; color:rgba(229,231,235,.92); margin:0}
-.muted{color:var(--muted)}
-.smallLink{color:var(--muted)}
-.smallLink:hover{color:var(--text)}
+    <style>
+      :root{
+        /* ニュートラル（学習向け） */
+        --bg: #f7f8fb;
+        --panel: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e5e7eb;
 
-.sectionHead{
-  display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
-  margin:26px 2px 12px;
-}
-.grid{
-  display:grid; gap:12px; grid-template-columns:1fr;
-}
-@media(min-width:860px){
-  .grid{grid-template-columns:1fr 1fr}
-}
-.cardTitle{margin:0 0 8px; font-size:17px; line-height:1.35}
-.cardTitle a{background: linear-gradient(90deg, var(--text), rgba(229,231,235,.78));
-  -webkit-background-clip:text; background-clip:text; color:transparent}
-.cardDesc{margin:0; color:rgba(229,231,235,.78); line-height:1.75; font-size:14px}
+        /* アクセント（淡いネイビー寄り） */
+        --accent: #1d4ed8;
+        --accent2: #0ea5e9;
 
-.btn{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:var(--text);
-  font-weight:800;
-}
-.btn:hover{background:rgba(255,255,255,.07)}
-.btn.primary{
-  border-color: transparent;
-  background: linear-gradient(135deg, var(--brand), var(--brand2));
-}
-.heroActions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+        --radius: 16px;
+        --shadow: 0 10px 30px rgba(2, 6, 23, .06);
+        --shadow2: 0 6px 18px rgba(2, 6, 23, .06);
+      }
 
-.metaRow{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  flex-wrap:wrap;
-  margin-top:12px;
-  font-size:12px;
-}
-.tagRow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-.tag{
-  display:inline-flex;
-  padding:4px 9px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:rgba(229,231,235,.9);
-  font-size:12px;
-}
-.tag:hover{background:rgba(255,255,255,.07)}
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body{
+        margin:0;
+        font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      a{ color: var(--accent); text-decoration: none; }
+      a:hover{ text-decoration: underline; }
 
-.prose{line-height:1.95; color:rgba(229,231,235,.9)}
-.prose h2{margin:26px 0 10px; font-size:18px}
-.prose h3{margin:22px 0 8px; font-size:16px}
-.prose p{margin:0 0 14px}
-.prose ul{margin:0 0 14px; padding-left:18px}
-.prose code{
-  padding:2px 6px; border-radius:8px;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  font-size: .95em;
-}
+      .wrap{
+        max-width: 1024px;
+        margin: 0 auto;
+        padding: 26px 16px 56px;
+      }
 
-.footer{
-  margin-top:28px;
-  padding-top:16px;
-  border-top:1px solid var(--line);
-  color:var(--muted);
-  font-size:13px;
-  display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
-}
-.footer a{color:var(--muted)}
-.footer a:hover{color:var(--text)}
+      /* Header */
+      .header{
+        display:flex;
+        justify-content: space-between;
+        align-items:center;
+        gap: 16px;
+        padding: 14px 16px;
+        background: rgba(255,255,255,.72);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow2);
+        backdrop-filter: blur(8px);
+      }
+      .brand{
+        display:flex; align-items:center; gap:12px;
+        min-width: 200px;
+      }
+      .logo{
+        width: 36px; height: 36px;
+        border-radius: 12px;
+        display:grid; place-items:center;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        color: #fff;
+        font-weight: 900;
+        letter-spacing: .02em;
+      }
+      .brandText{
+        display:flex; flex-direction: column;
+        line-height: 1.1;
+      }
+      .siteName{
+        font-size: 16px;
+        font-weight: 900;
+        letter-spacing: .02em;
+      }
+      .tagline{
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
 
-</style>
-</head>
+      .nav{
+        display:flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .nav a{
+        font-size: 13px;
+        color: var(--text);
+        background: #ffffff;
+        border: 1px solid var(--border);
+        padding: 8px 10px;
+        border-radius: 999px;
+        box-shadow: 0 1px 0 rgba(2,6,23,.03);
+      }
+      .nav a:hover{
+        text-decoration: none;
+        border-color: rgba(29,78,216,.35);
+        box-shadow: 0 10px 22px rgba(29,78,216,.10);
+      }
+      .nav a.primary{
+        color: #fff;
+        border: none;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+      }
 
-<body>
-  <div class="wrap">
-    <header class="site-header">
-      <div class="header-inner">
-        <a class="brand" href="/">
-          <span class="brand-mark">S</span>
-          <span class="brand-name">SHIOLAB</span>
-        </a>
+      /* Main */
+      main{
+        margin-top: 16px;
+      }
 
-        <nav class="header-nav" aria-label="主要ナビゲーション">
-          <a href="/articles/">記事</a>
+      .card{
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      h1{ font-size: 28px; margin: 0 0 10px; letter-spacing: -.01em; }
+      h2{ font-size: 18px; margin: 28px 0 12px; letter-spacing: -.01em; }
+      h3{ font-size: 16px; margin: 0 0 10px; }
+
+      p, li{
+        line-height: 1.85;
+        color: var(--muted);
+      }
+
+      .grid{
+        display:grid;
+        gap: 12px;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 820px){
+        .grid{ grid-template-columns: 1fr 1fr; }
+      }
+
+      .meta{
+        font-size: 12px;
+        color: #64748b;
+        display:flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .pill{
+        display:inline-flex;
+        align-items:center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: #f8fafc;
+        color: #334155;
+      }
+
+      /* Prose (article body) */
+      .prose{
+        color: var(--text);
+      }
+      .prose :global(p),
+      .prose :global(li){
+        color: #334155;
+      }
+      .prose :global(h2){
+        margin-top: 26px;
+      }
+      .prose :global(a){
+        color: var(--accent);
+      }
+      .prose :global(code){
+        background: #f1f5f9;
+        border: 1px solid var(--border);
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: .95em;
+      }
+
+      /* Footer */
+      .footer{
+        margin-top: 26px;
+        padding: 16px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.72);
+        box-shadow: var(--shadow2);
+        color: #64748b;
+        font-size: 13px;
+        display:flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .footerLinks{
+        display:flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .footerLinks a{
+        color: #334155;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        padding: 8px 10px;
+        border-radius: 999px;
+      }
+      .footerLinks a:hover{ text-decoration: none; border-color: rgba(29,78,216,.35); }
+      .copy{
+        color: #64748b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header class="header">
+        <div class="brand">
+          <div class="logo">S</div>
+          <div class="brandText">
+            <div class="siteName">SHIOLAB</div>
+            <div class="tagline">4択攻略パターンを、短く分かりやすく</div>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="主要メニュー">
+          <a class="primary" href="/articles/">記事</a>
+          <a href="/quiz/">クイズ</a>
+          <a href="/guide/">使い方</a>
           <a href="/about/">このサイトについて</a>
-          <a class="nav-cta" href="https://quiz.shiolab.co.jp/" rel="noopener noreferrer">
-            クイズ
-          </a>
+          <a href="/contact/">お問い合わせ</a>
         </nav>
-      </div>
-    </header>
+      </header>
 
-    <main>
-      <slot />
-    </main>
+      <main>
+        <slot />
+      </main>
 
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <nav class="footer-links">
-          <a href="/articles/">記事一覧</a>
-          <a href="/about/">このサイトについて</a>
+      <footer class="footer">
+        <div class="footerLinks">
           <a href="/privacy/">プライバシーポリシー</a>
           <a href="/terms/">利用規約</a>
           <a href="/disclaimer/">免責事項</a>
           <a href="/contact/">お問い合わせ</a>
-        </nav>
-
-        <p class="copyright">
-          © {new Date().getFullYear()} SHIOLAB
-        </p>
-      </div>
-    </footer>
-  </div>
-</body>
+        </div>
+        <div class="copy">© SHIOLAB</div>
+      </footer>
+    </div>
+  </body>
 </html>

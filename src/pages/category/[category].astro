@@ -1,81 +1,101 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
+import { fetchAllArticles, normalizeCategories } from "../../lib/microcms";
 
 // 静的生成に必須
 export async function getStaticPaths() {
   const articles = await fetchAllArticles();
 
-  // slug(生) -> label
+  // slug -> label のMap（重複排除）
   const categorySet = new Map<string, string>();
 
-  for (const article of articles) {
-    const normalized = normalizeCategory(article.category);
-    if (!normalized) continue;
-
-    // normalizeCategory が今「1個」しか返さない前提で一旦対応
-    // （配列対応は microcms.ts で直すのが本筋）
-    const slugRaw = decodeURIComponent(normalized.slug); // 念のため生に寄せる
-    if (!categorySet.has(slugRaw)) {
-      categorySet.set(slugRaw, normalized.label);
+  for (const a of articles) {
+    const cats = normalizeCategories(a.category);
+    for (const c of cats) {
+      if (!categorySet.has(c.slug)) categorySet.set(c.slug, c.label);
     }
   }
 
-  return Array.from(categorySet.entries()).map(([slugRaw, label]) => ({
-    params: { category: slugRaw }, // ここは「生」を渡す（AstroがURL化してくれる）
-    props: { label, slugRaw },
+  return Array.from(categorySet.entries()).map(([slug, label]) => ({
+    params: { category: slug },
+    props: { label },
   }));
 }
 
 const { category } = Astro.params;
-const { label, slugRaw } = Astro.props;
+const { label } = Astro.props;
 
-const articles = await fetchAllArticles();
+const all = await fetchAllArticles();
 
-const filtered = articles.filter((article) => {
-  const normalized = normalizeCategory(article.category);
-  if (!normalized) return false;
-
-  const s = decodeURIComponent(normalized.slug);
-  return s === category;
-});
-
-// 新しい順（カテゴリ内でも）
-filtered.sort((a, b) => {
-  const ta = new Date(a.date ?? a.publishedAt ?? a.createdAt ?? a.updatedAt ?? 0).getTime();
-  const tb = new Date(b.date ?? b.publishedAt ?? b.createdAt ?? b.updatedAt ?? 0).getTime();
-  return tb - ta;
-});
+// 対象カテゴリに一致する記事だけ
+const filtered = all
+  .filter((a) => {
+    const cats = normalizeCategories(a.category);
+    return cats.some((c) => c.slug === category);
+  })
+  .sort(
+    (a, b) =>
+      new Date(String(b.date ?? b.publishedAt ?? b.createdAt ?? 0)).getTime() -
+      new Date(String(a.date ?? a.publishedAt ?? a.createdAt ?? 0)).getTime()
+  );
 ---
 
-<BaseLayout title={`${label} の記事一覧`}>
+<BaseLayout title={`${label}｜カテゴリ`} description={`${label} に関する攻略記事一覧です。`}>
   <section class="card">
-    <h1>{label}</h1>
-    <p>{label} に関する攻略記事一覧です。</p>
+    <h1 style="margin:0 0 8px;">{label}</h1>
+    <p style="margin:0;">
+      {label} に関する攻略記事一覧です。
+      <a href="/articles/" style="margin-left:10px;">記事一覧へ →</a>
+    </p>
   </section>
 
   {filtered.length === 0 ? (
-    <section class="card">
-      <p>まだ記事がありません。</p>
-      <p style="margin:8px 0 0;">
-        <a href="/articles/">記事一覧へ戻る →</a>
-      </p>
+    <section class="card" style="margin-top:20px;">
+      <p>このカテゴリの記事はまだありません。</p>
     </section>
   ) : (
-    <section class="grid" style="margin-top:24px;">
-      {filtered.map((article) => (
-        <article class="card">
-          <h3 style="margin:0 0 8px;">
-            <a href={`/articles/${article.id}/`}>{article.title ?? "（無題）"}</a>
-          </h3>
+    <section class="grid" style="margin-top:20px;">
+      {filtered.map((a) => {
+        const cats = normalizeCategories(a.category);
+        const dateText = String(a.date ?? a.publishedAt ?? a.createdAt ?? "");
+        return (
+          <article class="card">
+            <h2 style="margin:0 0 10px; font-size:18px;">
+              <a href={`/articles/${a.id}/`}>{a.title}</a>
+            </h2>
 
-          {article.description ? (
-            <p style="font-size:14px; color:#666;">
-              {article.description}
-            </p>
-          ) : null}
-        </article>
-      ))}
+            {a.description ? (
+              <p style="font-size:14px; color:#666; margin:0 0 10px;">
+                {a.description}
+              </p>
+            ) : null}
+
+            <div style="font-size:12px; color:#888; display:flex; gap:10px; flex-wrap:wrap;">
+              <span>
+                カテゴリ：
+                {cats.length ? (
+                  cats.map((c, i) => (
+                    <>
+                      {i ? ", " : ""}
+                      <a href={`/category/${c.slug}/`}>{c.label}</a>
+                    </>
+                  ))
+                ) : (
+                  "未設定"
+                )}
+              </span>
+
+              {dateText ? <span>{dateText.slice(0, 10)}</span> : null}
+            </div>
+          </article>
+        );
+      })}
     </section>
   )}
+
+  <section class="card" style="margin-top:14px;">
+    <p style="margin:0;">
+      <a href="/">← トップへ</a>
+    </p>
+  </section>
 </BaseLayout>

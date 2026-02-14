@@ -103,3 +103,8 @@ export async function fetchArticleById(id: string): Promise<MicroCMSArticle | nu
     return null;
   }
 }
+
+export const microcms = client ?? {
+  getList: async () => ({ contents: [], totalCount: 0, offset: 0, limit: 0 }),
+  getListDetail: async () => null,
+};

@@ -33,246 +33,263 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).to
     ></script>
 
     <style>
+    :root{
+      --bg: #f6f7fb;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #e2e8f0;
+
+      --brand: #2563eb;
+      --brand-2: #06b6d4;
+
+      --radius: 18px;
+      --radius-sm: 14px;
+
+      --shadow: 0 10px 30px rgba(2, 6, 23, .08);
+      --shadow-sm: 0 6px 16px rgba(2, 6, 23, .06);
+    }
+
+    @media (prefers-color-scheme: dark){
       :root{
-        /* ニュートラル（学習向け） */
-        --bg: #f7f8fb;
-        --panel: #ffffff;
-        --text: #0f172a;
-        --muted: #475569;
-        --border: #e5e7eb;
+        --bg: #0b1220;
+        --surface: #0f172a;
+        --text: #e5e7eb;
+        --muted: #a1a1aa;
+        --line: rgba(148,163,184,.18);
+        --shadow: 0 16px 34px rgba(0,0,0,.35);
+        --shadow-sm: 0 10px 20px rgba(0,0,0,.28);
+      }
+      a{ color: color-mix(in srgb, var(--brand-2) 70%, #fff); }
+    }
 
-        /* アクセント（淡いネイビー寄り） */
-        --accent: #1d4ed8;
-        --accent2: #0ea5e9;
+    html, body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Sans", "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 420px at 10% -10%, color-mix(in srgb, var(--brand) 22%, transparent), transparent),
+        radial-gradient(900px 420px at 90% -10%, color-mix(in srgb, var(--brand-2) 18%, transparent), transparent),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
 
-        --radius: 16px;
-        --shadow: 0 10px 30px rgba(2, 6, 23, .06);
-        --shadow2: 0 6px 18px rgba(2, 6, 23, .06);
-      }
+    a{ color: var(--brand); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
 
-      * { box-sizing: border-box; }
-      html, body { height: 100%; }
-      body{
-        margin:0;
-        font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-      }
-      a{ color: var(--accent); text-decoration: none; }
-      a:hover{ text-decoration: underline; }
+    .wrap{
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
 
-      .wrap{
-        max-width: 1024px;
-        margin: 0 auto;
-        padding: 26px 16px 56px;
-      }
+    /* Header */
+    .header{
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .headerInner{
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 0;
+    }
+    .logo{
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      color:#fff;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: var(--shadow-sm);
+      flex: 0 0 auto;
+    }
+    .siteTitle{
+      font-weight: 900;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-      /* Header */
-      .header{
-        display:flex;
-        justify-content: space-between;
-        align-items:center;
-        gap: 16px;
-        padding: 14px 16px;
-        background: rgba(255,255,255,.72);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow2);
-        backdrop-filter: blur(8px);
-      }
-      .brand{
-        display:flex; align-items:center; gap:12px;
-        min-width: 200px;
-      }
-      .logo{
-        width: 36px; height: 36px;
-        border-radius: 12px;
-        display:grid; place-items:center;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        color: #fff;
-        font-weight: 900;
-        letter-spacing: .02em;
-      }
-      .brandText{
-        display:flex; flex-direction: column;
-        line-height: 1.1;
-      }
-      .siteName{
-        font-size: 16px;
-        font-weight: 900;
-        letter-spacing: .02em;
-      }
-      .tagline{
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 3px;
-      }
+    .nav{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      justify-content: flex-end;
+      align-items:center;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.2;
+      max-width: 68%;
+    }
+    .nav a{ color: var(--muted); }
+    .nav a{ padding: 6px 10px; border-radius: 999px; }
+    .nav a:hover{ color: var(--text); text-decoration: none; background: color-mix(in srgb, var(--surface) 65%, transparent); }
+    .nav a.primary{ color: var(--text); font-weight: 800; background: color-mix(in srgb, var(--surface) 70%, transparent); border: 1px solid var(--line); }
 
-      .nav{
-        display:flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-      }
-      .nav a{
-        font-size: 13px;
-        color: var(--text);
-        background: #ffffff;
-        border: 1px solid var(--border);
-        padding: 8px 10px;
-        border-radius: 999px;
-        box-shadow: 0 1px 0 rgba(2,6,23,.03);
-      }
-      .nav a:hover{
-        text-decoration: none;
-        border-color: rgba(29,78,216,.35);
-        box-shadow: 0 10px 22px rgba(29,78,216,.10);
-      }
-      .nav a.primary{
-        color: #fff;
-        border: none;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-      }
+    /* Common UI */
+    .card{
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
 
-      /* Main */
-      main{
-        margin-top: 16px;
-      }
+    .btnRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+      text-decoration:none;
+    }
+    .btn:hover{ text-decoration:none; transform: translateY(-1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      border-color: transparent;
+      color: #fff;
+    }
 
-      .card{
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 18px;
-        box-shadow: var(--shadow);
-      }
+    .badges{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items:center;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 70%, transparent);
+      color: var(--muted);
+    }
+.grid{
+      display:grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+      margin-top: 14px;
+    }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1fr 1fr; gap: 16px; }
+    }
 
-      h1{ font-size: 28px; margin: 0 0 10px; letter-spacing: -.01em; }
-      h2{ font-size: 18px; margin: 28px 0 12px; letter-spacing: -.01em; }
-      h3{ font-size: 16px; margin: 0 0 10px; }
+    h1, h2, h3{
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+    }
+    h1{ font-size: clamp(26px, 3.4vw, 36px); margin: 0 0 10px; }
+    h2{ font-size: 18px; margin: 0 0 10px; }
+    p{ margin: 0 0 12px; color: color-mix(in srgb, var(--text) 86%, var(--muted)); line-height: 1.85; }
+    .muted{ color: var(--muted); }
 
-      p, li{
-        line-height: 1.85;
-        color: var(--muted);
-      }
+    .prose :global(p){ margin: 0 0 14px; }
+    .prose :global(ul){ margin: 10px 0 14px; padding-left: 20px; }
+    .prose :global(li){ margin: 6px 0; }
+    .prose :global(h2){ margin-top: 22px; }
+    .prose :global(code){
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .95em;
+      padding: 0.15em 0.35em;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 85%, transparent);
+    }
 
-      .grid{
-        display:grid;
-        gap: 12px;
-        grid-template-columns: 1fr;
-      }
-      @media (min-width: 820px){
-        .grid{ grid-template-columns: 1fr 1fr; }
-      }
-
-      .meta{
-        font-size: 12px;
-        color: #64748b;
-        display:flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 10px;
-      }
-
-      .pill{
-        display:inline-flex;
-        align-items:center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-        background: #f8fafc;
-        color: #334155;
-      }
-
-      /* Prose (article body) */
-      .prose{
-        color: var(--text);
-      }
-      .prose :global(p),
-      .prose :global(li){
-        color: #334155;
-      }
-      .prose :global(h2){
-        margin-top: 26px;
-      }
-      .prose :global(a){
-        color: var(--accent);
-      }
-      .prose :global(code){
-        background: #f1f5f9;
-        border: 1px solid var(--border);
-        padding: 2px 6px;
-        border-radius: 8px;
-        font-size: .95em;
-      }
-
-      /* Footer */
-      .footer{
-        margin-top: 26px;
-        padding: 16px;
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        background: rgba(255,255,255,.72);
-        box-shadow: var(--shadow2);
-        color: #64748b;
-        font-size: 13px;
-        display:flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .footerLinks{
-        display:flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .footerLinks a{
-        color: #334155;
-        background: #ffffff;
-        border: 1px solid var(--border);
-        padding: 8px 10px;
-        border-radius: 999px;
-      }
-      .footerLinks a:hover{ text-decoration: none; border-color: rgba(29,78,216,.35); }
-      .copy{
-        color: #64748b;
-      }
-    </style>
+    /* Footer */
+    .footer{
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      text-align:center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer a{ color: var(--muted); }
+    .footer a:hover{ color: var(--text); text-decoration:none; }
+    .footerNav{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      justify-content:center;
+      margin-bottom: 10px;
+    }
+  </style>
   </head>
 
   <body>
     <div class="wrap">
       <header class="header">
+      <div class="headerInner">
         <div class="brand">
-          <div class="logo">S</div>
-          <div class="brandText">
-            <div class="siteName">SHIOLAB</div>
-            <div class="tagline">4択攻略パターンを、短く分かりやすく</div>
-          </div>
+          <a href="/" aria-label="SHIOLAB ホーム" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;">
+            <div class="logo">S</div>
+            <div>
+              <div class="siteTitle">SHIOLAB</div>
+              <div class="muted" style="font-size:12px;margin-top:2px;">4択攻略パターンを、短く分かりやすく</div>
+            </div>
+          </a>
         </div>
-
-        <nav class="nav" aria-label="主要メニュー">
-          <a class="primary" href="/articles/">記事</a>
-          <a href="/quiz/">クイズ</a>
-          <a href="/guide/">使い方</a>
-          <a href="/about/">このサイトについて</a>
-          <a href="/contact/">お問い合わせ</a>
+        <nav class="nav" aria-label="サイト内ナビゲーション">
+          <a href="/" class={Astro.url.pathname === "/" ? "primary" : ""}>トップ</a>
+          <a href="/articles/" class={Astro.url.pathname.startsWith("/articles") ? "primary" : ""}>記事</a>
+          <a href="/quiz/" class={Astro.url.pathname.startsWith("/quiz") ? "primary" : ""}>模擬問題</a>
+          <a href="/guide/" class={Astro.url.pathname.startsWith("/guide") ? "primary" : ""}>使い方</a>
+          <a href="/about/" class={Astro.url.pathname.startsWith("/about") ? "primary" : ""}>このサイトについて</a>
         </nav>
-      </header>
+      </div>
+    </header>
 
       <main>
         <slot />
       </main>
 
       <footer class="footer">
-        <div class="footerLinks">
-          <a href="/privacy/">プライバシーポリシー</a>
-          <a href="/terms/">利用規約</a>
-          <a href="/disclaimer/">免責事項</a>
-          <a href="/contact/">お問い合わせ</a>
-        </div>
-        <div class="copy">© SHIOLAB</div>
-      </footer>
+      <nav class="footerNav" aria-label="フッターナビゲーション">
+        <a href="/privacy/">プライバシーポリシー</a>
+        <a href="/terms/">利用規約</a>
+        <a href="/disclaimer/">免責事項</a>
+        <a href="/contact/">お問い合わせ</a>
+      </nav>
+      <div>© SHIOLAB</div>
+    </footer>
     </div>
   </body>
 </html>

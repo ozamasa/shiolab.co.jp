@@ -70,46 +70,72 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
     </div>
   </section>
 
-  <!-- カテゴリ -->
-  <div class="sectionHead" id="categories">
-    <h2>カテゴリから探す</h2>
-    <a href="/categories/">すべてのカテゴリ →</a>
-  </div>
+  <!-- 主要導線 -->
+  <section class="homeSplit">
+    <div>
+      <!-- カテゴリ -->
+      <div class="sectionHead">
+        <h2>カテゴリから探す</h2>
+        <a href="/articles/">すべての記事 →</a>
+      </div>
 
-    {categories.length === 0 ? (
-      <section class="card">
-        <p style="margin:0;">記事にカテゴリが付いていないため、カテゴリ一覧はまだ表示されません。</p>
-      </section>
-    ) : (
-      <section class="card" style="margin-top:12px;">
-        <div class="chipRow">
-          {categories.map((c) => (
-            <a class="chip" href={`/category/${c.slug}/`}>
-              <span>{c.label}</span>
-              <small>{c.count}件</small>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
-
-  <!-- 最新記事 -->
-  <div class="sectionHead" style="margin-top:34px;">
-    <h2>最新記事</h2>
-    <a href="/articles/">記事一覧 →</a>
-  </div>
-
-    {latest.length === 0 ? (
-      <section class="card">
-        <p style="margin:0;">まだ記事がありません。microCMSに記事を追加するとここに表示されます。</p>
-      </section>
-    ) : (
-      <section class="card" style="margin-top:12px;">
-        <section class="grid" style="margin-top:0;">
-          {latest.slice(0, 6).map((a) => (
-            <ArticleCard item={a} />
-          ))}
+      {categories.length === 0 ? (
+        <section class="card">
+          <p style="margin:0;">記事にカテゴリが付いていないため、カテゴリ一覧はまだ表示されません。</p>
         </section>
-      </section>
-    )}
+      ) : (
+        <section class="card" style="margin-top:12px;">
+          <div class="chipRow">
+            {categories.map((c) => (
+              <a class="chip" href={`/category/${c.slug}/`}>
+                <span>{c.label}</span>
+                <small>{c.count}件</small>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+
+    <div>
+      <!-- 最新記事 -->
+      <div class="sectionHead">
+        <h2>最新記事</h2>
+        <a href="/articles/">記事一覧 →</a>
+      </div>
+
+      {latest.length === 0 ? (
+        <section class="card">
+          <p style="margin:0;">まだ記事がありません。microCMSに記事を追加するとここに表示されます。</p>
+        </section>
+      ) : (
+        <section class="card" style="margin-top:12px;">
+          <section class="grid" style="margin-top:0;">
+            {latest.slice(0, 6).map((a) => (
+              <ArticleCard item={a} />
+            ))}
+          </section>
+        </section>
+      )}
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:22px;">
+    <div class="ctaRow">
+      <div>
+        <div class="kicker">次にやること</div>
+        <h2 style="margin-top:6px;">記事で覚えたら、クイズで確認</h2>
+        <p style="margin:10px 0 0;" class="subtle">
+          「なぜその選択肢は切れるのか」を理解したら、4択で同じ型を再現できるか確かめましょう。
+        </p>
+      </div>
+      <div class="ctaBtns">
+        <a class="btn" href="https://quiz.shiolab.co.jp/">クイズを開く</a>
+        <a class="btn btnSecondary" href="/guide/">使い方</a>
+      </div>
+    </div>
+  </section>
+
+
+
 </BaseLayout>

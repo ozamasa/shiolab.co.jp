@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
 import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
 
 const all = await fetchAllArticles();
@@ -37,243 +38,90 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
   return x.label.localeCompare(y.label, "ja");
 }).slice(0, 8);
 ---
-
 <BaseLayout
-  title="SHIOLAB｜資格・受験・学習の攻略パターン"
-  description="SHIOLABは、4択試験で「なぜその選択肢を切れるのか」を短く整理した攻略パターン記事と確認クイズを提供します。"
+  title="SHIOLAB｜資格・受験・学習の攻略メディア"
+  description="SHIOLABは、資格・受験・学校学習などの“4択試験攻略パターン”を、記事とクイズで学べる学習メディアです。"
 >
-  <style>
-    .hero{
-      display:grid;
-      gap:14px;
-      grid-template-columns: 1fr;
-      align-items: start;
-    }
-    @media (min-width: 900px){
-      .hero{ grid-template-columns: 1.4fr .6fr; }
-    }
-    .heroTitle{
-      font-size: 30px;
-      margin: 0 0 10px;
-      line-height: 1.25;
-    }
-    .heroLead{
-      margin:0;
-      font-size: 15px;
-    }
-    .ctaRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 14px;
-    }
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 12px 14px;
-      border-radius: 999px;
-      font-weight: 800;
-      border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--surface) 92%, transparent);
-      color: var(--text);
-      text-decoration:none;
-    }
-    .btn.primary{
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      color: #fff;
-      border-color: transparent;
-    }
-    .btn:hover{ text-decoration:none; }
-
-    .kpi{
-      display:grid;
-      gap:10px;
-      grid-template-columns: 1fr 1fr;
-    }
-    .kpiBox{
-      border:1px solid var(--line);
-      border-radius: var(--radius-sm);
-      padding: 12px;
-      background: color-mix(in srgb, var(--surface) 90%, transparent);
-    }
-    .kpiNum{
-      font-weight: 900;
-      font-size: 18px;
-      margin: 0;
-      color: var(--text);
-    }
-    .kpiLabel{
-      margin: 4px 0 0;
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .sectionHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:baseline;
-      gap:10px;
-      margin-top: 32px;
-    }
-    .sectionHead h2{ margin:0; }
-    .sectionHead a{ font-size: 13px; color: var(--muted); }
-
-    .metaLine{
-      font-size: 12px;
-      color: var(--muted);
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--surface) 88%, transparent);
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration:none;
-    }
-  </style>
-
-  <!-- HERO -->
+  <!-- ヒーロー -->
   <section class="hero">
-    <section class="hero">
-      <h1 class="heroTitle">4択試験は「解く」より「切る」</h1>
-      <p class="heroLead">
-        SHIOLAB は、資格・受験・学校学習などの4択問題で
-        <span style="color:var(--text); font-weight:800;">「なぜこの選択肢は即切りできるのか」</span>
-        を短い手順にしてまとめる学習メディアです。
-        記事で型を覚え、クイズで確認します。
-      </p>
+    <div class="heroInner">
+      <div>
+        <p class="kicker">4択試験の「選択肢を切る」技術</p>
+        <h1>SHIOLAB</h1>
+        <p class="lead">
+          資格試験・受験・学校学習の4択問題を、<br />
+          「なぜこの選択肢は切れるのか」という視点で整理した攻略メディアです。
+        </p>
 
-      <div class="ctaRow">
-        <a class="btn primary" href="/articles/">攻略記事を読む</a>
-        <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズで確認する</a>
-        <a class="btn" href="/guide/">使い方を見る</a>
-      </div>
-
-      <div class="metaLine">
-        <span>・記事：{articles.length}本</span>
-        <span>・カテゴリ：{catMap.size}件</span>
-        <span>・更新は随時</span>
-      </div>
-    </section>
-
-    <aside class="card">
-      <h2 style="margin:0 0 10px; font-size:16px;">まずはこの順で</h2>
-      <ol style="margin:0; padding-left:18px; color:var(--muted); line-height:1.9;">
-        <li>記事で「切り方の型」を1つ覚える</li>
-        <li>同じ型のクイズで5問だけ確認</li>
-        <li>間違えた選択肢の“切れない理由”をメモ</li>
-      </ol>
-
-      <div style="height:12px;"></div>
-
-      <div class="kpi">
-        <div class="kpiBox">
-          <p class="kpiNum">{latest.length}</p>
-          <p class="kpiLabel">最新記事（表示中）</p>
-        </div>
-        <div class="kpiBox">
-          <p class="kpiNum">{categories.length}</p>
-          <p class="kpiLabel">人気カテゴリ（表示中）</p>
+        <div class="heroActions">
+          <a class="btn" href="/articles/">記事を読む</a>
+          <a class="btn btn--ghost" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">
+            クイズで練習
+          </a>
         </div>
       </div>
-    </aside>
+
+      <div class="heroSide">
+        <div class="heroBox">
+          <h2 class="heroBoxTitle">まずはここから</h2>
+          <ul class="heroList">
+            <li>問題文より先に「形」を見る（主語・時制・品詞）</li>
+            <li>切れる選択肢を先に消す（消去法を型にする）</li>
+            <li>最後に意味を確認してミスを防ぐ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- カテゴリ -->
+  <section class="section">
+    <div class="sectionHead">
+      <h2 class="sectionTitle">カテゴリから探す</h2>
+      <p class="sectionSub">今ある記事カテゴリを一覧で表示します。増えても破綻しない構成です。</p>
+    </div>
+
+    {categories.length === 0 ? (
+      <section class="card">
+        <p style="margin:0;">記事にカテゴリが付いていないため、カテゴリ一覧はまだ表示されません。</p>
+      </section>
+    ) : (
+      <section class="grid grid--tight">
+        {categories.map((c) => (
+          <article class="card card--category">
+            <h3 class="cardTitle" style="margin-bottom:6px;">{c.label}</h3>
+            <p class="cardDesc" style="margin:0 0 12px;">
+              {c.label} の攻略記事をまとめて表示します。
+            </p>
+            <a class="linkArrow" href={`/category/${c.slug}/`}>記事一覧を見る</a>
+          </article>
+        ))}
+      </section>
+    )}
   </section>
 
   <!-- 最新記事 -->
-  <div class="sectionHead">
-    <h2 id="categories">カテゴリから探す</h2>
-    <a href="/articles/">全部見る →</a>
-  </div>
-
-  {categories.length === 0 ? (
-    <section class="card" style="margin-top:14px;">
-      <p style="margin:0;">
-        まだカテゴリがありません。記事にカテゴリを付けると表示されます。
-      </p>
-    </section>
-  ) : (
-    <section class="grid" style="margin-top:14px;">
-      {categories.map((c) => (
-        <article class="card">
-          <h3 style="margin:0 0 8px; font-size:16px;">{c.label}</h3>
-          <p style="margin:0; font-size:14px; color:var(--muted);">
-            {c.count}本の攻略記事があります。
-          </p>
-          <div style="margin-top:12px;">
-            <a class="btn" href={`/category/${c.slug}/`}>このカテゴリを見る →</a>
-          </div>
-        </article>
-      ))}
-    </section>
-  )}
-
-  <!-- 下段導線 -->
-  <section class="card" style="margin-top:28px;">
-    
-
-  <h2 id="latest">最新記事</h2>
-    <a href="/articles/">記事一覧へ →</a>
-  </div>
-
-  {latest.length === 0 ? (
-    <section class="card" style="margin-top:14px;">
-      <p style="margin:0;">
-        まだ記事がありません。microCMSに記事を追加するとここに表示されます。
-      </p>
-    </section>
-  ) : (
-    <section class="grid" style="margin-top:14px;">
-      {latest.map((a) => {
-        const cats = normalizeCategories((a as any).category);
-        const dateText = (a.date || a.publishedAt || a.createdAt || "").toString().slice(0, 10);
-        return (
-          <article class="card">
-            <h3 style="margin:0 0 8px; font-size:18px;">
-              <a href={`/articles/${a.id}/`}>{a.title}</a>
-            </h3>
-
-            {a.description ? (
-              <p style="margin:0; color:var(--muted); font-size:14px; line-height:1.75;">
-                {a.description}
-              </p>
-            ) : null}
-
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
-              {cats.length ? (
-                cats.map((c) => (
-                  <a class="pill" href={`/category/${c.slug}/`}>カテゴリ：{c.label}</a>
-                ))
-              ) : (
-                <span class="pill">カテゴリ：未設定</span>
-              )}
-              {dateText ? <span class="pill">更新：{dateText}</span> : null}
-            </div>
-          </article>
-        );
-      })}
-    </section>
-  )}
-
-  <!-- カテゴリ -->
-  <div class="sectionHead">
-    <h2 style="margin:0 0 10px;">学習を進める</h2>
-    <p style="margin:0 0 12px;">
-      目的に合わせて入口を選べます。
-    </p>
-    <div class="ctaRow">
-      <a class="btn primary" href="/articles/">攻略パターンを読む</a>
-      <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">確認クイズへ</a>
-      <a class="btn" href="/contact/">お問い合わせ</a>
+  <section class="section">
+    <div class="sectionHead">
+      <h2 class="sectionTitle">最新記事</h2>
+      <p class="sectionSub">新しく追加された攻略パターンから読むと理解が早いです。</p>
     </div>
+
+    {latest.length === 0 ? (
+      <section class="card">
+        <p style="margin:0;">まだ記事がありません。microCMSに記事を追加するとここに表示されます。</p>
+      </section>
+    ) : (
+      <>
+        <section class="grid">
+          {latest.map((a) => (
+            <ArticleCard item={a} />
+          ))}
+        </section>
+        <p class="moreLink">
+          <a href="/articles/">記事一覧へ →</a>
+        </p>
+      </>
+    )}
   </section>
 </BaseLayout>

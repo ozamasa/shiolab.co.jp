@@ -74,19 +74,6 @@ a:hover{ text-decoration:underline; }
   font-size:12px; color:#344054;
 }
 
-/* 記事・カテゴリ用のピル（リンクでも使う） */
-.pill{
-  display:inline-flex;
-  align-items:center;
-  padding:5px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:#fff;
-  font-size:12px;
-  color:#344054;
-}
-.pill:hover{ border-color:#cbd5e1; background:#f8fafc; }
-
 .tagbar{
   display:flex; gap:8px; flex-wrap:wrap;
   margin:10px 0 0;

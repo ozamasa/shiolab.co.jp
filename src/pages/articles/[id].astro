@@ -4,9 +4,10 @@ import {
   fetchAllArticles,
   fetchArticleById,
   normalizeCategories,
+  getArticleBodyHtml,
 } from "../../lib/microcms";
 
-// 静的生成
+// 静的生成に必須
 export async function getStaticPaths() {
   const all = await fetchAllArticles();
   return all.map((a) => ({
@@ -17,17 +18,14 @@ export async function getStaticPaths() {
 const { id } = Astro.params;
 const article = await fetchArticleById(String(id));
 
-// 安全ガード
-const title = article?.title ?? "記事が見つかりません";
-const description = article?.description ?? "";
+// microCMS側で null が来ることがあるので全部ガード
+const title = (article?.title ?? "記事が見つかりません").toString();
+const description = (article?.description ?? "").toString();
+const bodyHtml = getArticleBodyHtml(article);
 const dateText =
-  article?.date ?? article?.publishedAt ?? article?.createdAt ?? "";
+  (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
 
-// 本文は body を優先（content もフォールバックとして扱う）
-const bodyHtml = ((article as any)?.body ?? (article as any)?.content ?? "") as string;
-
-// カテゴリは複数あり得る
-const categories = normalizeCategories((article as any)?.category);
+const categories = normalizeCategories(article?.category);
 ---
 
 <BaseLayout
@@ -36,67 +34,65 @@ const categories = normalizeCategories((article as any)?.category);
 >
   {!article ? (
     <section class="card">
-      <h1>記事が見つかりません</h1>
-      <p>URLが間違っているか、記事が非公開になっている可能性があります。</p>
-      <p><a href="/articles/">記事一覧へ戻る →</a></p>
+      <h1 class="pageTitle">記事が見つかりません</h1>
+      <p class="lead">
+        URL が間違っているか、記事が非公開になっている可能性があります。
+      </p>
+      <p class="actions">
+        <a class="btn sub" href="/articles/">記事一覧へ戻る</a>
+      </p>
     </section>
   ) : (
     <>
-      <!-- 記事ヘッダー -->
       <article class="card">
-        <div class="meta" style="margin-bottom:10px;">
+        <div class="metaRow">
           {categories.length > 0 ? (
-            <>
+            <div class="metaTags">
+              <span class="metaLabel">カテゴリ</span>
               {categories.map((c) => (
-                <a
-                  class="pill"
-                  href={`/category/${c.slug}/`}
-                  style="text-decoration:none;"
-                >
-                  {c.label}
-                </a>
+                <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
               ))}
-            </>
+            </div>
           ) : (
-            <span class="pill">カテゴリ未設定</span>
+            <div class="metaTags">
+              <span class="metaLabel">カテゴリ</span>
+              <span class="tag muted">未設定</span>
+            </div>
           )}
 
-          {dateText && (
-            <span class="pill">
-              更新 {dateText.toString().slice(0, 10)}
-            </span>
-          )}
+          {dateText ? (
+            <div class="metaDate">更新：{dateText.slice(0, 10)}</div>
+          ) : null}
         </div>
 
-        <h1 style="margin:0 0 16px; line-height:1.4;">
-          {title}
-        </h1>
+        <h1 class="pageTitle">{title}</h1>
 
-        {description && (
-          <p style="font-size:16px; color:#334155; line-height:1.8;">
-            {description}
-          </p>
-        )}
+        {description ? (
+          <p class="lead">{description}</p>
+        ) : null}
+
+        <div class="inlineCta">
+          <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">
+            クイズで確認する
+          </a>
+          <a class="btn sub" href="/articles/">記事一覧</a>
+        </div>
       </article>
 
-      <!-- 本文（microCMS: body / content のHTMLを表示） -->
       <section class="card" style="margin-top:14px;">
-        {bodyHtml?.trim()?.length ? (
-          <div class="articleBody" set:html={bodyHtml} />
-        ) : (
-          <p style="margin:0; line-height:1.8;" class="muted">
-            この記事は本文が未入力です（microCMS の <code>body</code> または <code>content</code> を確認してください）。
+        {bodyHtml.trim().length === 0 ? (
+          <p class="muted" style="margin:0;">
+            この記事は本文が未入力です（microCMS の <code>body</code> を確認してください）。
           </p>
+        ) : (
+          <div class="prose" set:html={bodyHtml} />
         )}
       </section>
 
-      <!-- ナビ -->
       <section class="card" style="margin-top:14px;">
-        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <p style="margin:0;">
           <a href="/articles/">← 記事一覧へ</a>
-          <a href="/">トップへ</a>
-          <a href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズで練習 →</a>
-        </div>
+        </p>
       </section>
     </>
   )}

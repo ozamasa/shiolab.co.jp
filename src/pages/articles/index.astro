@@ -2,57 +2,58 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { fetchAllArticles, normalizeCategories } from "../../lib/microcms";
 
-const articles = (await fetchAllArticles()).sort(
-  (a, b) =>
-    new Date(b.date || b.publishedAt || 0).getTime() -
-    new Date(a.date || a.publishedAt || 0).getTime()
-);
+const articles = (await fetchAllArticles()).sort((a, b) => {
+  const ad = new Date(a.date || a.publishedAt || a.createdAt || 0).getTime();
+  const bd = new Date(b.date || b.publishedAt || b.createdAt || 0).getTime();
+  return bd - ad;
+});
 ---
 
 <BaseLayout
   title="記事一覧｜SHIOLAB"
   description="SHIOLABの記事一覧ページです。資格試験・受験対策に役立つ攻略パターンをまとめています。"
 >
-  <section class="card hero">
-    <h1 style="margin:0 0 6px;">記事一覧</h1>
-    <p style="margin:0;">攻略パターン記事を、新しい順に表示しています。</p>
+  <section class="card">
+    <h1 class="pageTitle">記事一覧</h1>
+    <p class="lead">
+      「なぜこの選択肢は切れるのか」を言語化した、4択試験の攻略パターン集です。
+    </p>
+
+    <div class="inlineCta">
+      <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズで確認する</a>
+      <a class="btn sub" href="/">トップへ</a>
+    </div>
   </section>
 
   {articles.length === 0 ? (
-    <section class="card" style="margin-top:14px;">
-      <p style="margin:0;">まだ記事がありません。</p>
+    <section class="card" style="margin-top:20px;">
+      <p class="muted" style="margin:0;">まだ記事がありません。</p>
     </section>
   ) : (
-    <section class="grid three" style="margin-top:14px;">
+    <section class="grid" style="margin-top:20px;">
       {articles.map((a) => {
         const cats = normalizeCategories(a.category);
-        const dateText = String(a.date || a.publishedAt || a.createdAt || "").slice(0, 10);
+        const dateText = (a.date || a.publishedAt || a.createdAt || "").toString();
         return (
-          <article class="card">
-            <h2 style="margin:0 0 10px; font-size:18px; line-height:1.35;">
+          <article class="card cardHover">
+            <h2 class="cardTitle">
               <a href={`/articles/${a.id}/`}>{a.title}</a>
             </h2>
 
-            {a.description ? (
-              <p style="font-size:14px; color:var(--muted); margin:0 0 12px;">
-                {a.description}
-              </p>
-            ) : null}
+            {a.description && <p class="cardDesc">{a.description}</p>}
 
-            <div class="meta">
-              {cats.length ? (
-                <>
-                  {cats.map((c) => (
-                    <span class="pill">
-                      <a href={`/category/${c.slug}/`}>{c.label}</a>
-                    </span>
+            <div class="cardMeta">
+              {cats.length > 0 ? (
+                <div class="metaTags">
+                  {cats.slice(0, 3).map((c) => (
+                    <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
                   ))}
-                </>
+                </div>
               ) : (
-                <span style="color:var(--muted);">カテゴリ未設定</span>
+                <div class="metaTags"><span class="tag muted">カテゴリ未設定</span></div>
               )}
 
-              {dateText ? <span>更新：{dateText}</span> : null}
+              {dateText ? <span class="metaDate">{dateText.slice(0, 10)}</span> : null}
             </div>
           </article>
         );

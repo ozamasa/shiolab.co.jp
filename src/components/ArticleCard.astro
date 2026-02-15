@@ -1,42 +1,20 @@
 ---
-import type { MicroCMSArticle } from "../lib/microcms";
-import { normalizeCategories } from "../lib/microcms";
-
-const { item } = Astro.props as { item: MicroCMSArticle };
-
-// idベースでリンク（slugだと404になりやすい）
-const href = `/articles/${item.id}/`;
-
-// カテゴリを配列で正規化（複数カテゴリ対応）
-const cats = normalizeCategories(item.category);
-const shown = cats.slice(0, 2);
-const rest = cats.length - shown.length;
-
-const dateText = (item.date || item.publishedAt || item.createdAt || "").toString();
+import type { ArticleItem } from "../lib/articles";
+const { item } = Astro.props as { item: ArticleItem };
 ---
-
-<article class="card card--article">
-  <h3 class="cardTitle">
-    <a href={href}>{item.title ?? "（無題）"}</a>
-  </h3>
-
-  {item.description ? (
-    <p class="cardDesc">{item.description}</p>
-  ) : null}
-
-  <div class="meta">
-    {shown.map((c) => (
-      <a class="pill" href={`/category/${c.slug}/`} aria-label={`カテゴリ：${c.label}`}>
-        {c.label}
-      </a>
-    ))}
-    {rest > 0 ? <span class="pill pill--muted">+{rest}</span> : null}
-
-    {dateText ? (
-      <span class="pill pill--muted">
-        <span style="opacity:.75;">更新</span>
-        {dateText.slice(0, 10)}
-      </span>
-    ) : null}
+<div class="card">
+  <div class="muted" style="font-size:12px;">
+    {item.updatedAt ? `更新: ${item.updatedAt}` : ""}
   </div>
-</article>
+  <h3 style="margin:6px 0 6px; font-size:18px;">{item.title}</h3>
+  {item.description ? <p class="p" style="margin:0 0 10px;">{item.description}</p> : null}
+
+  <div class="badges">
+    {item.tags?.slice(0, 6).map((t) => <span class="badge">{t}</span>)}
+    {item.levels?.slice(0, 4).map((l) => <span class="badge">{l}</span>)}
+  </div>
+
+  <div style="margin-top:12px;">
+    <a class="btn sub" href={`/articles/${item.slug}/`}>記事を読む</a>
+  </div>
+</div>

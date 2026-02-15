@@ -1,141 +1,145 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ArticleCard from "../components/ArticleCard.astro";
 import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
 
-const all = await fetchAllArticles();
+const articles = await fetchAllArticles();
 
-// 公開記事だけ（microCMS側で下書き除外はされる想定。念のため空タイトルは除外）
-const articles = (all || []).filter((a) => (a.title ?? "").toString().trim().length > 0);
-
-// 日付ソート（date優先、なければpublishedAt）
+// 新しい順（date > publishedAt > createdAt）
 articles.sort((a, b) => {
-  const da = new Date((a.date || a.publishedAt || a.createdAt || 0) as any).getTime();
-  const db = new Date((b.date || b.publishedAt || b.createdAt || 0) as any).getTime();
-  return db - da;
+  const ad = new Date(a.date || a.publishedAt || a.createdAt || 0).getTime();
+  const bd = new Date(b.date || b.publishedAt || b.createdAt || 0).getTime();
+  return bd - ad;
 });
 
-// 最新
-const latest = articles.slice(0, 8);
+const latest = articles.slice(0, 4);
 
-// カテゴリ集計（slugで重複排除、記事数も出す）
-type CatAgg = { slug: string; label: string; count: number };
-const catMap = new Map<string, CatAgg>();
+// カテゴリ抽出（複数カテゴリ対応） + 件数
+const catCount = new Map<string, { label: string; slug: string; count: number }>();
 
 for (const a of articles) {
-  const cats = normalizeCategories((a as any).category);
+  const cats = normalizeCategories(a.category);
   for (const c of cats) {
-    const key = c.slug; // すでにencode済み想定
-    const cur = catMap.get(key);
-    if (cur) cur.count += 1;
-    else catMap.set(key, { slug: key, label: c.label, count: 1 });
+    const prev = catCount.get(c.slug);
+    if (!prev) catCount.set(c.slug, { ...c, count: 1 });
+    else catCount.set(c.slug, { ...prev, count: prev.count + 1 });
   }
 }
 
-// 件数が多い順（同数ならラベル順）
-const categories = Array.from(catMap.values()).sort((x, y) => {
-  if (y.count !== x.count) return y.count - x.count;
-  return x.label.localeCompare(y.label, "ja");
-}).slice(0, 8);
+const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slice(0, 8);
 ---
+
 <BaseLayout
-  title="SHIOLAB｜資格・受験・学習の攻略メディア"
-  description="SHIOLABは、資格・受験・学校学習などの“4択試験攻略パターン”を、記事とクイズで学べる学習メディアです。"
+  title="SHIOLAB｜4択試験の攻略パターン集"
+  description="資格試験・受験・学校学習の4択問題を、「なぜこの選択肢は切れるのか」の視点で整理した学習メディア。"
 >
-  <section class="card hero">
-    <div class="heroGrid">
-      <div>
-        <div class="heroKicker">4択試験の「選択肢を切る」技術</div>
-        <h1>迷わないための攻略パターン</h1>
-        <p>
-          SHIOLAB は、資格試験・受験・学校学習の4択問題を、
-          <span style="font-weight:800;">「なぜこの選択肢は切れるのか」</span>の視点で整理した学習メディアです。
-        </p>
+  <section class="hero">
+    <div class="heroInner">
+      <p class="kicker">4択試験の「切り方」を学ぶ</p>
+      <h1 class="heroTitle">SHIOLAB</h1>
+      <p class="heroLead">
+        資格試験・受験・学校学習の4択問題を、
+        「なぜこの選択肢は切れるのか」の視点で整理した学習メディアです。
+      </p>
 
-        <div class="btnRow">
-          <a class="btn" href="#categories">カテゴリから探す</a>
-          <a class="btn sub" href="/articles/">記事一覧を見る</a>
-          <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズで練習</a>
-        </div>
+      <div class="heroActions">
+        <a class="btn" href="/articles/">攻略パターンを読む</a>
+        <a class="btn sub" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">
+          クイズで確認する
+        </a>
       </div>
-
-      <aside class="heroAside">
-        <h3>まずはこの型だけ</h3>
-        <ul>
-          <li>主語・時制・品詞を先に見る</li>
-          <li>切れる選択肢を先に消す</li>
-          <li>最後に意味で確認してミス防止</li>
-        </ul>
-      </aside>
     </div>
   </section>
 
-  <!-- 主要導線 -->
-  <section class="homeSplit">
-    <div>
-      <!-- カテゴリ -->
-      <div class="sectionHead">
-        <h2>カテゴリから探す</h2>
-        <a href="/articles/">すべての記事 →</a>
-      </div>
+  <section class="sectionHeader">
+    <h2>カテゴリから探す</h2>
+    <p>今ある記事を、分野ごとにまとめています。</p>
+  </section>
 
-      {categories.length === 0 ? (
-        <section class="card">
-          <p style="margin:0;">記事にカテゴリが付いていないため、カテゴリ一覧はまだ表示されません。</p>
-        </section>
-      ) : (
-        <section class="card" style="margin-top:12px;">
-          <div class="chipRow">
-            {categories.map((c) => (
-              <a class="chip" href={`/category/${c.slug}/`}>
-                <span>{c.label}</span>
-                <small>{c.count}件</small>
-              </a>
-            ))}
+  {categories.length === 0 ? (
+    <section class="card">
+      <p class="muted" style="margin:0;">
+        まだカテゴリがありません。記事にカテゴリを設定すると、ここに表示されます。
+      </p>
+    </section>
+  ) : (
+    <section class="grid">
+      {categories.map((c) => (
+        <a class="card cardHover catCard" href={`/category/${c.slug}/`}>
+          <div class="catTop">
+            <h3 class="catTitle">{c.label}</h3>
+            <span class="count">{c.count}</span>
           </div>
-        </section>
-      )}
-    </div>
+          <p class="catDesc">このカテゴリの記事を見る</p>
+        </a>
+      ))}
+    </section>
+  )}
 
-    <div>
-      <!-- 最新記事 -->
-      <div class="sectionHead">
+  <div class="splitRow">
+    <section style="min-width:0;">
+      <div class="sectionHeader" style="margin-top:0;">
         <h2>最新記事</h2>
-        <a href="/articles/">記事一覧 →</a>
+        <p>最近追加された攻略パターン</p>
       </div>
 
       {latest.length === 0 ? (
         <section class="card">
-          <p style="margin:0;">まだ記事がありません。microCMSに記事を追加するとここに表示されます。</p>
+          <p class="muted" style="margin:0;">まだ記事がありません。</p>
         </section>
       ) : (
-        <section class="card" style="margin-top:12px;">
-          <section class="grid" style="margin-top:0;">
-            {latest.slice(0, 6).map((a) => (
-              <ArticleCard item={a} />
-            ))}
-          </section>
+        <section class="stack">
+          {latest.map((article) => {
+            const cats = normalizeCategories(article.category);
+            const dateText = (article.date || article.publishedAt || article.createdAt || "").toString();
+            return (
+              <article class="card cardHover">
+                <div class="cardRow">
+                  <div style="min-width:0;">
+                    <h3 class="cardTitle" style="margin:0 0 6px;">
+                      <a href={`/articles/${article.id}/`}>{article.title}</a>
+                    </h3>
+
+                    {article.description ? (
+                      <p class="cardDesc" style="margin:0 0 10px;">
+                        {article.description}
+                      </p>
+                    ) : null}
+
+                    <div class="cardMeta">
+                      {cats.length > 0 ? (
+                        <div class="metaTags">
+                          {cats.slice(0, 2).map((c) => (
+                            <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
+                          ))}
+                        </div>
+                      ) : (
+                        <div class="metaTags"><span class="tag muted">カテゴリ未設定</span></div>
+                      )}
+                      {dateText ? <span class="metaDate">{dateText.slice(0, 10)}</span> : null}
+                    </div>
+                  </div>
+
+                  <div class="arrow" aria-hidden="true">→</div>
+                </div>
+              </article>
+            );
+          })}
         </section>
       )}
-    </div>
-  </section>
 
-  <section class="card" style="margin-top:22px;">
-    <div class="ctaRow">
-      <div>
-        <div class="kicker">次にやること</div>
-        <h2 style="margin-top:6px;">記事で覚えたら、クイズで確認</h2>
-        <p style="margin:10px 0 0;" class="subtle">
-          「なぜその選択肢は切れるのか」を理解したら、4択で同じ型を再現できるか確かめましょう。
-        </p>
+      <div style="margin-top:14px;">
+        <a class="btn sub" href="/articles/">記事一覧へ</a>
       </div>
-      <div class="ctaBtns">
-        <a class="btn" href="https://quiz.shiolab.co.jp/">クイズを開く</a>
-        <a class="btn btnSecondary" href="/guide/">使い方</a>
-      </div>
-    </div>
-  </section>
+    </section>
 
-
-
+    <aside class="sideCard">
+      <h3 style="margin:0 0 8px;">使い方</h3>
+      <ol class="steps">
+        <li>カテゴリから、近いテーマを選ぶ</li>
+        <li>「切れる理由」を読んで、型を覚える</li>
+        <li>クイズで確認して、定着させる</li>
+      </ol>
+      <a class="btn" style="margin-top:10px;" href="/guide/">使い方を見る</a>
+    </aside>
+  </div>
 </BaseLayout>

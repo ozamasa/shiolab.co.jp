@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategory } from "../../lib/microcms";
+import { fetchAllArticles, normalizeCategories } from "../../lib/microcms";
 
 // 静的生成に必須
 export async function getStaticPaths() {
@@ -10,9 +10,10 @@ export async function getStaticPaths() {
   const categorySet = new Map<string, string>();
 
   for (const a of articles) {
-    const c = normalizeCategory(a.category);
-    if (!c) continue;
-    if (!categorySet.has(c.slug)) categorySet.set(c.slug, c.label);
+    const cats = normalizeCategories((a as any).category);
+    for (const c of cats) {
+      if (!categorySet.has(c.slug)) categorySet.set(c.slug, c.label);
+    }
   }
 
   return Array.from(categorySet.entries()).map(([slug, label]) => ({
@@ -29,8 +30,8 @@ const all = await fetchAllArticles();
 // そのカテゴリの記事だけ抽出
 const filtered = all
   .filter((a) => {
-    const c = normalizeCategory(a.category);
-    return c ? c.slug === category : false;
+    const cats = normalizeCategories((a as any).category);
+    return cats.some((c) => c.slug === category);
   })
   .sort((a, b) => {
     const ad = new Date((a.date || a.publishedAt || a.createdAt || 0) as any).getTime();

@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   fetchAllArticles,
   fetchArticleById,
-  normalizeCategory,
+  normalizeCategories,
 } from "../../lib/microcms";
 
 // 静的生成
@@ -22,7 +22,12 @@ const title = article?.title ?? "記事が見つかりません";
 const description = article?.description ?? "";
 const dateText =
   article?.date ?? article?.publishedAt ?? article?.createdAt ?? "";
-const normalized = normalizeCategory(article?.category);
+
+// 本文は body を優先（content もフォールバックとして扱う）
+const bodyHtml = ((article as any)?.body ?? (article as any)?.content ?? "") as string;
+
+// カテゴリは複数あり得る
+const categories = normalizeCategories((article as any)?.category);
 ---
 
 <BaseLayout
@@ -40,14 +45,18 @@ const normalized = normalizeCategory(article?.category);
       <!-- 記事ヘッダー -->
       <article class="card">
         <div class="meta" style="margin-bottom:10px;">
-          {normalized ? (
-            <a
-              class="pill"
-              href={`/category/${normalized.slug}/`}
-              style="text-decoration:none;"
-            >
-              {normalized.label}
-            </a>
+          {categories.length > 0 ? (
+            <>
+              {categories.map((c) => (
+                <a
+                  class="pill"
+                  href={`/category/${c.slug}/`}
+                  style="text-decoration:none;"
+                >
+                  {c.label}
+                </a>
+              ))}
+            </>
           ) : (
             <span class="pill">カテゴリ未設定</span>
           )}
@@ -70,13 +79,15 @@ const normalized = normalizeCategory(article?.category);
         )}
       </article>
 
-      <!-- 本文なしメッセージ（content使わない方針） -->
+      <!-- 本文（microCMS: body / content のHTMLを表示） -->
       <section class="card" style="margin-top:14px;">
-        <p style="margin:0; line-height:1.8;">
-          本文はこの記事内に記載されています。
-          問題 → 切り方 → 判定ロジック → 練習、
-          の順で読み進めてください。
-        </p>
+        {bodyHtml?.trim()?.length ? (
+          <div class="articleBody" set:html={bodyHtml} />
+        ) : (
+          <p style="margin:0; line-height:1.8;" class="muted">
+            この記事は本文が未入力です（microCMS の <code>body</code> または <code>content</code> を確認してください）。
+          </p>
+        )}
       </section>
 
       <!-- ナビ -->

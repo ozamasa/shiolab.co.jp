@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategory } from "../lib/microcms";
+import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
 
 const all = await fetchAllArticles();
 
@@ -22,13 +22,13 @@ type CatAgg = { slug: string; label: string; count: number };
 const catMap = new Map<string, CatAgg>();
 
 for (const a of articles) {
-  const c = normalizeCategory(a.category);
-  if (!c) continue;
-
-  const key = c.slug; // すでにencode済み想定
-  const cur = catMap.get(key);
-  if (cur) cur.count += 1;
-  else catMap.set(key, { slug: key, label: c.label, count: 1 });
+  const cats = normalizeCategories((a as any).category);
+  for (const c of cats) {
+    const key = c.slug; // すでにencode済み想定
+    const cur = catMap.get(key);
+    if (cur) cur.count += 1;
+    else catMap.set(key, { slug: key, label: c.label, count: 1 });
+  }
 }
 
 // 件数が多い順（同数ならラベル順）
@@ -204,7 +204,7 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
   ) : (
     <section class="grid" style="margin-top:14px;">
       {latest.map((a) => {
-        const cat = normalizeCategory(a.category);
+        const cats = normalizeCategories((a as any).category);
         const dateText = (a.date || a.publishedAt || a.createdAt || "").toString().slice(0, 10);
         return (
           <article class="card">
@@ -219,7 +219,13 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
             ) : null}
 
             <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
-              {cat ? <a class="pill" href={`/category/${cat.slug}/`}>カテゴリ：{cat.label}</a> : <span class="pill">カテゴリ：未設定</span>}
+              {cats.length ? (
+                cats.map((c) => (
+                  <a class="pill" href={`/category/${c.slug}/`}>カテゴリ：{c.label}</a>
+                ))
+              ) : (
+                <span class="pill">カテゴリ：未設定</span>
+              )}
               {dateText ? <span class="pill">更新：{dateText}</span> : null}
             </div>
           </article>

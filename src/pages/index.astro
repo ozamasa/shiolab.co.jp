@@ -42,86 +42,74 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
   title="SHIOLAB｜資格・受験・学習の攻略メディア"
   description="SHIOLABは、資格・受験・学校学習などの“4択試験攻略パターン”を、記事とクイズで学べる学習メディアです。"
 >
-  <!-- ヒーロー -->
-  <section class="hero">
-    <div class="heroInner">
+  <section class="card hero">
+    <div class="heroGrid">
       <div>
-        <p class="kicker">4択試験の「選択肢を切る」技術</p>
-        <h1>SHIOLAB</h1>
-        <p class="lead">
-          資格試験・受験・学校学習の4択問題を、<br />
-          「なぜこの選択肢は切れるのか」という視点で整理した攻略メディアです。
+        <div class="heroKicker">4択試験の「選択肢を切る」技術</div>
+        <h1>迷わないための攻略パターン</h1>
+        <p>
+          SHIOLAB は、資格試験・受験・学校学習の4択問題を、
+          <span style="font-weight:800;">「なぜこの選択肢は切れるのか」</span>の視点で整理した学習メディアです。
         </p>
 
-        <div class="heroActions">
-          <a class="btn" href="/articles/">記事を読む</a>
-          <a class="btn btn--ghost" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">
-            クイズで練習
-          </a>
+        <div class="btnRow">
+          <a class="btn" href="#categories">カテゴリから探す</a>
+          <a class="btn sub" href="/articles/">記事一覧を見る</a>
+          <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズで練習</a>
         </div>
       </div>
 
-      <div class="heroSide">
-        <div class="heroBox">
-          <h2 class="heroBoxTitle">まずはここから</h2>
-          <ul class="heroList">
-            <li>問題文より先に「形」を見る（主語・時制・品詞）</li>
-            <li>切れる選択肢を先に消す（消去法を型にする）</li>
-            <li>最後に意味を確認してミスを防ぐ</li>
-          </ul>
-        </div>
-      </div>
+      <aside class="heroAside">
+        <h3>まずはこの型だけ</h3>
+        <ul>
+          <li>主語・時制・品詞を先に見る</li>
+          <li>切れる選択肢を先に消す</li>
+          <li>最後に意味で確認してミス防止</li>
+        </ul>
+      </aside>
     </div>
   </section>
 
   <!-- カテゴリ -->
-  <section class="section">
-    <div class="sectionHead">
-      <h2 class="sectionTitle">カテゴリから探す</h2>
-      <p class="sectionSub">今ある記事カテゴリを一覧で表示します。増えても破綻しない構成です。</p>
-    </div>
+  <div class="sectionHead" id="categories">
+    <h2>カテゴリから探す</h2>
+    <a href="/categories/">すべてのカテゴリ →</a>
+  </div>
 
     {categories.length === 0 ? (
       <section class="card">
         <p style="margin:0;">記事にカテゴリが付いていないため、カテゴリ一覧はまだ表示されません。</p>
       </section>
     ) : (
-      <section class="grid grid--tight">
-        {categories.map((c) => (
-          <article class="card card--category">
-            <h3 class="cardTitle" style="margin-bottom:6px;">{c.label}</h3>
-            <p class="cardDesc" style="margin:0 0 12px;">
-              {c.label} の攻略記事をまとめて表示します。
-            </p>
-            <a class="linkArrow" href={`/category/${c.slug}/`}>記事一覧を見る</a>
-          </article>
-        ))}
+      <section class="card" style="margin-top:12px;">
+        <div class="chipRow">
+          {categories.map((c) => (
+            <a class="chip" href={`/category/${c.slug}/`}>
+              <span>{c.label}</span>
+              <small>{c.count}件</small>
+            </a>
+          ))}
+        </div>
       </section>
     )}
-  </section>
 
   <!-- 最新記事 -->
-  <section class="section">
-    <div class="sectionHead">
-      <h2 class="sectionTitle">最新記事</h2>
-      <p class="sectionSub">新しく追加された攻略パターンから読むと理解が早いです。</p>
-    </div>
+  <div class="sectionHead" style="margin-top:34px;">
+    <h2>最新記事</h2>
+    <a href="/articles/">記事一覧 →</a>
+  </div>
 
     {latest.length === 0 ? (
       <section class="card">
         <p style="margin:0;">まだ記事がありません。microCMSに記事を追加するとここに表示されます。</p>
       </section>
     ) : (
-      <>
-        <section class="grid three">
-          {latest.map((a) => (
+      <section class="card" style="margin-top:12px;">
+        <section class="grid" style="margin-top:0;">
+          {latest.slice(0, 6).map((a) => (
             <ArticleCard item={a} />
           ))}
         </section>
-        <p class="moreLink">
-          <a href="/articles/">記事一覧へ →</a>
-        </p>
-      </>
+      </section>
     )}
-  </section>
 </BaseLayout>

@@ -144,7 +144,7 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
 
   <!-- HERO -->
   <section class="hero">
-    <section class="card">
+    <section class="hero">
       <h1 class="heroTitle">4択試験は「解く」より「切る」</h1>
       <p class="heroLead">
         SHIOLAB は、資格・受験・学校学習などの4択問題で
@@ -155,7 +155,7 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
 
       <div class="ctaRow">
         <a class="btn primary" href="/articles/">攻略記事を読む</a>
-        <a class="btn" href="/quiz/">クイズで確認する</a>
+        <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズで確認する</a>
         <a class="btn" href="/guide/">使い方を見る</a>
       </div>
 
@@ -191,7 +191,37 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
 
   <!-- 最新記事 -->
   <div class="sectionHead">
-    <h2>最新記事</h2>
+    <h2 id="categories">カテゴリから探す</h2>
+    <a href="/articles/">全部見る →</a>
+  </div>
+
+  {categories.length === 0 ? (
+    <section class="card" style="margin-top:14px;">
+      <p style="margin:0;">
+        まだカテゴリがありません。記事にカテゴリを付けると表示されます。
+      </p>
+    </section>
+  ) : (
+    <section class="grid" style="margin-top:14px;">
+      {categories.map((c) => (
+        <article class="card">
+          <h3 style="margin:0 0 8px; font-size:16px;">{c.label}</h3>
+          <p style="margin:0; font-size:14px; color:var(--muted);">
+            {c.count}本の攻略記事があります。
+          </p>
+          <div style="margin-top:12px;">
+            <a class="btn" href={`/category/${c.slug}/`}>このカテゴリを見る →</a>
+          </div>
+        </article>
+      ))}
+    </section>
+  )}
+
+  <!-- 下段導線 -->
+  <section class="card" style="margin-top:28px;">
+    
+
+  <h2 id="latest">最新記事</h2>
     <a href="/articles/">記事一覧へ →</a>
   </div>
 
@@ -236,41 +266,13 @@ const categories = Array.from(catMap.values()).sort((x, y) => {
 
   <!-- カテゴリ -->
   <div class="sectionHead">
-    <h2>カテゴリ</h2>
-    <a href="/articles/">全部見る →</a>
-  </div>
-
-  {categories.length === 0 ? (
-    <section class="card" style="margin-top:14px;">
-      <p style="margin:0;">
-        まだカテゴリがありません。記事にカテゴリを付けると表示されます。
-      </p>
-    </section>
-  ) : (
-    <section class="grid" style="margin-top:14px;">
-      {categories.map((c) => (
-        <article class="card">
-          <h3 style="margin:0 0 8px; font-size:16px;">{c.label}</h3>
-          <p style="margin:0; font-size:14px; color:var(--muted);">
-            {c.count}本の攻略記事があります。
-          </p>
-          <div style="margin-top:12px;">
-            <a class="btn" href={`/category/${c.slug}/`}>このカテゴリを見る →</a>
-          </div>
-        </article>
-      ))}
-    </section>
-  )}
-
-  <!-- 下段導線 -->
-  <section class="card" style="margin-top:28px;">
     <h2 style="margin:0 0 10px;">学習を進める</h2>
     <p style="margin:0 0 12px;">
       目的に合わせて入口を選べます。
     </p>
     <div class="ctaRow">
       <a class="btn primary" href="/articles/">攻略パターンを読む</a>
-      <a class="btn" href="/quiz/">確認クイズへ</a>
+      <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">確認クイズへ</a>
       <a class="btn" href="/contact/">お問い合わせ</a>
     </div>
   </section>

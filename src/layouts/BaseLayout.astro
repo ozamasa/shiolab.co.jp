@@ -270,7 +270,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).to
         <nav class="nav" aria-label="サイト内ナビゲーション">
           <a href="/" class={Astro.url.pathname === "/" ? "primary" : ""}>トップ</a>
           <a href="/articles/" class={Astro.url.pathname.startsWith("/articles") ? "primary" : ""}>記事</a>
-          <a href="/quiz/" class={Astro.url.pathname.startsWith("/quiz") ? "primary" : ""}>模擬問題</a>
+          <a href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズ</a>
           <a href="/guide/" class={Astro.url.pathname.startsWith("/guide") ? "primary" : ""}>使い方</a>
           <a href="/about/" class={Astro.url.pathname.startsWith("/about") ? "primary" : ""}>このサイトについて</a>
         </nav>
@@ -286,7 +286,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).to
         <a href="/privacy/">プライバシーポリシー</a>
         <a href="/terms/">利用規約</a>
         <a href="/disclaimer/">免責事項</a>
-        <a href="/contact/">お問い合わせ</a>
       </nav>
       <div>© SHIOLAB</div>
     </footer>

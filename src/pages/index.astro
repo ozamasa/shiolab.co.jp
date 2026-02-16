@@ -67,7 +67,7 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
         <a class="card cardHover catCard" href={`/category/${c.slug}/`}>
           <div class="catTop">
             <h3 class="catTitle">{c.label}</h3>
-            <span class="count">{c.count}</span>
+            <span class="pill">{c.count}件</span>
           </div>
           <p class="catDesc">このカテゴリの記事を見る</p>
         </a>
@@ -118,10 +118,11 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
                       {dateText ? <span class="metaDate">{dateText.slice(0, 10)}</span> : null}
                     </div>
                   </div>
-
-                  <div class="arrow" aria-hidden="true">→</div>
-                </div>
-              </article>
+</div>
+        <div class="cardActions">
+          <a class="btnLink btnPrimary" href={`/articles/${a.id}/`}>続きを読む</a>
+        </div>
+      </article>
             );
           })}
         </section>

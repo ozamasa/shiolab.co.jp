@@ -118,11 +118,11 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
                       {dateText ? <span class="metaDate">{dateText.slice(0, 10)}</span> : null}
                     </div>
                   </div>
-</div>
-        <div class="cardActions">
-          <a class="btnLink btnPrimary" href={`/articles/${a.id}/`}>続きを読む</a>
-        </div>
-      </article>
+                  <div class="cardActions">
+                    <a class="btnLink btnPrimary" href={`/articles/${article.id}/`}>続きを読む</a>
+                  </div>
+                </div>
+              </article>
             );
           })}
         </section>

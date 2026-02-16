@@ -1,5 +1,5 @@
 ---
-const { title = "SHIOLAB", description = "" } = Astro.props;
+const { title = "SHIOLAB", description = "", canonical = undefined } = Astro.props;
 ---
 
 <!doctype html>
@@ -9,10 +9,11 @@ const { title = "SHIOLAB", description = "" } = Astro.props;
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{title}</title>
     {description ? <meta name="description" content={description} /> : null}
+    {canonical ? <link rel="canonical" href={canonical} /> : null}
     <link rel="stylesheet" href="/styles/global.css" />
   </head>
   <body>
-    <header class="header">
+    <header class="siteHeader">
       <div class="headerTopBar"></div>
       <div class="wrap headerInner">
         <a class="headerBrand" href="/" aria-label="SHIOLAB トップへ">
@@ -23,6 +24,8 @@ const { title = "SHIOLAB", description = "" } = Astro.props;
           <a href="/articles/">記事</a>
           <a href="/quiz/">クイズ</a>
           <a href="/guide/">使い方</a>
+          <a href="/about/">運営</a>
+          <a href="/contact/">お問い合わせ</a>
         </nav>
       </div>
     </header>
@@ -39,6 +42,8 @@ const { title = "SHIOLAB", description = "" } = Astro.props;
           <div class="footerCopy">© {new Date().getFullYear()} SHIOLAB</div>
         </div>
         <div class="footerLinks">
+          <a href="/about/">運営</a>
+          <a href="/contact/">お問い合わせ</a>
           <a href="/privacy/">プライバシーポリシー</a>
           <a href="/terms/">利用規約</a>
           <a href="/disclaimer/">免責事項</a>

@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "お問い合わせ｜SHIOLAB";
+const description = "SHIOLABへのお問い合わせ。";
+---
+
+<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/contact/">
+  <section class="card">
+    <h1 class="h1" style="font-size:24px;">お問い合わせ</h1>
+    <p class="p">
+      ご連絡は、運営元サイトの問い合わせ窓口をご利用ください。
+      <a href="https://shiolab.com/" target="_blank" rel="noopener">shiolab.com</a> に連絡方法を掲載しています。
+    </p>
+    <div class="hr"></div>
+    <p class="muted" style="margin:0; font-size:13px;">
+      ※ 広告・提携などのご相談も、上記窓口へお願いします。
+    </p>
+  </section>
+</BaseLayout>

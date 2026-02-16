@@ -1,15 +1,61 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const title = "運営｜SHIOLAB";
-const description = "運営情報と方針。";
+const title = "このサイトについて";
+const description = "4択問題の切り方に焦点を当てた学習サイトです。";
 ---
-<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/about/">
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="https://shiolab.co.jp/about/"
+>
   <section class="card">
-    <h1 class="h1" style="font-size:24px;">運営</h1>
+    <h1 class="h1" style="font-size:24px;">このサイトについて</h1>
+
     <p class="p">
-      本サイト（shiolab.co.jp）は、学習記事の提供と、クイズへの案内を行うハブページです。
-      運営者情報の詳細は <a href="https://shiolab.com/" target="_blank" rel="noopener">shiolab.com</a> を参照してください。
+      本サイト（shiolab.co.jp）は、4択問題の「切り方」に焦点を当てた学習サイトです。
     </p>
+
+    <p class="p">
+      資格試験、受験、学校のテストなど、
+      さまざまな分野で出題される4択問題を題材に、
+      「なぜその選択肢を誤りと言えるのか」という視点で整理しています。
+    </p>
+
+    <h2 class="h2">学習方針</h2>
+
+    <p class="p">
+      正解を暗記するのではなく、
+      誤りを見抜くロジックを理解すること。
+    </p>
+
+    <p class="p">
+      選択肢の構造を分析し、
+      再現性のある消去法を身につけることを目的としています。
+    </p>
+
+    <h2 class="h2">おすすめの順番</h2>
+
+    <ol class="p" style="margin:0; padding-left:18px;">
+      <li><a href="/articles/">学習記事</a>で、切れる根拠（形・語順）を確認</li>
+      <li><a href="/quiz/">クイズ</a>で同じ型を短時間で反復（5〜25問）</li>
+      <li>間違えたら、その型の記事に戻って理由を確認</li>
+    </ol>
+
+    <h2 class="h2">記事で見るポイント</h2>
+
+    <ul class="p" style="margin:0; padding-left:18px;">
+      <li>「この条件なら、ここを見る」</li>
+      <li>「この選択肢は、なぜ切れるか」</li>
+      <li>「最後に残る形はどれか」</li>
+    </ul>
+
+    <h2 class="h2">注意事項</h2>
+    <p class="p">
+      本サイトは学習目的で作成されています。
+      特定の試験団体・教育機関とは関係ありません。
+    </p>
+
   </section>
 </BaseLayout>

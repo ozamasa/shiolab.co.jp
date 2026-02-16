@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
+import { normalizeCategories } from "../lib/microcms";
 
 const articles = await fetchAllArticles();
 
@@ -108,7 +109,11 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
               {a.category ? (
                 <span class="metaItem">
                   カテゴリ：
-                  <a href={`/category/${a.category.slug}/`}>{a.category.label}</a>
+                  {normalizeCategories(a.category).map((c) => (
+                    <a href={`/category/${c.slug}/`} class="tag">
+                      {c.label}
+                    </a>
+                  ))}
                 </span>
               ) : (
                 <span class="metaItem">カテゴリ：未設定</span>

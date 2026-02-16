@@ -77,6 +77,34 @@ const categories = normalizeCategories(article?.category);
           </a>
           <a class="btn sub" href="/articles/">記事一覧</a>
         </div>
+
+        {(() => {
+          const cats = normalizeCategories(article.category);
+          if (!cats.length) return null;
+
+          const all = await fetchAllArticles();
+          const related = all
+            .filter(a =>
+              a.id !== article.id &&
+              normalizeCategories(a.category).some(c => c.slug === cats[0].slug)
+            )
+            .slice(0, 3);
+
+          if (!related.length) return null;
+
+          return (
+            <section class="card" style="margin-top:20px;">
+              <h3 style="margin-top:0;">同じカテゴリの記事</h3>
+              <ul>
+                {related.map(r => (
+                  <li>
+                    <a href={`/articles/${r.id}/`}>{r.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })()}
       </article>
 
       <section class="card" style="margin-top:14px;">

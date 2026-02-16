@@ -100,6 +100,18 @@ export function normalizeCategories(
   return n ? [n] : [];
 }
 
+/**
+ * 旧コード互換:
+ * normalizeCategory(category) -> 先頭1件だけ返す（なければnull）
+ * ※ articles/index.astro 等がこれをimportしているため追加
+ */
+export function normalizeCategory(
+  input: MicroCMSCategory
+): { label: string; slug: string } | null {
+  const list = normalizeCategories(input);
+  return list.length > 0 ? list[0] : null;
+}
+
 // envが未設定のとき、ビルドを落とさず空配列で返す（審査・開発時に便利）
 function canUseMicroCMS() {
   return Boolean(serviceDomain && apiKey);

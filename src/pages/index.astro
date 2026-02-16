@@ -26,6 +26,7 @@ for (const a of articles) {
 }
 
 const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slice(0, 8);
+const dateLabel = (a: any) => a.date || a.publishedAt || a.createdAt || "";
 ---
 <BaseLayout
   title="LOGICLAB｜4択問題の攻略パターン集"
@@ -120,8 +121,9 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
               ) : (
                 <span class="metaItem">カテゴリ：未設定</span>
               )}
-              const dt = a.date || a.publishedAt || a.createdAt;
-              {dt ? <span class="metaItem">更新：{String(dt).slice(0, 10)}</span> : null}
+              {dateLabel(a) ? (
+                <span class="metaItem">更新：{String(dateLabel(a)).slice(0, 10)}</span>
+              ) : null}
             </div>
 
             <div style="margin-top:14px;">

@@ -26,12 +26,30 @@ const dateText =
   (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
 
 const categories = normalizeCategories(article?.category);
+
+// 同カテゴリの関連記事（最大3件）
+// ※ await は必ず frontmatter 側で行う（テンプレート側に await を置かない）
+let related: any[] = [];
+if (article && categories.length > 0) {
+  const all = await fetchAllArticles();
+  const targetSlug = categories[0].slug;
+
+  related = all
+    .filter(
+      (a) =>
+        a?.id !== article.id &&
+        normalizeCategories(a?.category).some((c) => c.slug === targetSlug)
+    )
+    .sort((a, b) => {
+      const ad = new Date(a?.date ?? a?.publishedAt ?? a?.createdAt ?? 0).getTime();
+      const bd = new Date(b?.date ?? b?.publishedAt ?? b?.createdAt ?? 0).getTime();
+      return bd - ad;
+    })
+    .slice(0, 3);
+}
 ---
 
-<BaseLayout
-  title={title}
-  description={description || "SHIOLABの記事ページです。"}
->
+<BaseLayout title={title} description={description || "SHIOLABの記事ページです。"}>
   {!article ? (
     <section class="card">
       <h1 class="pageTitle">記事が見つかりません</h1>
@@ -67,44 +85,19 @@ const categories = normalizeCategories(article?.category);
 
         <h1 class="pageTitle">{title}</h1>
 
-        {description ? (
-          <p class="lead">{description}</p>
-        ) : null}
+        {description ? <p class="lead">{description}</p> : null}
 
         <div class="inlineCta">
-          <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">
+          <a
+            class="btn"
+            href="https://quiz.shiolab.co.jp/"
+            target="_blank"
+            rel="noopener"
+          >
             クイズで確認する
           </a>
           <a class="btn sub" href="/articles/">記事一覧</a>
         </div>
-
-        {(() => {
-          const cats = normalizeCategories(article.category);
-          if (!cats.length) return null;
-
-          const all = await fetchAllArticles();
-          const related = all
-            .filter(a =>
-              a.id !== article.id &&
-              normalizeCategories(a.category).some(c => c.slug === cats[0].slug)
-            )
-            .slice(0, 3);
-
-          if (!related.length) return null;
-
-          return (
-            <section class="card" style="margin-top:20px;">
-              <h3 style="margin-top:0;">同じカテゴリの記事</h3>
-              <ul>
-                {related.map(r => (
-                  <li>
-                    <a href={`/articles/${r.id}/`}>{r.title}</a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          );
-        })()}
       </article>
 
       <section class="card" style="margin-top:14px;">
@@ -116,6 +109,19 @@ const categories = normalizeCategories(article?.category);
           <div class="prose" set:html={bodyHtml} />
         )}
       </section>
+
+      {related.length > 0 ? (
+        <section class="card" style="margin-top:14px;">
+          <h2 class="cardTitle" style="margin-top:0;">同じカテゴリの記事</h2>
+          <ul style="margin:0; padding-left:1.1em;">
+            {related.map((r) => (
+              <li>
+                <a href={`/articles/${r.id}/`}>{r.title}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section class="card" style="margin-top:14px;">
         <p style="margin:0;">

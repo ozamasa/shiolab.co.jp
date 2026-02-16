@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
-import { normalizeCategories } from "../lib/microcms";
 
 const articles = await fetchAllArticles();
 
@@ -29,12 +28,12 @@ for (const a of articles) {
 const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slice(0, 8);
 ---
 <BaseLayout
-  title="LOGICLAB｜4択試験の攻略パターン集"
-  description="資格試験・受験・学校学習の4択問題を、「なぜこの選択肢は切れるのか」の視点で整理した学習メディア。"
+  title="LOGICLAB｜4択問題の攻略パターン集"
+  description="資格試験・受験・学校学習の4択問題を、『なぜこの選択肢は切れるのか』の視点で整理する学習サイト。"
 >
   <section class="hero">
     <div class="heroInner">
-      <p class="kicker">4択試験の「切り方」を学ぶ</p>
+      <p class="kicker">4択問題の「切り方」を学ぶ</p>
       <h1>LOGICLAB</h1>
       <p class="lead">
         資格試験・受験・学校学習の4択問題を、「なぜこの選択肢は切れるのか」という視点で整理します。
@@ -43,7 +42,7 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
         正解を覚えるのではなく、消去の思考プロセスを身につけるための学習サイトです。
       </p>
       <div class="heroCta">
-        <a class="btn btnPrimary" href="/articles/">攻略パターンを読む</a>
+        <a class="btn btnPrimary" href="/articles/">攻略パターンを見る</a>
         <a class="btn" href="/quiz/">クイズで確認する</a>
       </div>
     </div>
@@ -53,7 +52,7 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
     <div class="sectionHeader">
       <div>
         <h2>カテゴリから探す</h2>
-        <p>まずは分野を選んで、近いテーマから入れます。</p>
+        <p>まずは分野を選んで、近いテーマから始められます。</p>
       </div>
       <a class="btn btnSmall" href="/articles/">記事一覧へ</a>
     </div>
@@ -113,7 +112,7 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
                 <span class="metaItem">
                   カテゴリ：
                   {normalizeCategories(a.category).map((c) => (
-                    <a href={`/category/${c.slug}/`} class="tag">
+                    <a href={`/category/${c.slug}/`} class="tag" key={c.slug}>
                       {c.label}
                     </a>
                   ))}
@@ -121,7 +120,8 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
               ) : (
                 <span class="metaItem">カテゴリ：未設定</span>
               )}
-              {a.dateText ? <span class="metaItem">更新：{a.dateText.slice(0, 10)}</span> : null}
+              const dt = a.date || a.publishedAt || a.createdAt;
+              {dt ? <span class="metaItem">更新：{String(dt).slice(0, 10)}</span> : null}
             </div>
 
             <div style="margin-top:14px;">
@@ -145,7 +145,7 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
     <section class="card">
       <ol class="steps">
         <li>カテゴリから、近いテーマを選ぶ</li>
-        <li>「切れる理由」を読んで、型をつかむ</li>
+        <li>「切り方」を読んで、型をつかむ</li>
         <li>クイズで確認して、定着させる</li>
       </ol>
     </section>

@@ -1,236 +1,49 @@
 ---
-const { title, description } = Astro.props;
-const fullTitle = title ? `${title}` : "SHIOLAB";
-const metaDescription =
-  description ??
-  "資格試験・受験・学校学習の4択問題を、「なぜこの選択肢は切れるのか」の視点で整理した学習メディア。";
+const { title = "SHIOLAB", description = "" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{fullTitle}</title>
-    <meta name="description" content={metaDescription} />
-    <meta name="robots" content="index,follow" />
-    <link rel="icon" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    {description ? <meta name="description" content={description} /> : null}
+    <link rel="stylesheet" href="/styles/global.css" />
   </head>
   <body>
-    <header class="siteHeader">
-      <div class="container headerRow">
-        <a class="brand" href="/">
-          <span class="brandMark" aria-hidden="true">◎</span>
-          <span class="brandText">SHIOLAB</span>
+    <header class="header">
+      <div class="headerTopBar"></div>
+      <div class="wrap headerInner">
+        <a class="headerBrand" href="/" aria-label="SHIOLAB トップへ">
+          <span class="logo" aria-hidden="true">●</span>
+          <span class="siteTitle">SHIOLAB</span>
         </a>
-
-        <nav class="nav">
+        <nav class="nav" aria-label="サイトメニュー">
           <a href="/articles/">記事</a>
-          <a href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズ</a>
+          <a href="/quiz/">クイズ</a>
           <a href="/guide/">使い方</a>
         </nav>
       </div>
     </header>
 
-    <main class="container main">
+    <main class="wrap">
       <slot />
     </main>
 
-    <footer class="siteFooter">
-      <div class="container footerInner">
-        <div class="footerLeft">
+    <footer class="footer">
+      <div class="wrap footerInner">
+        <div>
           <div class="footerBrand">SHIOLAB</div>
-          <p class="footerDesc">
-            4択問題を「切れる理由」で整理する学習メディア
-          </p>
+          <div class="footerDesc">4択問題を「切れる理由」で整理する学習メディア</div>
+          <div class="footerCopy">© {new Date().getFullYear()} SHIOLAB</div>
         </div>
-
         <div class="footerLinks">
           <a href="/privacy/">プライバシーポリシー</a>
           <a href="/terms/">利用規約</a>
           <a href="/disclaimer/">免責事項</a>
         </div>
       </div>
-      <div class="container footerBottom">
-        <small>© {new Date().getFullYear()} SHIOLAB</small>
-      </div>
     </footer>
-
-    <style>
-      :root{
-        --bg:#f7f8fb;
-        --panel:#ffffff;
-        --text:#0f172a;
-        --muted:#475569;
-        --muted2:#64748b;
-        --border:rgba(15,23,42,.10);
-
-        /* 学習メディア：信頼感のあるブルー + 強調のアンバー */
-        --accent:#2563eb;
-        --accent2:#0ea5e9;
-        --accentWarm:#f59e0b;
-        --accentSoft:rgba(37,99,235,.10);
-
-        --radius:16px;
-        --shadow:0 12px 30px rgba(15,23,42,.10);
-        --shadow2:0 16px 40px rgba(15,23,42,.12);
-      }
-
-      *{box-sizing:border-box}
-      html,body{height:100%}
-      body{
-        margin:0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-        color:var(--text);
-        background:
-          radial-gradient(1200px 520px at 20% -10%, rgba(37,99,235,.12), transparent 60%),
-          radial-gradient(900px 420px at 90% 0%, rgba(14,165,233,.10), transparent 55%),
-          var(--bg);
-        line-height:1.75;
-      }
-
-      a{color:var(--accent); text-decoration:none}
-      a:hover{text-decoration:underline}
-      a:focus-visible{outline:3px solid rgba(37,99,235,.25); outline-offset:3px; border-radius:10px}
-
-      /* Layout */
-      .container{max-width:1040px; margin:0 auto; padding:0 18px}
-      .main{padding:28px 0 56px}
-      .section{margin-top:28px}
-      .section + .section{margin-top:34px}
-
-      /* Header */
-      .siteHeader{
-        position:sticky; top:0; z-index:10;
-        backdrop-filter:saturate(180%) blur(10px);
-        background:rgba(247,248,251,.85);
-        border-bottom:1px solid var(--border);
-      }
-      .headerRow{display:flex; align-items:center; justify-content:space-between; height:60px}
-      .brandLink{display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.02em}
-      .brandLogo{
-        width:28px; height:28px; border-radius:10px;
-        background:linear-gradient(135deg,var(--accent),var(--accent2));
-        box-shadow:0 10px 22px rgba(37,99,235,.25);
-        display:inline-flex; align-items:center; justify-content:center;
-        color:#fff; font-size:14px;
-      }
-      .nav ul{list-style:none; display:flex; gap:14px; margin:0; padding:0}
-      ..nav a{color:var(--text); font-weight:650; font-size:14px; padding:8px 10px; border-radius:10px}
-      ..nav a:hover{background:rgba(15,23,42,.04); text-decoration:none}
-
-      /* Footer */
-      .siteFooter{border-top:1px solid var(--border); padding:22px 0; color:var(--muted2); font-size:13px}
-      footer a{color:var(--muted)}
-      .footerInner{display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap}
-
-      /* Typography */
-      h1,h2,h3{line-height:1.25}
-      h1{font-size:34px; margin:0 0 10px}
-      h2{font-size:20px; margin:0 0 14px}
-      h3{font-size:16px; margin:0 0 10px}
-      .lead{color:var(--muted); max-width:68ch}
-      .kicker{font-size:12px; color:var(--muted2); letter-spacing:.06em; text-transform:uppercase}
-
-      /* Components */
-      .card{
-        background:var(--panel);
-        border:1px solid var(--border);
-        border-radius:var(--radius);
-        padding:18px;
-        box-shadow:0 1px 0 rgba(15,23,42,.02);
-      }
-      .cardHover{transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease}
-      .cardHover:hover{transform:translateY(-2px); box-shadow:var(--shadow); border-color:rgba(37,99,235,.20)}
-      .grid{display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:18px}
-      @media (max-width: 860px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-      @media (max-width: 520px){.grid{grid-template-columns:1fr}}
-
-      .pill{
-        display:inline-flex; align-items:center; gap:6px;
-        padding:4px 10px;
-        border-radius:999px;
-        border:1px solid rgba(37,99,235,.20);
-        background:var(--accentSoft);
-        color:var(--accent);
-        font-size:12px;
-        font-weight:700;
-        line-height:1;
-      }
-      .pillWarm{
-        border-color:rgba(245,158,11,.28);
-        background:rgba(245,158,11,.14);
-        color:#92400e;
-      }
-
-      .metaRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; color:var(--muted2); font-size:12px}
-      .metaRow a{color:var(--muted); text-decoration:underline; text-underline-offset:2px}
-
-      .btnLink{
-        display:inline-flex; align-items:center; justify-content:center;
-        padding:9px 12px;
-        border-radius:12px;
-        border:1px solid rgba(37,99,235,.22);
-        background:rgba(37,99,235,.06);
-        color:var(--accent);
-        font-weight:750;
-        font-size:13px;
-        text-decoration:none !important;
-      }
-      .btnLink:hover{background:rgba(37,99,235,.12)}
-      .btn{
-        display:inline-flex; align-items:center; justify-content:center;
-        padding:10px 14px;
-        border-radius:14px;
-        border:1px solid rgba(37,99,235,.22);
-        background:linear-gradient(135deg, rgba(37,99,235,.12), rgba(14,165,233,.08));
-        color:var(--text);
-        font-weight:800;
-        font-size:14px;
-        text-decoration:none !important;
-      }
-      .btn:hover{background:linear-gradient(135deg, rgba(37,99,235,.18), rgba(14,165,233,.12))}
-      .btn.sub{
-        background:rgba(15,23,42,.03);
-        border-color:rgba(15,23,42,.10);
-        color:var(--text);
-      }
-      .btn.sub:hover{background:rgba(15,23,42,.05)}
-
-      .btnPrimary{
-        border-color:rgba(37,99,235,.25);
-        background:linear-gradient(135deg, rgba(37,99,235,.14), rgba(14,165,233,.10));
-      }
-
-      .list{display:flex; flex-direction:column; gap:14px}
-      .list .card{padding:16px 18px}
-
-      /* Prose for article body */
-      .prose{max-width:78ch}
-      .prose :global(p){margin:0 0 14px}
-      .prose :global(h2){margin:22px 0 10px}
-      .prose :global(ul){margin:10px 0 14px; padding-left:1.2em}
-      .prose :global(li){margin:6px 0}
-
-    
-      /* Home page helpers */
-      .hero{
-        padding:20px;
-        border-radius:calc(var(--radius) + 6px);
-        background:linear-gradient(135deg, rgba(37,99,235,.08), rgba(14,165,233,.05));
-        border:1px solid rgba(37,99,235,.16);
-      }
-      .heroActions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-      .catCard h3{display:flex; align-items:center; justify-content:space-between; gap:10px}
-      .catMeta{margin-top:10px; color:var(--muted2); font-size:12px}
-      .cardActions{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
-      .cardMeta{margin-top:10px; color:var(--muted2); font-size:12px; display:flex; gap:10px; flex-wrap:wrap}
-      .cardMeta a{color:var(--muted); text-decoration:underline; text-underline-offset:2px}
-      .cardTitleLink{color:var(--text); text-decoration:none !important}
-      .cardTitleLink:hover{color:var(--accent)}
-      .sectionHeader{display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px}
-      .sectionHeader p{margin:0; color:var(--muted); font-size:14px}
-
-    </style>
   </body>
 </html>

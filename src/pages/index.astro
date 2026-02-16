@@ -27,7 +27,6 @@ for (const a of articles) {
 
 const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slice(0, 8);
 ---
-
 <BaseLayout
   title="SHIOLAB｜4択試験の攻略パターン集"
   description="資格試験・受験・学校学習の4択問題を、「なぜこの選択肢は切れるのか」の視点で整理した学習メディア。"
@@ -35,112 +34,112 @@ const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slic
   <section class="hero">
     <div class="heroInner">
       <p class="kicker">4択試験の「切り方」を学ぶ</p>
-      <h1 class="heroTitle">SHIOLAB</h1>
-      <p class="heroLead">
-        資格試験・受験・学校学習の4択問題を、
-        「なぜこの選択肢は切れるのか」の視点で整理した学習メディアです。
+      <h1>SHIOLAB</h1>
+      <p class="lead">
+        資格試験・受験・学校学習の4択問題を、「なぜこの選択肢は切れるのか」の視点で整理した学習メディアです。
       </p>
-
-      <div class="heroActions">
-        <a class="btn" href="/articles/">攻略パターンを読む</a>
-        <a class="btn sub" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">
-          クイズで確認する
-        </a>
+      <div class="heroCta">
+        <a class="btn btnPrimary" href="/articles/">攻略パターンを読む</a>
+        <a class="btn" href="/quiz/">クイズで確認する</a>
       </div>
     </div>
   </section>
 
-  <section class="sectionHeader">
-    <h2>カテゴリから探す</h2>
-    <p>今ある記事を、分野ごとにまとめています。</p>
+  <section class="section">
+    <div class="sectionHeader">
+      <div>
+        <h2>カテゴリから探す</h2>
+        <p>まずは分野を選んで、近いテーマから入れます。</p>
+      </div>
+      <a class="btn btnSmall" href="/articles/">記事一覧へ</a>
+    </div>
+
+    {categories.length === 0 ? (
+      <section class="card">
+        <p>まだカテゴリがありません。記事を追加するとここに表示されます。</p>
+      </section>
+    ) : (
+      <section class="grid">
+        {categories.map((c) => (
+          <article class="card">
+            <div class="catTop">
+              <h3 class="catTitle">
+                <a class="cardLink" href={`/category/${c.slug}/`}>{c.label}</a>
+              </h3>
+              <span class="pill">{c.count} 記事</span>
+            </div>
+            <p class="muted" style="margin:6px 0 14px;">
+              {c.label} の攻略パターンをまとめています。
+            </p>
+            <a class="btn btnSmall" href={`/category/${c.slug}/`}>このカテゴリを見る</a>
+          </article>
+        ))}
+      </section>
+    )}
   </section>
 
-  {categories.length === 0 ? (
-    <section class="card">
-      <p class="muted" style="margin:0;">
-        まだカテゴリがありません。記事にカテゴリを設定すると、ここに表示されます。
-      </p>
-    </section>
-  ) : (
-    <section class="grid">
-      {categories.map((c) => (
-        <a class="card cardHover catCard" href={`/category/${c.slug}/`}>
-          <div class="catTop">
-            <h3 class="catTitle">{c.label}</h3>
-            <span class="pill">{c.count}件</span>
-          </div>
-          <p class="catDesc">このカテゴリの記事を見る</p>
-        </a>
-      ))}
-    </section>
-  )}
-
-  <div class="splitRow">
-    <section style="min-width:0;">
-      <div class="sectionHeader" style="margin-top:0;">
+  <section class="section">
+    <div class="sectionHeader">
+      <div>
         <h2>最新記事</h2>
         <p>最近追加された攻略パターン</p>
       </div>
+      <a class="btn btnSmall" href="/articles/">すべての記事</a>
+    </div>
 
-      {latest.length === 0 ? (
-        <section class="card">
-          <p class="muted" style="margin:0;">まだ記事がありません。</p>
-        </section>
-      ) : (
-        <section class="stack">
-          {latest.map((article) => {
-            const cats = normalizeCategories(article.category);
-            const dateText = (article.date || article.publishedAt || article.createdAt || "").toString();
-            return (
-              <article class="card cardHover">
-                <div class="cardRow">
-                  <div style="min-width:0;">
-                    <h3 class="cardTitle" style="margin:0 0 6px;">
-                      <a href={`/articles/${article.id}/`}>{article.title}</a>
-                    </h3>
+    {latest.length === 0 ? (
+      <section class="card">
+        <p>まだ記事がありません。最初の記事を追加するとここに表示されます。</p>
+      </section>
+    ) : (
+      <section class="grid">
+        {latest.map((a) => (
+          <article class="card">
+            <h3 style="margin:0 0 10px;">
+              <a class="cardLink" href={`/articles/${a.id}/`}>{a.title}</a>
+            </h3>
+            {a.description ? (
+              <p class="muted" style="margin:0 0 14px; line-height:1.8;">
+                {a.description}
+              </p>
+            ) : null}
 
-                    {article.description ? (
-                      <p class="cardDesc" style="margin:0 0 10px;">
-                        {article.description}
-                      </p>
-                    ) : null}
+            <div class="metaRow" style="margin-top:0;">
+              {a.category ? (
+                <span class="metaItem">
+                  カテゴリ：
+                  <a href={`/category/${a.category.slug}/`}>{a.category.label}</a>
+                </span>
+              ) : (
+                <span class="metaItem">カテゴリ：未設定</span>
+              )}
+              {a.dateText ? <span class="metaItem">更新：{a.dateText.slice(0, 10)}</span> : null}
+            </div>
 
-                    <div class="cardMeta">
-                      {cats.length > 0 ? (
-                        <div class="metaTags">
-                          {cats.slice(0, 2).map((c) => (
-                            <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
-                          ))}
-                        </div>
-                      ) : (
-                        <div class="metaTags"><span class="tag muted">カテゴリ未設定</span></div>
-                      )}
-                      {dateText ? <span class="metaDate">{dateText.slice(0, 10)}</span> : null}
-                    </div>
-                  </div>
-                  <div class="cardActions">
-                    <a class="btnLink btnPrimary" href={`/articles/${article.id}/`}>続きを読む</a>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
-        </section>
-      )}
+            <div style="margin-top:14px;">
+              <a class="btn btnSmall" href={`/articles/${a.id}/`}>続きを読む</a>
+            </div>
+          </article>
+        ))}
+      </section>
+    )}
+  </section>
 
-      <div style="margin-top:14px;">
-        <a class="btn sub" href="/articles/">記事一覧へ</a>
+  <section class="section">
+    <div class="sectionHeader">
+      <div>
+        <h2>使い方</h2>
+        <p>最短で「切り方」を身につける流れ</p>
       </div>
-    </section>
+      <a class="btn btnSmall" href="/guide/">使い方を見る</a>
+    </div>
 
-    <aside class="sideCard">
-      <h3 style="margin:0 0 8px;">使い方</h3>
+    <section class="card">
       <ol class="steps">
         <li>カテゴリから、近いテーマを選ぶ</li>
-        <li>「切れる理由」を読んで、型を覚える</li>
+        <li>「切れる理由」を読んで、型をつかむ</li>
         <li>クイズで確認して、定着させる</li>
       </ol>
-      <a class="btn" style="margin-top:10px;" href="/guide/">使い方を見る</a>
-    </aside>
-  </div>
+    </section>
+  </section>
 </BaseLayout>

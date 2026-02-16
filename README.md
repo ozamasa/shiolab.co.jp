@@ -1,4 +1,4 @@
-# SHIOLAB hub (Astro + optional microCMS)
+# LOGICLAB hub (Astro + optional microCMS)
 
 目的:
 - 記事(=教育コンテンツ)を中心にしたハブ

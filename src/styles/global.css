@@ -234,7 +234,7 @@ a:hover{ text-decoration:underline; }
 .prose p{ margin:0 0 1em; }
 .prose ul, .prose ol{ margin:0 0 1em 1.2em; padding:0; }
 .prose li{ margin:.2em 0; }
-.prose h2{ margin:1.6em 0 .6em; font-size:20px; line-height:1.35; }
-.prose h3{ margin:1.2em 0 .5em; font-size:17px; line-height:1.35; }
+.prose h2{ border-left: 4px solid var(--primary); padding-left: 10px;}.prose h3{ margin:1.2em 0 .5em; font-size:17px; line-height:1.35; }
 .prose a{ text-decoration:underline; text-underline-offset:2px; }
 .prose code{ background:#f3f4f6; padding:.15em .35em; border-radius:6px; font-size:.95em; }
+.prose strong{ color: var(--primary); }

@@ -1,23 +1,87 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const title = "クイズ｜LOGICLAB";
-const description = "学習記事で理解した「切り方」を、クイズで反復練習します。";
+import "../../styles/quiz.css";
 ---
-<BaseLayout title={title} description={description} canonical="https://shiolab.co.jp/quiz/">
+
+<BaseLayout title="クイズ｜LOGICLAB" description="4択問題の「切り方」をクイズで確認できます。">
   <section class="card">
-    <h1 class="h1" style="font-size:24px;">クイズ</h1>
-    <p class="p">
-      クイズは、学習記事で理解した「型」を短時間で反復するための練習です。
-      まず記事で切り方を確認し、次にクイズで同じ型を5〜25問ほど繰り返すのがおすすめです。
+    <h1 class="pageTitle">クイズ</h1>
+    <p class="lead" style="margin-top:6px;">
+      カテゴリを選ぶと問題を読み込みます（最大25問）。回答すると、答えと解説が表示されます。
     </p>
-    <div class="btnRow">
-      <a class="btn" href="https://quiz.shiolab.co.jp/" target="_blank" rel="noopener">クイズを開く</a>
-      <a class="btn sub" href="/articles/">学習記事を見る</a>
+
+    <div class="quizTopCats">
+      <div class="quizTopCatsLabel">レベルを選択</div>
+      <!-- ★ここにカテゴリを出す -->
+      <div id="categoryList" class="categoryList"></div>
+      <div id="topMessage" class="topMessage" aria-live="polite"></div>
     </div>
-    <div class="hr"></div>
-    <p class="muted" style="margin:0; font-size:13px;">
-      ※ クイズ本体が別ドメインでも、ここは「入口」として機能します。
-    </p>
   </section>
+
+  <div class="quizApp">
+    <div class="wrap">
+      <!-- TOP（ここはカテゴリ等を移したので薄くする） -->
+      <section class="panel topPanel" id="top">
+        <footer class="siteFooter">
+          <a href="/about/">このサイトについて</a>
+          <span class="sep">｜</span>
+          <a href="/terms/">利用規約</a>
+          <span class="sep">｜</span>
+          <a href="/disclaimer/">免責事項</a>
+          <span class="sep">｜</span>
+          <a href="/privacy/">プライバシーポリシー</a>
+        </footer>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="quiz" id="quiz" hidden>
+        <aside class="side">
+          <button id="toTopBtn" class="secondary small topBackBtn" type="button">トップへ</button>
+
+          <div class="status" id="statusHint"></div>
+
+          <div class="jumpBtns">
+            <button id="nextWrongBtn" type="button" class="secondary">間違った問題へ</button>
+          </div>
+
+          <div id="nav" class="nav"></div>
+        </aside>
+
+        <main class="main">
+          <div class="metaLine">
+            <div id="categoryTitle" class="categoryTitle"></div>
+            <div id="qNo" class="qno"></div>
+          </div>
+
+          <div id="qText" class="qtext"></div>
+          <div id="choices" class="choices"></div>
+
+          <div id="feedback" class="feedback" aria-live="polite"></div>
+
+          <div class="bottomBar">
+            <button id="prevBtn" class="navBtn secondary" type="button">戻る</button>
+            <button id="nextBtn" class="navBtn primary" type="button">次へ</button>
+          </div>
+        </main>
+      </section>
+
+      <!-- RESULT -->
+      <section class="panel" id="result" hidden>
+        <div class="resultHead">
+          <h1>結果</h1>
+        </div>
+
+        <div id="summary"></div>
+        <div class="adBox" id="adResult" aria-label="広告枠"></div>
+        <div id="review"></div>
+
+        <div class="resultActions">
+          <button id="restartBtn" class="primaryBtn" type="button">もう一度</button>
+          <button id="toTopBtn2" class="primaryBtn" type="button">トップへ</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script defer src="/quiz/app.js?v=20260123"></script>
 </BaseLayout>

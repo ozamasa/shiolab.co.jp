@@ -4,10 +4,12 @@ import { createClient } from "microcms-js-sdk";
 // microCMSの環境変数（Cloudflare Pages の Environment variables に設定）
 const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
+const ENDPOINT_ARTICLES = import.meta.env.MICROCMS_ENDPOINT || "articles";
 
-// microCMS側の「コンテンツAPI名」
-// もしあなたのmicroCMSで違う名前なら、ここだけ合わせればOK
-const ENDPOINT_ARTICLES = "articles";
+export const client = createClient({
+  serviceDomain,
+  apiKey,
+});
 
 // ---- Types ----
 export type MicroCMSCategoryItem = {

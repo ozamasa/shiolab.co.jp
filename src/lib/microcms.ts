@@ -6,10 +6,17 @@ const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
 const ENDPOINT_ARTICLES = import.meta.env.MICROCMS_ENDPOINT || "articles";
 
-export const client = createClient({
-  serviceDomain,
-  apiKey,
-});
+// envが未設定のとき、ビルドを落とさず空配列で返す
+function canUseMicroCMS() {
+  return Boolean(serviceDomain && apiKey);
+}
+
+// clientは使えるときだけ作る
+const client = canUseMicroCMS()
+  ? createClient({ serviceDomain, apiKey })
+  : null;
+
+export const microcms = client;
 
 // ---- Types ----
 export type MicroCMSCategoryItem = {

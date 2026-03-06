@@ -1,61 +1,69 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const title = "このサイトについて";
-const description = "4択問題の切り方に焦点を当てた学習サイトです。";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  canonical="https://shiolab.co.jp/about/"
->
-  <section class="card">
-    <h1 class="h1" style="font-size:24px;">このサイトについて</h1>
+<BaseLayout title="このサイトについて | SHIOLAB">
 
-    <p class="p">
-      LOGICLABは、4択問題の「切り方」に焦点を当てた学習サイトです。
-    </p>
+<div class="wrap">
 
-    <p class="p">
-      資格試験、受験、学校のテストなど、
-      さまざまな分野で出題される4択問題を題材に、
-      「なぜその選択肢を誤りと言えるのか」という視点で整理しています。
-    </p>
-
-    <h2 class="h2">学習方針</h2>
-
-    <p class="p">
-      正解を暗記するのではなく、
-      誤りを見抜くロジックを理解すること。
-    </p>
-
-    <p class="p">
-      選択肢の構造を分析し、
-      再現性のある消去法を身につけることを目的としています。
-    </p>
-
-    <h2 class="h2">おすすめの順番</h2>
-
-    <ol class="p" style="margin:0; padding-left:18px;">
-      <li><a href="/articles/">学習記事</a>で、切れる理由（判断ポイント）を確認</li>
-      <li><a href="https://logiclab.shiolab.co.jp/quiz/">クイズ</a>で同じ型を短時間で反復（数問〜）</li>
-      <li>間違えたら、その型の記事に戻って理由を確認</li>
-    </ol>
-
-    <h2 class="h2">記事で見るポイント</h2>
-
-    <ul class="p" style="margin:0; padding-left:18px;">
-      <li>「この条件なら、どこを見るかを確認する」</li>
-      <li>「なぜ切れるかを確認する」</li>
-      <li>「最後に残る選択肢を確認する」</li>
-    </ul>
-
-    <h2 class="h2">注意事項</h2>
-    <p class="p">
-      本サイトは学習目的で作成されています。
-      特定の試験団体・教育機関とは関係ありません。
-    </p>
-
+  <section class="hero">
+    <div class="heroInner">
+      <h1>このサイトについて</h1>
+      <p class="lead">
+        LOGICLABは、英語の文法を「構造」で理解するための学習サイトです。
+      </p>
+    </div>
   </section>
+
+  <section class="section">
+    <div class="card stack">
+
+<p>
+LOGICLAB（ロジックラボ）は、英語の文法を「丸暗記」ではなく、
+構造として理解するための学習サイトです。
+</p>
+
+<p>
+英語学習では、多くの人が「文法を覚えているのに読めない」
+「単語はわかるのに意味が取れない」という壁にぶつかります。
+</p>
+
+<p>
+その原因の多くは、文の構造を整理して読む方法を
+体系的に学んでいないことにあります。
+</p>
+
+<p>
+本サイトでは、その問題を解決するために
+「英文を切り分けて理解する」という考え方をベースにした
+独自の学習方法「切断術」を紹介しています。
+</p>
+
+<p>
+現在は主に以下のテーマで記事を公開しています。
+</p>
+
+<ul>
+<li>英検3級レベルの英文法</li>
+<li>文構造の理解</li>
+<li>英語読解の基礎</li>
+</ul>
+
+<p>
+英語を「感覚」ではなく「構造」で理解したい人の
+助けになることを目標に、このサイトを運営しています。
+</p>
+
+<hr />
+
+<p>
+お問い合わせ：
+<a href="mailto:contact@shiolab.co.jp">contact@shiolab.co.jp</a>
+</p>
+
+    </div>
+  </section>
+
+</div>
+
 </BaseLayout>

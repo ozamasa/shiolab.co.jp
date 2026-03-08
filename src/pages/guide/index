@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="英検3級文法の学習ロードマップ｜SHIOLAB"
+  description="英検3級の英文法を体系的に理解するための15ステップの学習ロードマップです。"
+>
+
+<section class="hero">
+  <div class="heroInner">
+    <h1>英検3級文法ロードマップ</h1>
+    <p class="lead">
+      英検3級レベルの英文法を、構造から理解するための学習ガイドです。
+      下の順番で読み進めることで、英語の文構造を体系的に理解できます。
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <section class="card stack">
+    <h2>英検3級文法 15ステップ</h2>
+
+    <ol class="steps">
+
+<li><a href="/articles/現在完了形">現在完了形の基本と過去形との違い</a></li>
+<li><a href="/articles/受動態">受動態の基本と「する・される」の見分け方</a></li>
+<li><a href="/articles/関係代名詞">関係代名詞の基本と who / which</a></li>
+<li><a href="/articles/不定詞">不定詞の基本</a></li>
+<li><a href="/articles/比較">比較の基本と as / than</a></li>
+<li><a href="/articles/助動詞">助動詞の基本</a></li>
+<li><a href="/articles/受動態疑問文">受動態の疑問文</a></li>
+<li><a href="/articles/分詞">分詞の形容詞用法</a></li>
+<li><a href="/articles/間接疑問文">間接疑問文</a></li>
+<li><a href="/articles/接続詞前置詞">接続詞と前置詞</a></li>
+<li><a href="/articles/代名詞">代名詞の使い分け</a></li>
+<li><a href="/articles/副詞形容詞">形容詞と副詞</a></li>
+<li><a href="/articles/最上級">最上級の in / of</a></li>
+<li><a href="/articles/there">There is / There are</a></li>
+<li><a href="/articles/命令文">命令文</a></li>
+
+    </ol>
+
+  </section>
+
+  <section class="card">
+    <h2>このサイトについて</h2>
+
+    <p>
+      SHIOLABでは、英語の文法を「丸暗記」ではなく
+      文構造から理解することを目的に解説しています。
+    </p>
+
+    <p>
+      英検3級レベルの問題では、文の構造を理解すると
+      選択肢の多くを瞬時に排除できるようになります。
+    </p>
+
+    <p>
+      各記事では、文のどこを見ると判断できるのかを
+      具体例とともに解説しています。
+    </p>
+
+  </section>
+
+</div>
+
+</BaseLayout>

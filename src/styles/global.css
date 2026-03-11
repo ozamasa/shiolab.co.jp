@@ -157,17 +157,6 @@ a:hover{ text-decoration:underline; }
   color:#111;
 }
 
-.footer{
-  margin-top:20px;
-  padding-top:14px;
-  border-top:1px solid var(--border);
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-}
-.footer a{ color:var(--muted); }
-.footer .sep{ margin:0 6px; color:#c0c4cc; }
-
 .articleBody{
   max-width:720px;
   margin:auto;
@@ -182,7 +171,6 @@ a:hover{ text-decoration:underline; }
   padding-left:12px;
 }
 .articleBody h3{ margin:16px 0 8px; font-size:16px; }
-
 
 /* --- Card content helpers (used across pages) --- */
 .cardTitle{margin:0 0 10px;font-size:18px;line-height:1.35;}
@@ -392,4 +380,67 @@ a:hover{ text-decoration:underline; }
   opacity: .55;
   cursor: default;
   pointer-events: none;
+}
+
+.footer{
+  margin-top:40px;
+  padding:24px 16px;
+  border-top:1px solid var(--border);
+}
+
+.footerInner{
+  max-width:980px;
+  margin:0 auto;
+  font-size:13px;
+  color:var(--muted);
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:space-between;
+}
+
+.footer a{ color:var(--muted); }
+.footer .sep{ margin:0 6px; color:#c0c4cc; }
+
+/* ---- Article Card Improvement ---- */
+
+.card{
+  transition: all .18s ease;
+  border:1px solid #e5e7eb;
+}
+
+.card:hover{
+  transform: translateY(-3px);
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+}
+
+/* タイトル強調 */
+.card h3{
+  font-size:18px;
+  font-weight:700;
+}
+
+/* タイトルリンク */
+.cardLink{
+  text-decoration:none;
+  color:#2563eb;
+}
+
+.cardLink:hover{
+  text-decoration:underline;
+}
+
+/* カテゴリタグ */
+.tag{
+  display:inline-block;
+  font-size:12px;
+  background:#eef2ff;
+  color:#4f46e5;
+  padding:3px 8px;
+  border-radius:6px;
+  margin-left:6px;
+}
+
+.card{
+  padding:22px;
 }

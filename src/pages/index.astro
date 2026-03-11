@@ -4,7 +4,6 @@ import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
 
 const articles = await fetchAllArticles();
 
-// 新しい順（date > publishedAt > createdAt）
 articles.sort((a, b) => {
   const ad = new Date(a.date || a.publishedAt || a.createdAt || 0).getTime();
   const bd = new Date(b.date || b.publishedAt || b.createdAt || 0).getTime();
@@ -12,25 +11,11 @@ articles.sort((a, b) => {
 });
 
 const latest = articles.slice(0, 4);
-
-// カテゴリ抽出（複数カテゴリ対応） + 件数
-const catCount = new Map<string, { label: string; slug: string; count: number }>();
-
-for (const a of articles) {
-  const cats = normalizeCategories(a.category);
-  for (const c of cats) {
-    const prev = catCount.get(c.slug);
-    if (!prev) catCount.set(c.slug, { ...c, count: 1 });
-    else catCount.set(c.slug, { ...prev, count: prev.count + 1 });
-  }
-}
-
-const categories = [...catCount.values()].sort((x, y) => y.count - x.count).slice(0, 8);
 const dateLabel = (a: any) => a.date || a.publishedAt || a.createdAt || "";
 
 const roadmap = [
-  { label: "現在完了形", id: "xlauatc7h3u" },
-  { label: "受動態", id: "m0i58z__8l7b" },
+  { label: "現在完了形", id: "m0i58z__8l7b" },
+  { label: "受動態", id: "xlauatc7h3u" },
   { label: "関係代名詞", id: "h3t2_3dhkzl" },
   { label: "不定詞", id: "tdjrcvrf1b-a" },
   { label: "比較", id: "4_o_go8w1" },
@@ -45,140 +30,122 @@ const roadmap = [
   { label: "There is / There are", id: "9ojgxas6cb48" },
   { label: "命令文", id: "38_cic-41p" },
 ];
-
 ---
 <BaseLayout
-  title="LOGICLAB｜4択問題の攻略パターン集"
-  description="資格試験・受験・学校学習の4択問題を、『なぜこの選択肢は切れるのか』の視点で整理する学習サイト。"
+  title="LOGICLAB｜英検3級英文法の攻略パターン集"
+  description="英検初級レベルの英文法問題を、『なぜその選択肢は切れるのか』の視点で整理する学習サイト。"
 >
-
-<section class="hero">
-  <div class="heroInner">
-    <p class="kicker">4択問題の「切り方」を学ぶ</p>
-    <h1>LOGICLAB</h1>
-    <p class="lead">
-    英検初級レベルの英文法問題を、
-    「なぜその選択肢は切れるのか」という視点で整理する学習サイトです。
-    </p>
-    <p class="lead">
-    正解を覚えるのではなく、
-    文法や文構造から不正解を見抜く考え方を身につけることを目的としています。
-    </p>
-    <div class="heroCta">
-      <a class="btn btnPrimary" href="/roadmap/">ロードマップを見る</a>
+  <section class="hero">
+    <div class="heroInner">
+      <p class="kicker">4択問題の「切り方」を学ぶ</p>
+      <h1>LOGICLAB</h1>
+      <p class="lead">
+        英検初級レベルの英文法問題を、「なぜその選択肢は切れるのか」という視点で整理する学習サイトです。
+      </p>
+      <p class="lead">
+        正解を覚えるのではなく、文法や文構造から不正解を見抜く考え方を身につけることを目的としています。
+      </p>
+      <div class="heroCta">
+        <a class="btn" href="/roadmap/">ロードマップを見る</a>
+      </div>
     </div>
-  </div>
-</section>
-
-<section class="section sectionPrimary">
-  <div class="sectionHeader">
-    <div>
-      <h2>英検初級レベル学習ロードマップ</h2>
-      <p>15本の記事を順番に読むための入口です</p>
-    </div>
-    <a class="btn btnSmall" href="/roadmap/">ロードマップを見る</a>
-  </div>
-
-  <div class="card roadmapCard">
-    <p class="roadmapLead">
-      英検初級レベルの文法を、構造から順番に理解するためのガイドです。
-      単発で記事を読むよりも、流れに沿って読むほうが理解しやすくなります。
-    </p>
-
-    <div class="roadmapMiniGrid">
-      {roadmap.map((item) =>
-        item.id ? (
-          <a class="roadmapStep" href={`/articles/${item.id}/`}>{item.label}</a>
-        ) : (
-          <span class="roadmapStep roadmapStepDisabled">{item.label}</span>
-        )
-      )}
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="sectionHeader">
-    <div>
-      <h2>最新記事</h2>
-      <p>最近追加された攻略パターン</p>
-    </div>
-    <a class="btn btnSmall" href="/articles/">すべての記事</a>
-  </div>
-
-  {latest.length === 0 ? (
-    <section class="card">
-      <p>まだ記事がありません。最初の記事を追加するとここに表示されます。</p>
-    </section>
-  ) : (
-    <section class="grid">
-      {latest.map((a) => (
-        <article class="card">
-          <h3 style="margin:0 0 10px;">
-            <a class="cardLink" href={`/articles/${a.id}/`}>{a.title}</a>
-          </h3>
-          {a.description ? (
-            <p class="muted" style="margin:0 0 14px; line-height:1.8;">
-              {a.description}
-            </p>
-          ) : null}
-
-          <div class="metaRow" style="margin-top:0;">
-            {a.category ? (
-              <span class="metaItem">
-                カテゴリ：
-                {normalizeCategories(a.category).map((c) => (
-                  <a href={`/category/${c.slug}/`} class="tag" key={c.slug}>
-                    {c.label}
-                  </a>
-                ))}
-              </span>
-            ) : (
-              <span class="metaItem">カテゴリ：未設定</span>
-            )}
-            {dateLabel(a) ? (
-              <span class="metaItem">更新：{String(dateLabel(a)).slice(0, 10)}</span>
-            ) : null}
-          </div>
-
-          <div style="margin-top:14px;">
-            <a class="btn btnSmall" href={`/articles/${a.id}/`}>続きを読む</a>
-          </div>
-        </article>
-      ))}
-    </section>
-  )}
-</section>
-
-<section class="section">
-  <div class="card prose compactProse">
-    <h2>このサイトの考え方</h2>
-    <p>
-      LOGICLABは、英検初級レベルの4択問題を
-      「なぜその選択肢は切れるのか」という視点で整理する学習サイトです。
-    </p>
-    <p>
-      正解を暗記するのではなく、
-      文法や文構造から不正解を見抜く考え方を身につけることを目的としています。
-    </p>
-  </div>
-</section>
-
-<section class="section">
-  <div class="sectionHeader">
-    <div>
-      <h2>使い方</h2>
-      <p>最短で「切り方」を身につける流れ</p>
-    </div>
-    <a class="btn btnSmall" href="/guide/">使い方を見る</a>
-  </div>
-
-  <section class="card">
-    <ol class="steps">
-      <li>ロードマップから、順番にテーマを選ぶ</li>
-      <li>「切り方」を読んで、型をつかむ</li>
-      <li>クイズで確認して、定着させる</li>
-    </ol>
   </section>
-</section>
+
+  <section class="section sectionPrimary">
+    <div class="sectionHeader">
+      <div>
+        <h2>英検初級レベル学習ロードマップ</h2>
+        <p>15本の記事を順番に読むための入口です</p>
+      </div>
+      <a class="btn btnSmall" href="/roadmap/">ロードマップを見る</a>
+    </div>
+
+    <div class="card roadmapCard">
+      <p class="roadmapLead">
+        英検初級レベルの文法を、構造から順番に理解するためのガイドです。単発で記事を読むよりも、流れに沿って読むほうが理解しやすくなります。
+      </p>
+
+      <div class="roadmapMiniGrid">
+        {roadmap.map((item) => (
+          <a class="roadmapStep" href={`/articles/${item.id}/`}>{item.label}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHeader">
+      <div>
+        <h2>最新の攻略パターン</h2>
+        <p>最近追加された記事を新しい順に掲載しています</p>
+      </div>
+      <a class="btn btnSmall" href="/articles/">すべての記事</a>
+    </div>
+
+    {latest.length === 0 ? (
+      <section class="card">
+        <p>まだ記事がありません。最初の記事を追加するとここに表示されます。</p>
+      </section>
+    ) : (
+      <section class="grid">
+        {latest.map((a) => (
+          <article class="card cardHover">
+            <h3 class="articleCardTitle">
+              <a class="cardLink" href={`/articles/${a.id}/`}>{a.title}</a>
+            </h3>
+
+            {a.description ? <p class="articleDesc">{a.description}</p> : null}
+
+            <div class="metaRow" style="margin-top:0;">
+              {a.category ? (
+                <span class="metaItem">
+                  カテゴリ：
+                  {normalizeCategories(a.category).map((c) => (
+                    <a href={`/category/${c.slug}/`} class="tag">{c.label}</a>
+                  ))}
+                </span>
+              ) : (
+                <span class="metaItem">カテゴリ：未設定</span>
+              )}
+              {dateLabel(a) ? <span class="metaItem">更新：{String(dateLabel(a)).slice(0, 10)}</span> : null}
+            </div>
+
+            <div style="margin-top:14px;">
+              <a class="btn btnSmall" href={`/articles/${a.id}/`}>続きを読む</a>
+            </div>
+          </article>
+        ))}
+      </section>
+    )}
+  </section>
+
+  <section class="section">
+    <div class="card prose">
+      <h2>このサイトの考え方</h2>
+      <p>
+        LOGICLABは、英検初級レベルの4択問題を「なぜその選択肢は切れるのか」という視点で整理する学習サイトです。
+      </p>
+      <p>
+        正解を暗記するのではなく、文法や文構造から不正解を見抜く考え方を身につけることを目的としています。
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHeader">
+      <div>
+        <h2>使い方</h2>
+        <p>最短で「切り方」を身につける流れ</p>
+      </div>
+      <a class="btn btnSmall" href="/roadmap/">ロードマップへ</a>
+    </div>
+
+    <section class="card">
+      <ol class="steps">
+        <li>ロードマップから、順番にテーマを選ぶ</li>
+        <li>「切り方」を読んで、型をつかむ</li>
+        <li>必要に応じてクイズで確認し、定着させる</li>
+      </ol>
+    </section>
+  </section>
 </BaseLayout>

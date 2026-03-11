@@ -10,8 +10,8 @@ const articles = (await fetchAllArticles()).sort(
 ---
 
 <BaseLayout
-  title="記事一覧｜LOGICLAB"
-  description="LOGICLABの記事一覧ページです。資格試験・受験対策に役立つ攻略パターンをまとめています。"
+  title="攻略パターン一覧｜LOGICLAB"
+  description="LOGICLABの記事一覧ページです。英検初級レベルの英文法攻略パターンをまとめています。"
 >
   <section class="hero">
     <div class="heroInner">
@@ -19,8 +19,8 @@ const articles = (await fetchAllArticles()).sort(
       <h1>記事一覧</h1>
       <p class="lead">公開中の記事を新しい順に掲載しています。</p>
       <div class="heroCta">
-        <a class="btn" href="/">トップへ戻る</a>
-        <a class="btn" href="https://logiclab.shiolab.co.jp/quiz/">クイズへ</a>
+        <a class="btn sub" href="/">トップへ戻る</a>
+        <a class="btn" href="/roadmap/">ロードマップ</a>
       </div>
     </div>
   </section>
@@ -36,22 +36,18 @@ const articles = (await fetchAllArticles()).sort(
         const dateText = (a.date || a.publishedAt || a.createdAt || "").toString();
 
         return (
-          <article class="card">
-            <h2 style="margin:0 0 10px; font-size:18px;">
+          <article class="card cardHover">
+            <h2 class="articleCardTitle">
               <a class="cardLink" href={`/articles/${a.id}/`}>{a.title}</a>
             </h2>
 
-            {a.description ? (
-              <p class="muted" style="margin:0 0 14px; line-height:1.8;">
-                {a.description}
-              </p>
-            ) : null}
+            {a.description ? <p class="articleDesc">{a.description}</p> : null}
 
             <div class="metaRow" style="margin-top:0;">
               {cat ? (
                 <span class="metaItem">
                   カテゴリ：
-                  <a href={`/category/${cat.slug}/`}>{cat.label}</a>
+                  <a class="tag" href={`/category/${cat.slug}/`}>{cat.label}</a>
                 </span>
               ) : (
                 <span class="metaItem">カテゴリ：未設定</span>

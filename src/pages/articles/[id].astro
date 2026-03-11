@@ -7,7 +7,6 @@ import {
   getArticleBodyHtml,
 } from "../../lib/microcms";
 
-// 静的生成に必須
 export async function getStaticPaths() {
   const all = await fetchAllArticles();
   return all.map((a) => ({
@@ -18,28 +17,18 @@ export async function getStaticPaths() {
 const { id } = Astro.params;
 const article = await fetchArticleById(String(id));
 
-// microCMS側で null が来ることがあるので全部ガード
 const title = (article?.title ?? "記事が見つかりません").toString();
 const description = (article?.description ?? "").toString();
 const bodyHtml = getArticleBodyHtml(article);
-const dateText =
-  (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
-
+const dateText = (article?.date ?? article?.publishedAt ?? article?.createdAt ?? "").toString();
 const categories = normalizeCategories(article?.category);
 
-// 同カテゴリの関連記事（最大3件）
-// ※ await は必ず frontmatter 側で行う（テンプレート側に await を置かない）
 let related: any[] = [];
 if (article && categories.length > 0) {
   const all = await fetchAllArticles();
   const targetSlug = categories[0].slug;
-
   related = all
-    .filter(
-      (a) =>
-        a?.id !== article.id &&
-        normalizeCategories(a?.category).some((c) => c.slug === targetSlug)
-    )
+    .filter((a) => a?.id !== article.id && normalizeCategories(a?.category).some((c) => c.slug === targetSlug))
     .sort((a, b) => {
       const ad = new Date(a?.date ?? a?.publishedAt ?? a?.createdAt ?? 0).getTime();
       const bd = new Date(b?.date ?? b?.publishedAt ?? b?.createdAt ?? 0).getTime();
@@ -52,61 +41,41 @@ if (article && categories.length > 0) {
 <BaseLayout title={title} description={description || "LOGICLABの記事ページです。"}>
   {!article ? (
     <section class="card">
-      <h1 class="pageTitle">記事が見つかりません</h1>
-      <p class="lead">
-        URL が間違っているか、記事が非公開になっている可能性があります。
-      </p>
-      <p class="actions">
-        <a class="btn sub" href="/articles/">記事一覧へ戻る</a>
-      </p>
+      <h1 class="h1">記事が見つかりません</h1>
+      <p class="lead">URL が間違っているか、記事が非公開になっている可能性があります。</p>
+      <p><a class="btn sub" href="/articles/">記事一覧へ戻る</a></p>
     </section>
   ) : (
     <>
       <article class="card">
-        <div class="metaRow">
+        <div class="metaRow" style="margin-top:0;">
           {categories.length > 0 ? (
-            <div class="metaTags">
-              <span class="metaLabel">カテゴリ</span>
+            <div class="metaItem">
+              <span>カテゴリ：</span>
               {categories.map((c) => (
                 <a class="tag" href={`/category/${c.slug}/`}>{c.label}</a>
               ))}
             </div>
           ) : (
-            <div class="metaTags">
-              <span class="metaLabel">カテゴリ</span>
-              <span class="tag muted">未設定</span>
-            </div>
+            <div class="metaItem"><span>カテゴリ：</span><span class="tag muted">未設定</span></div>
           )}
-
-          {dateText ? (
-            <div class="metaDate">更新：{dateText.slice(0, 10)}</div>
-          ) : null}
+          {dateText ? <div class="metaItem">更新：{dateText.slice(0, 10)}</div> : null}
         </div>
 
-        <h1 class="pageTitle">{title}</h1>
-
+        <h1 class="h1">{title}</h1>
         {description ? <p class="lead">{description}</p> : null}
 
-        <div class="inlineCta">
-          <a
-            class="btn"
-            href="https://logiclab.shiolab.co.jp/quiz/"
-            target="_blank"
-            rel="noopener"
-          >
-            クイズで確認する
-          </a>
+        <div class="heroCta">
           <a class="btn sub" href="/articles/">記事一覧</a>
+          <a class="btn sub" href="/roadmap/">ロードマップ</a>
         </div>
       </article>
 
       <section class="card" style="margin-top:14px;">
         {bodyHtml.trim().length === 0 ? (
-          <p class="muted" style="margin:0;">
-            この記事は本文が未入力です（microCMS の <code>body</code> を確認してください）。
-          </p>
+          <p class="muted" style="margin:0;">この記事は本文が未入力です。</p>
         ) : (
-          <div class="prose" set:html={bodyHtml} />
+          <div class="prose articleBody" set:html={bodyHtml} />
         )}
       </section>
 
@@ -115,18 +84,14 @@ if (article && categories.length > 0) {
           <h2 class="cardTitle" style="margin-top:0;">同じカテゴリの記事</h2>
           <ul style="margin:0; padding-left:1.1em;">
             {related.map((r) => (
-              <li>
-                <a href={`/articles/${r.id}/`}>{r.title}</a>
-              </li>
+              <li><a href={`/articles/${r.id}/`}>{r.title}</a></li>
             ))}
           </ul>
         </section>
       ) : null}
 
       <section class="card" style="margin-top:14px;">
-        <p style="margin:0;">
-          <a href="/articles/">← 記事一覧へ</a>
-        </p>
+        <p style="margin:0;"><a href="/articles/">← 記事一覧へ</a></p>
       </section>
     </>
   )}

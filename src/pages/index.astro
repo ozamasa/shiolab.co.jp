@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { fetchAllArticles, getRoadmapGroups, normalizeCategories } from "../lib/microcms";
+import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
 
 const articles = await fetchAllArticles();
 
+// 新しい順（date > publishedAt > createdAt）
 articles.sort((a, b) => {
   const ad = new Date(a.date || a.publishedAt || a.createdAt || 0).getTime();
   const bd = new Date(b.date || b.publishedAt || b.createdAt || 0).getTime();
@@ -11,8 +12,12 @@ articles.sort((a, b) => {
 });
 
 const latest = articles.slice(0, 4);
-const { basic } = getRoadmapGroups(articles);
-const roadmapTop = basic.slice(0, 15);
+
+const roadmapTop = articles
+  .filter((a) => a.roadmapType === "basic")
+  .sort((a, b) => (a.roadmapOrder || 999) - (b.roadmapOrder || 999))
+  .slice(0, 15);
+
 const dateLabel = (a: any) => a.date || a.publishedAt || a.createdAt || "";
 ---
 

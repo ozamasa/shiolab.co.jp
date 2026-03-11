@@ -1,44 +1,61 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { fetchAllArticles, getRoadmapGroups } from "../../lib/microcms";
 
-const steps = [
-  { step: "STEP1", title: "現在完了形", href: "/articles/m0i58z__8l7b/" },
-  { step: "STEP2", title: "受動態", href: "/articles/xlauatc7h3u/" },
-  { step: "STEP3", title: "関係代名詞", href: "/articles/h3t2_3dhkzl/" },
-  { step: "STEP4", title: "不定詞", href: "/articles/tdjrcvrf1b-a/" },
-  { step: "STEP5", title: "比較", href: "/articles/4_o_go8w1/" },
-  { step: "STEP6", title: "助動詞", href: "/articles/bbv2iufy9/" },
-  { step: "STEP7", title: "受動態の疑問文", href: "/articles/j1t5n4kq77m/" },
-  { step: "STEP8", title: "分詞", href: "/articles/45bmjvget/" },
-  { step: "STEP9", title: "間接疑問文", href: "/articles/yxhe1x9og/" },
-  { step: "STEP10", title: "接続詞と前置詞", href: "/articles/3riztgotej/" },
-  { step: "STEP11", title: "代名詞", href: "/articles/7uxn97h7o/" },
-  { step: "STEP12", title: "形容詞と副詞", href: "/articles/buck2wkbjvz/" },
-  { step: "STEP13", title: "最上級", href: "/articles/3ci5pwb78f5/" },
-  { step: "STEP14", title: "There is / There are", href: "/articles/9ojgxas6cb48/" },
-  { step: "STEP15", title: "命令文", href: "/articles/38_cic-41p/" },
-];
+const articles = await fetchAllArticles();
+const { basic, advanced } = getRoadmapGroups(articles);
 ---
+
 <BaseLayout
   title="英検3級文法を最短で理解するロードマップ｜LOGICLAB"
-  description="英検初級レベルの英文法を構造から理解するための15ステップの学習ロードマップです。"
+  description="英検初級レベルの英文法を構造から理解するための学習ロードマップです。"
 >
   <section class="hero">
     <div class="heroInner">
       <h1>英検3級文法を最短で理解するロードマップ</h1>
-      <p class="lead">英語の文法は、単語やルールを個別に覚えるだけではなかなか理解が定着しません。</p>
-      <p class="lead">このサイトでは、英文を「意味のかたまり」に分けて理解する独自の方法「切断術」をベースに、英検3級レベルの英文法を体系的に解説しています。</p>
+      <p class="lead">
+        英検初級レベルの文法を、基礎から順番に理解するための学習ガイドです。
+      </p>
     </div>
   </section>
 
   <section class="section">
+    <div class="sectionHeader">
+      <div>
+        <h2>基礎15ステップ</h2>
+        <p>まずはここから順番に読むのがおすすめです</p>
+      </div>
+    </div>
+
     <div class="grid">
-      {steps.map((item) => (
-        <a class="card cardHover" href={item.href} style="color:inherit; text-decoration:none;">
-          <div class="kicker" style="margin-bottom:10px;">{item.step}</div>
-          <h2 class="cardTitle" style="margin:0;">{item.title}</h2>
+      {basic.map((item, i) => (
+        <a class="card cardHover" href={`/articles/${item.id}/`} style="color:inherit; text-decoration:none;">
+          <div class="kicker" style="margin-bottom:10px;">STEP{i + 1}</div>
+          <h2 class="cardTitle" style="margin:0;">{item.roadmapLabel || item.title}</h2>
         </a>
       ))}
     </div>
   </section>
+
+  {advanced.length > 0 && (
+    <section class="section">
+      <div class="sectionHeader">
+        <div>
+          <h2>発展記事</h2>
+          <p>基礎を読んだあとに取り組みたいテーマです</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        {advanced.map((item) => (
+          <article class="card cardHover">
+            <h3 class="articleCardTitle">
+              <a class="cardLink" href={`/articles/${item.id}/`}>{item.title}</a>
+            </h3>
+            {item.description ? <p class="articleDesc">{item.description}</p> : null}
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 </BaseLayout>

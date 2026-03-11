@@ -34,6 +34,10 @@ export type MicroCMSArticle = {
   revisedAt?: string;
   createdAt?: string;
   updatedAt?: string;
+
+  roadmapType?: "basic" | "advanced" | "none";
+  roadmapOrder?: number;
+  roadmapLabel?: string;
 };
 
 // ---------- Helpers ----------

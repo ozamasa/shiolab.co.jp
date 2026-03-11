@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { fetchAllArticles, normalizeCategories } from "../lib/microcms";
+import { fetchAllArticles, getRoadmapGroups, normalizeCategories } from "../lib/microcms";
 
 const articles = await fetchAllArticles();
 
@@ -11,26 +11,11 @@ articles.sort((a, b) => {
 });
 
 const latest = articles.slice(0, 4);
+const { basic } = getRoadmapGroups(articles);
+const roadmapTop = basic.slice(0, 15);
 const dateLabel = (a: any) => a.date || a.publishedAt || a.createdAt || "";
-
-const roadmap = [
-  { label: "現在完了形", id: "m0i58z__8l7b" },
-  { label: "受動態", id: "xlauatc7h3u" },
-  { label: "関係代名詞", id: "h3t2_3dhkzl" },
-  { label: "不定詞", id: "tdjrcvrf1b-a" },
-  { label: "比較", id: "4_o_go8w1" },
-  { label: "助動詞", id: "bbv2iufy9" },
-  { label: "受動態の疑問文", id: "j1t5n4kq77m" },
-  { label: "分詞", id: "45bmjvget" },
-  { label: "間接疑問文", id: "yxhe1x9og" },
-  { label: "接続詞と前置詞", id: "3riztgotej" },
-  { label: "代名詞", id: "7uxn97h7o" },
-  { label: "形容詞と副詞", id: "buck2wkbjvz" },
-  { label: "最上級", id: "3ci5pwb78f5" },
-  { label: "There is / There are", id: "9ojgxas6cb48" },
-  { label: "命令文", id: "38_cic-41p" },
-];
 ---
+
 <BaseLayout
   title="LOGICLAB｜英検3級英文法の攻略パターン集"
   description="英検初級レベルの英文法問題を、『なぜその選択肢は切れるのか』の視点で整理する学習サイト。"
@@ -66,8 +51,10 @@ const roadmap = [
       </p>
 
       <div class="roadmapMiniGrid">
-        {roadmap.map((item) => (
-          <a class="roadmapStep" href={`/articles/${item.id}/`}>{item.label}</a>
+        {roadmapTop.map((item) => (
+          <a class="roadmapStep" href={`/articles/${item.id}/`}>
+            {item.roadmapLabel || item.title}
+          </a>
         ))}
       </div>
     </div>

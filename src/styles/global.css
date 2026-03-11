@@ -168,9 +168,19 @@ a:hover{ text-decoration:underline; }
 .footer a{ color:var(--muted); }
 .footer .sep{ margin:0 6px; color:#c0c4cc; }
 
+.articleBody{
+  max-width:720px;
+  margin:auto;
+}
 .articleBody p{ line-height:1.9; color:#333; }
 .articleBody ul{ line-height:1.9; color:#333; }
-.articleBody h2{ margin:20px 0 10px; font-size:18px; }
+.articleBody h2{
+  font-size:22px;
+  margin-top:32px;
+  margin-bottom:12px;
+  border-left:4px solid #2563eb;
+  padding-left:12px;
+}
 .articleBody h3{ margin:16px 0 8px; font-size:16px; }
 
 
@@ -329,4 +339,57 @@ a:hover{ text-decoration:underline; }
 
 .compactProse p:last-child{
   margin-bottom: 0;
+}
+
+
+.articleCard {
+  padding: 18px;
+}
+
+.articleCard h3{
+  font-size:18px;
+  line-height:1.5;
+  margin-bottom:6px;
+}
+
+.articleMeta{
+  font-size:12px;
+  color:#6b7280;
+  margin-bottom:8px;
+}
+
+.articleDesc{
+  font-size:14px;
+  line-height:1.7;
+  color:#374151;
+}
+
+
+.roadmapStep{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-size:13px;
+  font-weight:700;
+  color:#344054;
+  text-decoration:none;
+  transition:all .15s ease;
+}
+
+.roadmapStep:hover{
+  border-color:var(--primary);
+  background:#eef2ff;
+  color:var(--primary2);
+  text-decoration:none;
+}
+
+.roadmapStepDisabled{
+  opacity: .55;
+  cursor: default;
+  pointer-events: none;
 }

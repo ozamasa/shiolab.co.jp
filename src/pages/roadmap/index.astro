@@ -30,25 +30,27 @@ const advanced = articles
     </div>
   </section>
 
-  <section class="section">
-    <div class="sectionHeader">
-      <div>
-        <h2>基礎15ステップ</h2>
-        <p>まずはここから順番に読むのがおすすめです</p>
+  {basic.length > 0 ? (
+    <section class="section">
+      <div class="sectionHeader">
+        <div>
+          <h2>基礎15ステップ</h2>
+          <p>まずはここから順番に読むのがおすすめです</p>
+        </div>
       </div>
-    </div>
 
-    <div class="grid">
-      {basic.map((item, i) => (
-        <a class="card cardHover" href={`/articles/${item.id}/`} style="color:inherit; text-decoration:none;">
-          <div class="kicker" style="margin-bottom:10px;">STEP{i + 1}</div>
-          <h2 class="cardTitle" style="margin:0;">{item.roadmapLabel || item.title}</h2>
-        </a>
-      ))}
-    </div>
-  </section>
+      <div class="grid">
+        {basic.map((item, i) => (
+          <a class="card cardHover" href={`/articles/${item.id}/`} style="color:inherit; text-decoration:none;">
+            <div class="kicker" style="margin-bottom:10px;">STEP{i + 1}</div>
+            <h2 class="cardTitle" style="margin:0;">{item.roadmapLabel || item.title}</h2>
+          </a>
+        ))}
+      </div>
+    </section>
+  ) : null}
 
-  {advanced.length > 0 && (
+  {advanced.length > 0 ? (
     <section class="section">
       <div class="sectionHeader">
         <div>
@@ -68,5 +70,13 @@ const advanced = articles
         ))}
       </div>
     </section>
-  )}
+  ) : null}
+
+  {basic.length === 0 && advanced.length === 0 ? (
+    <section class="section">
+      <div class="card">
+        <p style="margin:0;">ロードマップに表示する記事がまだありません。</p>
+      </div>
+    </section>
+  ) : null}
 </BaseLayout>

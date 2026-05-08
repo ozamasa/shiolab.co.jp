@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-05-08T09:13:32+09:00",
+  "generated_at": "2026-05-08T22:08:33+09:00",
   "datasets": {
-    "finance_summary": {
-      "dataset": "finance_summary",
+    "finance_expenditure_purpose": {
+      "dataset": "finance_expenditure_purpose",
       "enabled": true,
-      "source_name": "塩尻市 普通会計収支状況",
-      "source_url": "https://www.city.shiojiri.lg.jp/uploaded/attachment/40334.xls",
-      "cache_file": "cache/finance_summary.xls",
-      "downloaded_at": "2026-05-08T09:13:33+09:00",
+      "source_name": "塩尻市 一般会計歳出当初予算額 目的別",
+      "source_url": "https://www.city.shiojiri.lg.jp/uploaded/attachment/40336.xls",
+      "cache_file": "cache/finance_expenditure_purpose.xls",
+      "downloaded_at": "2026-05-08T22:08:34+09:00",
       "used_cached_file": false,
       "last_modified": "Mon, 02 Mar 2026 03:45:10 GMT",
-      "etag": "\"a800-64c0269e33dd7\"",
-      "content_length": "43008",
-      "sha256": "6dede9bf6a7a030986b70de4149967262eb28b2a2cde4677166e1b693c22ea6f",
-      "generated_at": "2026-05-08T09:13:33+09:00",
-      "output": "public/data/finance_summary.json",
-      "row_count": 63,
+      "etag": "\"3fa00-64c0269e364e7\"",
+      "content_length": "260608",
+      "sha256": "0ee52c0c44160299eb16616bdb71e97ba7a4cfebdeb117c21be5f4b2bb21d13a",
+      "generated_at": "2026-05-08T22:08:34+09:00",
+      "output": "public/data/finance_expenditure_purpose.json",
+      "row_count": 50,
       "years": {
-        "min": 1959,
-        "max": 2024
+        "min": 1972,
+        "max": 2025
       }
     }
   }

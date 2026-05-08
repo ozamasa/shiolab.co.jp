@@ -1,0 +1,421 @@
+# データ取得・変換設定
+
+population_summary:
+  enabled: true
+  type: table_by_columns
+
+  source_name: "塩尻市 統計しおじり 人口・世帯数の推移"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/35606.xls"
+  cache_file: "cache/population_summary.xls"
+
+  sheet: "2-1"
+  data_start_row: 5
+  stop_when_year_blank: true
+
+  columns:
+    year:
+      column: "A"
+      type: year
+    households:
+      column: "C"
+      type: int
+    total:
+      column: "D"
+      type: int
+    male:
+      column: "E"
+      type: int
+    female:
+      column: "F"
+      type: int
+
+  derived:
+    people_per_household:
+      formula: "total / households"
+      digits: 2
+
+  output: "public/data/population_summary.json"
+
+  validations:
+    - name: "total_equals_male_plus_female"
+      type: "sum_equals"
+      left: "total"
+      rights: ["male", "female"]
+      tolerance: 0
+    - name: "people_per_household_reasonable"
+      type: "range"
+      field: "people_per_household"
+      min: 1
+      max: 10
+    - name: "year_unique"
+      type: "unique"
+      field: "year"
+    - name: "year_ascending"
+      type: "ascending"
+      field: "year"
+
+population_age_groups:
+  enabled: true
+  type: table_by_columns
+
+  source_name: "塩尻市 統計しおじり 年齢3区分別人口"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/35608.xls"
+  cache_file: "cache/population_age_groups.xls"
+
+  sheet: "2-3"
+  data_start_row: 6
+  stop_when_year_blank: true
+
+  columns:
+    year:
+      column: "A"
+      type: year
+    total:
+      column: "C"
+      type: int
+    young:
+      column: "D"
+      type: int
+    working:
+      column: "E"
+      type: int
+    elderly:
+      column: "F"
+      type: int
+
+  derived:
+    unknown:
+      formula: "total - young - working - elderly"
+      digits: 0
+
+  output: "public/data/population_age_groups.json"
+
+  validations:
+    - name: "unknown_age_non_negative"
+      type: "range"
+      field: "unknown"
+      min: 0
+      max: 1000
+    - name: "year_unique"
+      type: "unique"
+      field: "year"
+    - name: "year_ascending"
+      type: "ascending"
+      field: "year"
+
+education_elementary:
+  enabled: true
+  type: table_by_columns
+
+  source_name: "塩尻市 統計しおじり 小学校児童数"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40136.xls"
+  cache_file: "cache/education_elementary.xls"
+
+  sheet: "7-1"
+  data_start_row: 6
+  stop_when_year_blank: false
+  max_blank_years: 30
+
+  filters:
+    - column: "C"
+      equals: "総数"
+
+  columns:
+    year:
+      column: "B"
+      type: year
+    total:
+      column: "D"
+      type: int
+    male:
+      column: "E"
+      type: int
+    female:
+      column: "F"
+      type: int
+
+  output: "public/data/education_elementary.json"
+
+  validations:
+    - name: "total_equals_male_plus_female"
+      type: "sum_equals"
+      left: "total"
+      rights: ["male", "female"]
+      tolerance: 0
+    - name: "year_unique"
+      type: "unique"
+      field: "year"
+    - name: "year_ascending"
+      type: "ascending"
+      field: "year"
+
+education_junior_high:
+  enabled: true
+  type: table_by_columns
+
+  source_name: "塩尻市 統計しおじり 中学校生徒数"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40141.xls"
+  cache_file: "cache/education_junior_high.xls"
+
+  sheet: "7-6"
+  data_start_row: 6
+  stop_when_year_blank: false
+  max_blank_years: 30
+
+  filters:
+    - column: "C"
+      equals: "総数"
+    - column: "D"
+      not_equals: "***"
+
+  columns:
+    year:
+      column: "B"
+      type: year
+    total:
+      column: "D"
+      type: int
+    male:
+      column: "E"
+      type: int
+    female:
+      column: "F"
+      type: int
+
+  output: "public/data/education_junior_high.json"
+
+  validations:
+    - name: "total_equals_male_plus_female"
+      type: "sum_equals"
+      left: "total"
+      rights: ["male", "female"]
+      tolerance: 0
+    - name: "year_unique"
+      type: "unique"
+      field: "year"
+    - name: "year_ascending"
+      type: "ascending"
+      field: "year"
+
+
+industry_summary:
+  enabled: true
+  type: row_blocks_by_year
+
+  source_name: "塩尻市 統計しおじり 産業大分類別事業所数・従業者数"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40533.xls"
+  cache_file: "cache/industry_summary.xls"
+
+  sheet: "3-1"
+  data_start_row: 5
+
+  row_blocks:
+    - key: businesses
+      match:
+        column: "D"
+        equals: "事業所数"
+
+    - key: employees
+      match:
+        column: "D"
+        equals: "従業者数"
+
+  columns:
+    year:
+      column: "B"
+      type: year
+
+    total:
+      column: "F"
+      type: int
+
+  merge_by_year:
+    businesses:
+      total: businesses
+
+    employees:
+      total: employees
+
+  derived:
+    employees_per_business:
+      formula: "employees / businesses"
+      digits: 2
+
+  validations:
+    - type: not_null
+      fields: ["year", "businesses", "employees"]
+
+    - type: range
+      field: "employees_per_business"
+      min: 1
+      max: 100
+
+    - type: unique
+      field: "year"
+
+    - type: ascending
+      field: "year"
+
+  output: "public/data/industry_summary.json"
+
+finance_summary:
+  enabled: true
+  type: table_by_columns
+
+  source_name: "塩尻市 普通会計収支状況"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40334.xls"
+  cache_file: "cache/finance_summary.xls"
+
+  sheet: "15-1"
+  data_start_row: 5
+  stop_when_year_blank: false
+  max_blank_years: 30
+
+  filters:
+    - column: "D"
+      not_equals: "***"
+
+  columns:
+    year:
+      column: "B"
+      type: year
+
+    revenue:
+      column: "D"
+      type: int
+
+    expenditure:
+      column: "E"
+      type: int
+
+    balance:
+      column: "F"
+      type: int
+
+  validations:
+    - type: unique
+      field: year
+
+    - type: ascending
+      field: year
+
+  output: "public/data/finance_summary.json"
+
+finance_expenditure_purpose:
+  enabled: true
+  type: row_blocks_by_year
+
+  source_name: "塩尻市 一般会計歳出当初予算額 目的別"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40336.xls"
+  cache_file: "cache/finance_expenditure_purpose.xls"
+
+  sheet: "15-3【歳出】"
+  data_start_row: 5
+
+  row_blocks:
+    - key: general_affairs
+      match:
+        column: "C"
+        equals: "総務費"
+
+    - key: welfare
+      match:
+        column: "C"
+        equals: "民生費"
+
+    - key: health
+      match:
+        column: "C"
+        equals: "衛生費"
+
+    - key: agriculture
+      match:
+        column: "C"
+        equals: "農林水産業費"
+
+    - key: commerce
+      match:
+        column: "C"
+        equals: "商工費"
+
+    - key: civil_engineering
+      match:
+        column: "C"
+        equals: "土木費"
+
+    - key: education
+      match:
+        column: "C"
+        equals: "教育費"
+
+    - key: debt
+      match:
+        column: "C"
+        equals: "公債費"
+
+  columns:
+    year:
+      column: "B"
+      type: year
+
+    amount:
+      column: "D"
+      type: int
+
+    ratio:
+      column: "E"
+      type: float
+
+  merge_by_year:
+    general_affairs:
+      amount: general_affairs_amount
+      ratio: general_affairs_ratio
+
+    welfare:
+      amount: welfare_amount
+      ratio: welfare_ratio
+
+    health:
+      amount: health_amount
+      ratio: health_ratio
+
+    agriculture:
+      amount: agriculture_amount
+      ratio: agriculture_ratio
+
+    commerce:
+      amount: commerce_amount
+      ratio: commerce_ratio
+
+    civil_engineering:
+      amount: civil_engineering_amount
+      ratio: civil_engineering_ratio
+
+    education:
+      amount: education_amount
+      ratio: education_ratio
+
+    debt:
+      amount: debt_amount
+      ratio: debt_ratio
+
+  validations:
+    - type: not_null
+      fields:
+        - year
+        - welfare_amount
+        - welfare_ratio
+        - education_amount
+        - education_ratio
+        - civil_engineering_amount
+        - civil_engineering_ratio
+        - debt_amount
+        - debt_ratio
+
+    - type: unique
+      field: year
+
+    - type: ascending
+      field: year
+
+  output: "public/data/finance_expenditure_purpose.json"

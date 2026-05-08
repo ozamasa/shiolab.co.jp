@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-05-08T09:13:32+09:00",
+  "datasets": {
+    "finance_summary": {
+      "dataset": "finance_summary",
+      "enabled": true,
+      "source_name": "塩尻市 普通会計収支状況",
+      "source_url": "https://www.city.shiojiri.lg.jp/uploaded/attachment/40334.xls",
+      "cache_file": "cache/finance_summary.xls",
+      "downloaded_at": "2026-05-08T09:13:33+09:00",
+      "used_cached_file": false,
+      "last_modified": "Mon, 02 Mar 2026 03:45:10 GMT",
+      "etag": "\"a800-64c0269e33dd7\"",
+      "content_length": "43008",
+      "sha256": "6dede9bf6a7a030986b70de4149967262eb28b2a2cde4677166e1b693c22ea6f",
+      "generated_at": "2026-05-08T09:13:33+09:00",
+      "output": "public/data/finance_summary.json",
+      "row_count": 63,
+      "years": {
+        "min": 1959,
+        "max": 2024
+      }
+    }
+  }
+}

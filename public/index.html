@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>塩尻市データストーリー</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--border:#e5e7eb;--soft:#eff6ff;--accent:#2563eb;--accent-soft:#dbeafe;--event:#dc2626;--period:#2563eb;--warn:#fff7ed}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.75}
+header,main{width:min(1120px,calc(100% - 32px));margin:0 auto}
+header{padding:52px 0 24px}
+.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:24px}
+.hero-main,.story-card,.stat-card,.chart-card,.note-card,.step-lead{background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:0 10px 28px rgba(15,23,42,.06)}
+.hero-main{padding:34px}
+.hero-eyebrow{color:var(--accent);font-weight:800;font-size:13px;letter-spacing:.08em;margin-bottom:10px}
+h1{margin:0 0 14px;font-size:clamp(32px,5vw,52px);line-height:1.15}
+.hero-main p{margin:0;color:var(--muted)}
+.timeline-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;color:var(--muted);font-size:13px}
+.timeline-legend span{display:inline-flex;align-items:center;gap:6px}
+.legend-line{display:inline-block;width:22px;height:0;border-top:2px solid rgba(220,38,38,.7)}
+.legend-band{display:inline-block;width:22px;height:12px;background:rgba(37,99,235,.10);border-radius:4px}
+.story-card{padding:24px;display:flex;flex-direction:column;justify-content:center}
+.story-card h2{margin:0 0 10px;font-size:18px}
+.story-card ol{margin:0;padding-left:1.3em;color:var(--muted);font-size:14px}
+.top-nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(244,246,251,.94);border-bottom:1px solid var(--border)}
+.top-nav-inner{width:min(1120px,calc(100% - 32px));margin:0 auto;display:flex;gap:12px;padding:12px 0;overflow-x:auto}
+.top-nav a{text-decoration:none;color:var(--text);background:#fff;border:1px solid var(--border);border-radius:999px;padding:8px 14px;font-size:14px;white-space:nowrap}
+main{margin-bottom:64px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:24px 0 40px}
+.stat-card{padding:20px}
+.stat-card .label{color:var(--muted);font-size:13px}
+.stat-card .value{font-size:26px;font-weight:780;margin-top:8px}
+.stat-card .sub{color:var(--muted);font-size:13px;margin-top:4px}
+.story-step{margin:48px 0;scroll-margin-top:76px}
+.step-lead{padding:26px;margin-bottom:18px}
+.step-kicker{color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.08em;margin-bottom:8px}
+.step-lead h2{margin:0 0 8px;font-size:30px;line-height:1.25}
+.step-lead p{margin:0;color:var(--muted)}
+.step-conclusion{margin-top:16px;padding:14px 16px;border-left:4px solid var(--accent);background:#f8fbff;border-radius:14px;font-weight:750}
+.chart-card{padding:24px;margin-bottom:18px;background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:0 10px 28px rgba(15,23,42,.06)}
+.chart-card.primary{border-color:#c7d2fe}
+.chart-card h3{margin:0 0 4px;font-size:22px}
+.chart-card .description{margin:0 0 12px;color:var(--muted);font-size:14px}
+.highlight{margin:12px 0 18px;padding:12px 14px;border-left:4px solid var(--accent);background:#f8fbff;border-radius:12px;font-size:14px;font-weight:650}
+.chart-wrap{position:relative;height:450px;padding-top:18px}
+.event-explain{margin:14px 0 0;padding:14px;border:1px solid #fecaca;background:#fff7f7;border-radius:14px}
+.event-explain h4{margin:0 0 8px;font-size:13px;color:#991b1b}
+.event-explain ul{margin:0;padding-left:0;list-style:none;display:grid;gap:8px}
+.event-explain li{display:grid;grid-template-columns:auto 1fr;gap:8px;font-size:13px;color:#374151}
+.event-no{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:999px;background:#fee2e2;color:#991b1b;font-weight:800;font-size:12px}
+.event-title{font-weight:700;color:#1f2937}
+.event-desc{color:#6b7280}
+.period-tag{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:#dbeafe;color:#1e40af;font-size:11px;font-weight:700}
+.insights{margin:20px 0 0;padding:16px 18px;border-radius:14px;background:var(--soft);color:#1e3a8a;font-size:14px}
+.insights ul{margin:0;padding-left:1.2em}
+.note{margin-top:12px;color:var(--muted);font-size:12px;border-top:1px dashed var(--border);padding-top:10px}
+.note-card{padding:20px 24px;color:var(--muted);font-size:14px}
+.warning{background:var(--warn);color:#9a3412}
+details.details-block{margin-top:12px}
+details.details-block>summary{cursor:pointer;list-style:none;display:inline-flex;gap:8px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:9px 14px;font-size:14px;box-shadow:0 6px 16px rgba(15,23,42,.04)}
+details.details-block>summary::-webkit-details-marker{display:none}
+details.details-block>summary:after{content:"↓";color:var(--muted);font-size:13px}
+details.details-block[open]>summary:after{content:"↑"}
+.details-grid{margin-top:16px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:32px 20px}
+
+.story-step{
+  margin:64px 0;
+  padding:28px;
+  border:1px solid #dbe3f0;
+  border-radius:32px;
+  background:linear-gradient(180deg, rgba(255,255,255,.72), rgba(248,251,255,.82));
+  box-shadow:0 18px 45px rgba(15,23,42,.06);
+  scroll-margin-top:86px;
+}
+.step-lead{
+  padding:0;
+  margin:0 0 22px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:24px;
+  align-items:start;
+}
+.step-kicker{
+  position:sticky;
+  top:86px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+  color:#1d4ed8;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.08em;
+  margin:0;
+}
+.step-kicker::after{
+  content:"";
+  display:block;
+  width:54px;
+  height:4px;
+  border-radius:999px;
+  background:#2563eb;
+}
+.step-lead h2{
+  margin:0 0 8px;
+  font-size:32px;
+  line-height:1.25;
+}
+.step-lead p{
+  margin:0;
+  color:var(--muted);
+  max-width:760px;
+}
+.step-conclusion{
+  margin-top:18px;
+  padding:16px 18px;
+  border-left:5px solid var(--accent);
+  background:#ffffff;
+  border-radius:16px;
+  font-weight:800;
+  box-shadow:0 8px 20px rgba(37,99,235,.06);
+}
+.step-body{
+  margin-left:174px;
+}
+.story-step .chart-card{
+  margin-bottom:18px;
+}
+.chapter-label{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  color:#64748b;
+  font-size:13px;
+  font-weight:700;
+}
+.chapter-label::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#2563eb;
+}
+
+@media(max-width:800px){.hero{grid-template-columns:1fr}.chart-wrap{height:330px}.chart-card,.step-lead{padding:18px}.event-explain li{grid-template-columns:1fr}.event-no{margin-bottom:2px}}
+
+.mayor-legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0;color:var(--muted);font-size:12px}
+.mayor-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:4px 9px}
+.mayor-chip i{display:inline-block;width:14px;height:10px;border-radius:3px;background:rgba(245,158,11,.08)}
+.mayor-note{margin-top:8px;color:#92400e;font-size:12px}
+
+</style>
+</head>
+<body>
+<header>
+  <section class="hero">
+    <div class="hero-main">
+      <div class="hero-eyebrow">SHIOJIRI DATA STORY</div>
+      <h1>塩尻市の構造変化を読む</h1>
+      <p>統計を並べるのではなく、人口・年齢・学校・産業・財政・暮らしの流れとして、塩尻市の変化を読み解きます。</p>
+      <div class="timeline-legend"><span><i class="legend-line"></i>番号付きイベント</span><span><i class="legend-band"></i>影響期間</span></div>
+    </div>
+    <aside class="story-card">
+      <h2>章立て</h2>
+      <ol>
+        <li>暮らしの単位はどう変わった？</li>
+        <li>年齢のバランスはどう変わった？</li>
+        <li>子どもと学校はどう変わった？</li>
+        <li>産業と行政は何にお金を使うようになった？</li>
+        <li>暮らしの基盤はどう変わった？</li>
+      </ol>
+    </aside>
+  </section>
+</header>
+<nav class="top-nav"><div class="top-nav-inner" id="topNav"></div></nav>
+<main>
+  <section class="summary" id="summary"></section>
+  <div id="charts"></div>
+  <section class="note-card" id="sources"><p><strong>注釈・出典</strong><br><br>
+データは塩尻市「統計しおじり」等の公開資料をもとに作成しています。<br>
+STEP構成は <code>public/data/story_steps.json</code>、グラフ設定は <code>public/data/sections.json</code>、主要イベントは <code>public/data/timeline_events.json</code>、市長任期帯は <code>public/data/mayors.json</code> で管理しています。<br><br>
+※ 市長任期帯は時期を読むための補助情報であり、政策との因果関係を示すものではありません。<br>
+※ 複数の統計を重ねたグラフは、出典や集計間隔が異なる場合があります。必要に応じて各グラフ下の注釈に明記しています。
+</p></section>
+</main>
+<footer>Shiojiri Data Story</footer>
+
+<script>
+const formatNumber=(v)=>new Intl.NumberFormat('ja-JP').format(v);
+
+function eventsForSection(events, section) {
+  const groups = section.eventGroups || [];
+  return events.filter(e => Array.isArray(e.appliesTo) && e.appliesTo.some(g => groups.includes(g)));
+}
+
+const timelinePlugin = {
+  id: 'timelinePlugin',
+  beforeDatasetsDraw(chart, args, opts) {
+    const events = opts?.events || [];
+    if (!opts?.enabled || !events.length) return;
+
+    const xScale = chart.scales.x;
+    const chartArea = chart.chartArea;
+    if (!xScale || !chartArea) return;
+
+    const labels = chart.data.labels || [];
+    const years = labels.map(v => Number(v));
+
+    function xForYear(year) {
+      const numericYear = Number(year);
+      const exactIndex = years.indexOf(numericYear);
+      if (exactIndex >= 0) return xScale.getPixelForValue(exactIndex);
+
+      const min = Math.min(...years);
+      const max = Math.max(...years);
+      if (!Number.isFinite(min) || !Number.isFinite(max) || min === max) return null;
+      if (numericYear < min || numericYear > max) return null;
+
+      const ratio = (numericYear - min) / (max - min);
+      return chartArea.left + ratio * (chartArea.right - chartArea.left);
+    }
+
+    const ctx = chart.ctx;
+    ctx.save();
+
+    events.forEach(event => {
+      if (event.type !== 'period' || !event.start || !event.end) return;
+      const x1 = xForYear(event.start);
+      const x2 = xForYear(event.end);
+      if (x1 == null || x2 == null) return;
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.08)';
+      ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
+    });
+
+    events.forEach(event => {
+      if (event.type !== 'event' || !event.year) return;
+      const x = xForYear(event.year);
+      if (x == null) return;
+
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(220, 38, 38, 0.28)';
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([4, 4]);
+      ctx.moveTo(x, chartArea.top + 32);
+      ctx.lineTo(x, chartArea.bottom);
+      ctx.stroke();
+
+      const no = event.no ?? '';
+      if (no !== '') {
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(220, 38, 38, 0.92)';
+        ctx.beginPath();
+        ctx.arc(x, chartArea.top + 20, 10, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(no), x, chartArea.top + 20);
+      }
+    });
+
+    ctx.restore();
+  }
+};
+
+
+function bandsForSection(mayors, section) {
+  const groups = section.eventGroups || [];
+  return mayors.filter(m => Array.isArray(m.appliesTo) && m.appliesTo.some(g => groups.includes(g)));
+}
+
+const mayorBandPlugin = {
+  id: 'mayorBandPlugin',
+  beforeDatasetsDraw(chart, args, opts) {
+    const bands = opts?.bands || [];
+    if (!opts?.enabled || !bands.length) return;
+
+    const xScale = chart.scales.x;
+    const chartArea = chart.chartArea;
+    if (!xScale || !chartArea) return;
+
+    const labels = chart.data.labels || [];
+    const years = labels.map(v => Number(v));
+
+    function xForYear(year) {
+      const numericYear = Number(year);
+      const exactIndex = years.indexOf(numericYear);
+      if (exactIndex >= 0) return xScale.getPixelForValue(exactIndex);
+
+      const min = Math.min(...years);
+      const max = Math.max(...years);
+      if (!Number.isFinite(min) || !Number.isFinite(max) || min === max) return null;
+      if (numericYear < min || numericYear > max) return null;
+
+      const ratio = (numericYear - min) / (max - min);
+      return chartArea.left + ratio * (chartArea.right - chartArea.left);
+    }
+
+    const ctx = chart.ctx;
+    ctx.save();
+
+    bands.forEach((band, index) => {
+      const x1 = xForYear(band.start);
+      const x2 = xForYear(band.end);
+      if (x1 == null || x2 == null) return;
+
+      const colors = [
+        'rgba(251, 191, 36, 0.10)',
+        'rgba(249, 115, 22, 0.08)',
+        'rgba(245, 158, 11, 0.10)',
+        'rgba(234, 88, 12, 0.08)'
+      ];
+
+      ctx.fillStyle = colors[index % colors.length];
+      ctx.fillRect(x1, chartArea.top, x2 - x1, chartArea.bottom - chartArea.top);
+
+      const labelX = x1 + 10;
+      const labelY = chartArea.top + 10;
+
+      ctx.fillStyle = 'rgba(120, 53, 15, 0.82)';
+      ctx.font = '600 11px system-ui, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText(band.label, labelX, labelY);
+    });
+
+    ctx.restore();
+  }
+};
+
+Chart.register(timelinePlugin, mayorBandPlugin);
+
+function slugStep(step, title){return `step-${step}-${String(title).replace(/\s+/g,'-').replace(/[^\p{L}\p{N}\-_]/gu,'')}`}
+function latestOf(r){return Array.isArray(r)&&r.length?r[r.length-1]:null}
+
+function calcValue(row,d){
+  if(!row)return null;
+  if(d.field)return row[d.field];
+  if(d.calc){
+    try{
+      const k=Object.keys(row),v=Object.values(row),fn=new Function(...k,`return ${d.calc};`),res=fn(...v);
+      return Number(res.toFixed(d.digits??0));
+    }catch(e){console.warn('calc failed',d,row,e);return null}
+  }
+  return null
+}
+
+async function loadJson(f){
+  const r=await fetch(`./data/${f}`,{cache:'no-store'});
+  if(!r.ok)throw new Error(`${f} を読み込めませんでした: ${r.status}`);
+  return r.json()
+}
+
+function createSummary(m){
+  const pop=m['population_summary.json']||[],age=m['population_age_groups.json']||[],edu=m['education_elementary.json']||[],ind=m['industry_summary.json']||[],fin=m['finance_summary.json']||[],veh=m['vehicle_summary.json']||[];
+  const first=pop[0],latest=latestOf(pop),la=latestOf(age),le=latestOf(edu),li=latestOf(ind),lf=latestOf(fin),lv=latestOf(veh),cards=[];
+  if(first&&latest){
+    const diff=latest.total-first.total,hd=latest.households-first.households;
+    cards.push({label:`${first.year}年からの人口増減`,value:`${diff>=0?'+':''}${formatNumber(diff)}人`,sub:`${first.year}年 → ${latest.year}年`});
+    cards.push({label:`${first.year}年からの世帯数増減`,value:`${hd>=0?'+':''}${formatNumber(hd)}世帯`,sub:`${first.year}年 → ${latest.year}年`})
+  }
+  if(la)cards.push({label:'高齢化率',value:`${(la.elderly/la.total*100).toFixed(1)}%`,sub:`${la.year}年`});
+  if(le)cards.push({label:'小学校児童数',value:`${formatNumber(le.total)}人`,sub:`${le.year}年`});
+  if(li)cards.push({label:'従業者数',value:`${formatNumber(li.employees)}人`,sub:`${li.year}年`});
+  if(lf&&lf.expenditure_per_person)cards.push({label:'1人あたり歳出額',value:`${formatNumber(lf.expenditure_per_person)}千円`,sub:`${lf.year}年度`});
+  if(lv)cards.push({label:'自動車保有台数',value:`${formatNumber(lv.total)}台`,sub:`${lv.year}年度`});
+  document.getElementById('summary').innerHTML=cards.map(c=>`<article class="stat-card"><div class="label">${c.label}</div><div class="value">${c.value}</div><div class="sub">${c.sub}</div></article>`).join('')
+}
+
+function shortStepLabel(step) {
+  return step.navLabel || step.title || 'その他';
+}
+
+function renderNav(steps){
+  document.getElementById('topNav').innerHTML=steps.map(step=>`<a href="#${slugStep(step.no,step.title)}">${shortStepLabel(step)}</a>`).join('')+'<a href="#sources">出典</a>'
+}
+
+function eventExplain(section, timelineEvents) {
+  if (!section.timeline) return '';
+  const sectionEvents = eventsForSection(timelineEvents, section);
+  if (!sectionEvents.length) return '';
+
+  return `<div class="event-explain">
+    <h4>このグラフを見るときの主な節目</h4>
+    <ul>
+      ${sectionEvents.map(e => {
+        const when = e.type === 'period' ? `${e.start}–${e.end}` : e.year;
+        const periodTag = e.type === 'period' ? '<span class="period-tag">期間</span>' : '';
+        return `<li>
+          <span class="event-no">${e.no ?? ''}</span>
+          <span>
+            <span class="event-title">${when} ${e.label}${periodTag}</span><br>
+            <span class="event-desc">${e.description || ''}</span>
+          </span>
+        </li>`;
+      }).join('')}
+    </ul>
+  </div>`;
+}
+
+
+function mayorLegend(section, mayors) {
+  if (!section.mayorBands) return '';
+  const bands = bandsForSection(mayors, section);
+  if (!bands.length) return '';
+
+  return `<div class="mayor-legend">
+    ${bands.map((m, i) => `<span class="mayor-chip"><i style="background:rgba(245,158,11,${i % 2 === 0 ? 0.12 : 0.07})"></i>${m.start}–${m.end} ${m.label}</span>`).join('')}
+  </div>`;
+}
+
+function renderChartSection(s, timelineEvents, mayors=[], primary=false){
+  const id=`chart-${s.id}`;
+  const ins=s.insights?.length?`<div class="insights"><ul>${s.insights.map(i=>`<li>${i}</li>`).join('')}</ul></div>`:'';
+  const note=s.note?`<div class="note">注：${s.note}</div>`:'';
+  const hi=s.highlight?`<div class="highlight">${s.highlight}</div>`:'';
+  const events = eventExplain(s, timelineEvents);
+  const mayorBands = mayorLegend(s, mayors);
+  return`<section class="chart-card ${primary?'primary':''}"><h3>${s.title}</h3><p class="description">${s.description}</p>${hi}<div class="chart-wrap"><canvas id="${id}"></canvas></div>${mayorBands}${events}${ins}${note}</section>`
+}
+
+function makeScales(s){
+  const axes=s.axes||{y:{label:'値',beginAtZero:false}},sc={};
+  Object.entries(axes).forEach(([id,a])=>{
+    sc[id]={type:'linear',display:true,position:a.position||(id==='y1'?'right':'left'),beginAtZero:a.beginAtZero??false,max:a.max,stacked:a.stacked??false,title:{display:true,text:a.label},grid:{drawOnChartArea:id==='y'},ticks:{callback:v=>formatNumber(v)}}
+  });
+  return sc
+}
+
+function mapByYear(rows){const m=new Map();if(Array.isArray(rows))rows.forEach(r=>m.set(r.year,r));return m}
+
+function buildSingle(s,m){
+  const rows=m[s.dataFile]||[];
+  return{labels:rows.map(r=>r.year),datasets:s.datasets.map(d=>({label:d.label,data:rows.map(r=>calcValue(r,d)),yAxisID:d.axis||'y',unit:d.unit||'',tension:.25,fill:s.chartType==='stackedArea',spanGaps:!!s.spanGaps,pointRadius:s.spanGaps?3:undefined,spanGaps:!!s.spanGaps,pointRadius:s.spanGaps?3:undefined}))}
+}
+
+function buildMulti(s,m){
+  const years=[...new Set(s.sources.flatMap(src=>(m[src.dataFile]||[]).map(r=>r.year)))].sort((a,b)=>a-b);
+  return{labels:years,datasets:s.sources.map(src=>{const mp=mapByYear(m[src.dataFile]||[]);return{label:src.label,data:years.map(y=>calcValue(mp.get(y),src)),yAxisID:src.axis||'y',unit:src.unit||'',tension:.25,fill:s.chartType==='stackedArea',spanGaps:!!s.spanGaps,pointRadius:s.spanGaps?3:undefined,spanGaps:!!s.spanGaps,pointRadius:s.spanGaps?3:undefined}})}
+}
+
+function drawChart(s,m,timelineEvents,mayors=[]){
+  const data=Array.isArray(s.sources)?buildMulti(s,m):buildSingle(s,m);
+  if(!data.labels.length)return;
+  const sectionEvents = s.timeline ? eventsForSection(timelineEvents, s) : [];
+  new Chart(document.getElementById(`chart-${s.id}`),{
+    type:'line',
+    data,
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      layout:{padding:{top:28}},
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{position:'bottom'},
+        mayorBandPlugin:{bands:bandsForSection(mayors, s),enabled:!!s.mayorBands},
+        timelinePlugin:{events:sectionEvents,enabled:!!s.timeline},
+        tooltip:{callbacks:{label:ctx=>{
+          const v=ctx.parsed.y;
+          if(v===null||v===undefined)return`${ctx.dataset.label}: データなし`;
+          return`${ctx.dataset.label}: ${formatNumber(v)}${ctx.dataset.unit||''}`
+        }}}
+      },
+      scales:makeScales(s)
+    }
+  })
+}
+
+function sortByPriority(items){return[...items].sort((a,b)=>(a.priority??999)-(b.priority??999))}
+
+async function main(){
+  const sections=await loadJson('sections.json');
+  const storySteps=await loadJson('story_steps.json');
+  const timelineEvents=await loadJson('timeline_events.json').catch(()=>[]);
+  const mayors=await loadJson('mayors.json').catch(()=>[]);
+  const files=new Set();
+  sections.forEach(s=>{if(s.dataFile)files.add(s.dataFile);if(Array.isArray(s.sources))s.sources.forEach(src=>files.add(src.dataFile))});
+  const entries=await Promise.all([...files].map(async f=>{const rows=await loadJson(f);if(Array.isArray(rows))rows.sort((a,b)=>a.year-b.year);return[f,rows]}));
+  const dataMap=Object.fromEntries(entries);
+
+  createSummary(dataMap);
+
+  const stepMap = new Map();
+  storySteps.forEach(step => {
+    const no = step.step ?? step.no;
+    stepMap.set(no, {
+      no,
+      title: step.title || 'その他',
+      lead: step.lead || '',
+      conclusion: step.conclusion || '',
+      navLabel: step.navLabel || step.title || 'その他',
+      sections: []
+    });
+  });
+
+  sections.forEach(s => {
+    const no = s.storyStep || 99;
+    if (!stepMap.has(no)) {
+      stepMap.set(no, {
+        no,
+        title: 'その他',
+        lead: '',
+        conclusion: '',
+        navLabel: 'その他',
+        sections: []
+      });
+    }
+    stepMap.get(no).sections.push(s);
+  });
+
+  const steps = [...stepMap.values()].filter(step => step.sections.length).sort((a,b)=>a.no-b.no);
+  renderNav(steps);
+
+  document.getElementById('charts').innerHTML=steps.map(step=>{
+    const primary=sortByPriority(step.sections.filter(s=>s.storyRole==='primary'));
+    const detail=sortByPriority(step.sections.filter(s=>s.storyRole!=='primary'));
+    return`<section class="story-step" id="${slugStep(step.no,step.title)}">
+      <div class="step-lead">
+        <div class="step-kicker">STEP ${step.no}</div>
+        <div>
+          <div class="chapter-label">${shortStepLabel(step)}</div>
+          <h2>${step.title}</h2>
+          ${step.lead?`<p>${step.lead}</p>`:''}
+          ${step.conclusion?`<div class="step-conclusion">${step.conclusion}</div>`:''}
+        </div>
+      </div>
+      <div class="step-body">
+        ${primary.map(s=>renderChartSection(s,timelineEvents,mayors,true)).join('')}
+        ${detail.length?`<details class="details-block"><summary>補助グラフを見る</summary><div class="details-grid">${detail.map(s=>renderChartSection(s,timelineEvents,mayors,false)).join('')}</div></details>`:''}
+      </div>
+    </section>`
+  }).join('');
+
+  sections.forEach(s=>drawChart(s,dataMap,timelineEvents,mayors))
+}
+
+main().catch(e=>{
+  console.error(e);
+  document.querySelector('main').insertAdjacentHTML('afterbegin',`<section class="note-card warning">データの読み込みに失敗しました。<br>${e.message}</section>`)
+});
+</script>
+</body>
+</html>

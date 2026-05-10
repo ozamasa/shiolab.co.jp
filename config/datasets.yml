@@ -442,3 +442,12 @@ population_dynamics:
     move_out: { column: "J", type: int }
     social_change: { column: "K", type: int }
   output: "public/data/population_dynamics.json"
+
+finance_expenditure_nature:
+  enabled: true
+  type: custom_finance_expenditure_nature
+  source_name: "塩尻市 普通会計性質別歳出内訳"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40337.xls"
+  cache_file: "cache/finance_expenditure_nature.xls"
+  sheet: "15-4【歳出】"
+  output: "public/data/finance_expenditure_nature.json"

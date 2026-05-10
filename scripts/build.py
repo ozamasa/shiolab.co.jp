@@ -18,7 +18,9 @@ from openpyxl import load_workbook
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = PROJECT_ROOT / "config" / "datasets.yml"
 METADATA_PATH = PROJECT_ROOT / "public" / "data" / "metadata.json"
-SUPPORTED_DATASET_TYPES = {"table_by_columns", "row_blocks_by_year", "row_filter_table"}
+SUPPORTED_DATASET_TYPES = {"table_by_columns", "row_blocks_by_year", "row_filter_table",
+    "custom_finance_expenditure_nature"
+}
 SUPPORTED_COLUMN_TYPES = {"raw", "text", "year", "int", "float", "number"}
 
 ValidationHandler = Callable[[str, list[dict[str, Any]], dict[str, Any]], list[str]]
@@ -195,6 +197,12 @@ def build_row_filter_table_records(cfg):
 
 def validate_dataset_config(dataset_key: str, cfg: dict[str, Any]) -> None:
     if not cfg.get("enabled", True):
+        return
+    if cfg.get("type") == "custom_finance_expenditure_nature":
+        required = ["type", "source_url", "cache_file", "sheet", "output"]
+        missing = [field for field in required if field not in cfg]
+        if missing:
+            raise ValueError(f"{dataset_key}: required config fields are missing: {missing}")
         return
     required = ["type", "source_url", "cache_file", "data_start_row", "columns", "output"]
     missing = [field for field in required if field not in cfg]
@@ -489,8 +497,117 @@ def write_json(path: Path, data: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+
+def build_finance_expenditure_nature_records(cfg: dict[str, Any], cache_info: dict[str, Any]) -> list[dict[str, Any]]:
+    """Build finance_expenditure_nature from 15-4【歳出】."""
+    cache_path = PROJECT_ROOT / cache_info["cache_file"]
+    book = xlrd.open_workbook(str(cache_path))
+    sheet_name = cfg.get("sheet", "15-4【歳出】")
+    try:
+        sheet = book.sheet_by_name(sheet_name)
+    except xlrd.biffh.XLRDError:
+        normalized = sheet_name.strip()
+        matched = None
+        for name in book.sheet_names():
+            if name.strip() == normalized:
+                matched = name
+                break
+        if matched is None:
+            raise ValueError(
+                f"sheet '{sheet_name}' が見つかりません。available={book.sheet_names()}"
+            )
+        sheet = book.sheet_by_name(matched)
+
+    def _parse_year(value: Any) -> int | None:
+        match = re.search(r"(\d{4})", str(value))
+        return int(match.group(1)) if match else None
+
+    def _to_int(value: Any) -> int | None:
+        if value in (None, "", "***"):
+            return None
+        try:
+            return int(float(value))
+        except Exception:
+            return None
+
+    def _to_float(value: Any) -> float | None:
+        if value in (None, "", "***"):
+            return None
+        try:
+            return float(value)
+        except Exception:
+            return None
+
+    grouped: dict[int, dict[str, Any]] = {}
+
+    for row_index in range(4, sheet.nrows):
+        row = sheet.row_values(row_index)
+        year = _parse_year(row[1])
+        category = str(row[2]).strip() if row[2] else ""
+
+        if not year:
+            continue
+
+        grouped.setdefault(year, {
+            "year": year,
+            "construction_amount": None,
+            "construction_ratio": None,
+            "support_amount": None,
+            "support_ratio": None,
+            "personnel_amount": None,
+            "personnel_ratio": None,
+            "debt_amount": None,
+            "debt_ratio": None,
+            "total_amount": None,
+        })
+
+        amount = _to_int(row[3])
+        ratio = _to_float(row[4])
+
+        if category == "普通建設事業費":
+            grouped[year]["construction_amount"] = amount
+            grouped[year]["construction_ratio"] = ratio
+        elif category == "扶助費":
+            grouped[year]["support_amount"] = amount
+            grouped[year]["support_ratio"] = ratio
+        elif category == "人件費":
+            grouped[year]["personnel_amount"] = amount
+            grouped[year]["personnel_ratio"] = ratio
+        elif category == "公債費":
+            grouped[year]["debt_amount"] = amount
+            grouped[year]["debt_ratio"] = ratio
+        elif category == "合計":
+            grouped[year]["total_amount"] = amount
+
+    return sorted(grouped.values(), key=lambda row: row["year"])
+
+
+def write_records(output_path: str, records: list[dict[str, Any]]) -> None:
+    output = PROJECT_ROOT / output_path
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(records, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def build_dataset(dataset_key: str, cfg: dict[str, Any], force_download: bool = False) -> dict[str, Any]:
     validate_dataset_config(dataset_key, cfg)
+
+    if cfg.get("type") == "custom_finance_expenditure_nature":
+        cache_info = download_source(dataset_key, cfg, force_download)
+        records = build_finance_expenditure_nature_records(cfg, cache_info)
+        write_records(cfg["output"], records)
+        return {
+            "dataset": dataset_key,
+            "row_count": len(records),
+            "output": cfg["output"],
+            "year_range": {
+                "min": min(r["year"] for r in records) if records else None,
+                "max": max(r["year"] for r in records) if records else None,
+            },
+            "source": cache_info,
+        }
 
     if cfg.get("type") == "row_filter_table":
         if not cfg.get("enabled", True):

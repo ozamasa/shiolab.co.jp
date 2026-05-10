@@ -679,6 +679,80 @@
     "focusQuestion": "塩尻市は、何にお金を使う自治体へ変わってきたのか？"
   },
   {
+    "id": "finance_expenditure_nature_ratio",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "財政は「建設」から「支える」方向へ変化している",
+    "description": "普通建設事業費・扶助費・人件費・公債費の構成比を表示しています。",
+    "highlight": "高度成長期には建設投資の割合が大きく、近年は扶助費の割合が上昇しています。",
+    "focusQuestion": "財政の使い方は、建設中心から生活を支える方向へ変わっているのか？",
+    "readingHints": [
+      "普通建設事業費は、道路・施設など都市基盤整備の時期に大きくなりやすい項目です。",
+      "扶助費は、福祉や生活支援など、社会保障に近い支出と関係します。",
+      "目的別歳出と合わせて見ると、自治体が何を支え、どう使っているかが見えやすくなります。"
+    ],
+    "insights": [
+      "高度成長期には普通建設事業費の割合が高くなっています。",
+      "近年は扶助費の割合が上昇しています。",
+      "人口構造や高齢化の変化が、財政支出の性質にも表れています。"
+    ],
+    "note": "普通会計性質別歳出内訳をもとに作成しています。",
+    "dataFile": "finance_expenditure_nature.json",
+    "datasets": [
+      {
+        "label": "普通建設事業費",
+        "field": "construction_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "扶助費",
+        "field": "support_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "人件費",
+        "field": "personnel_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "公債費",
+        "field": "debt_ratio",
+        "axis": "y",
+        "unit": "%"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "構成比（%）",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 8,
+    "timeline": true,
+    "storyStep": 6,
+    "storyRole": "primary",
+    "eventGroups": [
+      "財政"
+    ],
+    "mayorBands": true,
+    "relatedLinks": [
+      {
+        "label": "歳出の内訳を見る",
+        "targetSection": "finance_expenditure_purpose_ratio",
+        "description": "目的別歳出と合わせて読む"
+      },
+      {
+        "label": "高齢者人口と民生費を見る",
+        "targetSection": "elderly_population_vs_welfare",
+        "description": "支える側の背景を見る"
+      }
+    ]
+  },
+  {
     "id": "finance_expenditure_purpose_amount",
     "group": "財政",
     "groupDescription": "行政サービスや投資規模の変化を見ます。",

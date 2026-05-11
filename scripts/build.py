@@ -198,6 +198,13 @@ def build_row_filter_table_records(cfg):
 def validate_dataset_config(dataset_key: str, cfg: dict[str, Any]) -> None:
     if not cfg.get("enabled", True):
         return
+    if cfg.get("type") == "custom_industry_manufacturing":
+        required = ["type", "source_url", "cache_file", "sheet", "output"]
+        missing = [field for field in required if field not in cfg]
+        if missing:
+            raise ValueError(f"{dataset_key}: required config fields are missing: {missing}")
+        return
+
     if cfg.get("type") == "custom_finance_revenue_structure":
         required = ["type", "source_url", "cache_file", "sheet", "output"]
         missing = [field for field in required if field not in cfg]
@@ -677,6 +684,59 @@ def build_finance_revenue_structure_records(cfg: dict[str, Any], cache_info: dic
     return sorted(grouped.values(), key=lambda r: r["year"])
 
 
+
+def build_industry_manufacturing_records(cfg: dict[str, Any], source_meta: dict[str, Any]) -> list[dict[str, Any]]:
+    """Build manufacturing industry records from 4-1."""
+    cache_path = PROJECT_ROOT / source_meta["cache_file"]
+    book = xlrd.open_workbook(str(cache_path))
+
+    target = cfg.get("sheet", "4-1")
+    sheet = book.sheet_by_name(target)
+
+    def parse_year(value: Any) -> int | None:
+        match = re.search(r"(\d{4})", str(value))
+        return int(match.group(1)) if match else None
+
+    def to_int(value: Any) -> int | None:
+        if value in (None, "", "***"):
+            return None
+        try:
+            return int(float(value))
+        except Exception:
+            return None
+
+    records = []
+
+    # row index 4 = Excel row 5; rows 1-4 are title/header.
+    for row_index in range(4, sheet.nrows):
+        row = sheet.row_values(row_index)
+        year = parse_year(row[1])
+        if not year:
+            continue
+
+        records.append({
+            "year": year,
+            "businesses": to_int(row[2]),
+            "employees_total": to_int(row[3]),
+            "employees_male": to_int(row[4]),
+            "employees_female": to_int(row[5]),
+            "shipments": to_int(row[6]),
+            "cash_salary": to_int(row[7]),
+            "materials": to_int(row[8]),
+            "gross_value_added": to_int(row[9]),
+        })
+
+    # Merge population if available
+    population_path = PROJECT_ROOT / "public" / "data" / "population_summary.json"
+    if population_path.exists():
+        population_rows = json.loads(population_path.read_text(encoding="utf-8"))
+        population_by_year = {row.get("year"): row.get("total") for row in population_rows}
+        for record in records:
+            record["population"] = population_by_year.get(record["year"])
+
+    return sorted(records, key=lambda row: row["year"])
+
+
 def build_dataset(dataset_key: str, cfg: dict[str, Any], force_download: bool = False) -> dict[str, Any]:
     validate_dataset_config(dataset_key, cfg)
 
@@ -732,6 +792,24 @@ def build_dataset(dataset_key: str, cfg: dict[str, Any], force_download: bool = 
         rows = read_table_by_columns(dataset_key, cfg)
     elif data_type == "row_blocks_by_year":
         rows = read_row_blocks_by_year(dataset_key, cfg)
+    elif data_type == "custom_industry_manufacturing":
+        records = build_industry_manufacturing_records(cfg, source_meta)
+        output_path = PROJECT_ROOT / cfg["output"]
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(records, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        years = [row.get("year") for row in records if row.get("year") is not None]
+        return {
+            "dataset": dataset_key,
+            "source_name": cfg.get("source_name"),
+            **source_meta,
+            "generated_at": now_iso(),
+            "output": str(output_path.relative_to(PROJECT_ROOT)),
+            "row_count": len(records),
+            "years": {"min": min(years) if years else None, "max": max(years) if years else None},
+        }
     elif data_type == "custom_finance_revenue_structure":
         records = build_finance_revenue_structure_records(cfg, source_meta)
         output_path = PROJECT_ROOT / cfg["output"]

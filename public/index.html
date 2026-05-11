@@ -649,6 +649,12 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:32px 20px}
 STEP構成は <code>public/data/story_steps.json</code>、グラフ設定は <code>public/data/sections.json</code>、主要イベントは <code>public/data/timeline_events.json</code>、市長任期帯は <code>public/data/mayors.json</code> で管理しています。<br><br>
 ※ 市長任期帯は時期を読むための補助情報であり、政策との因果関係を示すものではありません。<br>
 ※ 複数の統計を重ねたグラフは、出典や集計間隔が異なる場合があります。必要に応じて各グラフ下の注釈に明記しています。
+<br><br>
+<strong>グラフの見方</strong><br>
+・欠損年がある場合でも、変化の流れを読みやすくするため線を接続しています。<br>
+・市長任期帯は時期を読むための補助情報であり、政策との因果関係を示すものではありません。<br>
+・グラフごとに出典や集計方法が異なる場合があります。
+
 </p></section>
 </main>
 <footer>Shiojiri Data Story</footer>
@@ -1177,5 +1183,7 @@ main().catch(e=>{
   document.querySelector('main').insertAdjacentHTML('afterbegin',`<section class="note-card warning">データの読み込みに失敗しました。<br>${e.message}</section>`)
 });
 </script>
+
+
 </body>
 </html>

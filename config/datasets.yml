@@ -461,3 +461,13 @@ finance_revenue_structure:
   cache_file: "cache/finance_revenue_structure.xls"
   sheet: "15-4【歳入】"
   output: "public/data/finance_revenue_structure.json"
+
+
+industry_manufacturing:
+  enabled: true
+  type: custom_industry_manufacturing
+  source_name: "塩尻市 工業の推移"
+  source_url: "https://www.city.shiojiri.lg.jp/uploaded/attachment/40539.xls"
+  cache_file: "cache/industry_manufacturing.xls"
+  sheet: "4-1"
+  output: "public/data/industry_manufacturing.json"

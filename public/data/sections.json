@@ -1,5 +1,219 @@
 [
   {
+    "id": "industry_workers_vs_population",
+    "group": "産業・雇用",
+    "title": "働く場所と人口を重ねて見る",
+    "description": "製造業従業者数と人口の推移を重ね、働く場所の変化と人口構造の関係を見ます。",
+    "storyStep": 1,
+    "storyRole": "primary",
+    "priority": 1,
+    "chartType": "line",
+    "layout": "dualAxis",
+    "dataFile": "industry_manufacturing.json",
+    "datasets": [
+      {
+        "label": "製造業従業者数",
+        "field": "employees_total",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "人口",
+        "field": "population",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "highlight": "製造業従業者数の増加は、人口や世帯の変化を考える前段として見ることができます。",
+    "timeline": true,
+    "mayorBands": true,
+    "axes": {
+      "y": {
+        "label": "製造業従業者数（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "人口（人）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "spanGaps": true,
+    "eventGroups": [
+      "産業"
+    ],
+    "note": "製造業従業者数は工業統計等、人口は人口統計に基づくため、集計年や出典が異なります。線は見やすさのため欠損年をまたいで接続しています。市長任期帯は時期を読むための補助情報です。",
+    "isStepRepresentative": true,
+    "summaryLabel": "製造業従業者数",
+    "summaryField": "employees_total",
+    "summaryUnit": "人"
+  },
+  {
+    "id": "industry_shipments",
+    "group": "産業・雇用",
+    "title": "製造品出荷額から地域経済の規模を見る",
+    "description": "製造品出荷額等の推移を表示し、地域の工業規模の変化を見ます。",
+    "storyStep": 1,
+    "storyRole": "detail",
+    "priority": 2,
+    "chartType": "line",
+    "layout": "single",
+    "dataFile": "industry_manufacturing.json",
+    "datasets": [
+      {
+        "label": "製造品出荷額等",
+        "field": "shipments",
+        "axis": "y",
+        "unit": "万円"
+      }
+    ],
+    "highlight": "製造品出荷額等の変化から、地域経済や産業活動の規模変化を見ます。",
+    "timeline": true,
+    "mayorBands": true,
+    "axes": {
+      "y": {
+        "label": "製造品出荷額等（万円）",
+        "beginAtZero": false
+      }
+    },
+    "eventGroups": [
+      "産業"
+    ],
+    "note": "製造品出荷額等は万円単位です。市長任期帯は時期を読むための補助情報であり、因果関係を示すものではありません。",
+    "spanGaps": true
+  },
+  {
+    "id": "industry_businesses",
+    "group": "産業・雇用",
+    "groupDescription": "人口変化の前段として、働く場所と地域経済の変化を見ます。",
+    "title": "製造業事業所数を見る",
+    "description": "従業者4人以上の製造業事業所数の推移です。",
+    "highlight": "事業所数の変化から、地域の産業構造の変化を見ます。",
+    "note": "従業者4人以上の製造業事業所数です。市長任期帯は時期を読むための補助情報です。",
+    "dataFile": "industry_manufacturing.json",
+    "datasets": [
+      {
+        "label": "事業所数",
+        "field": "businesses",
+        "axis": "y",
+        "unit": "事業所"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "事業所数",
+        "beginAtZero": false
+      }
+    },
+    "storyStep": 1,
+    "storyRole": "detail",
+    "priority": 3,
+    "timeline": true,
+    "eventGroups": [
+      "産業"
+    ],
+    "mayorBands": true,
+    "spanGaps": true
+  },
+  {
+    "id": "industry_summary",
+    "group": "産業",
+    "groupDescription": "地域の働く場と経済規模の変化を見ます。",
+    "title": "事業所と従業者から働く場を見る",
+    "description": "経済センサス等に基づく、事業所数と従業者数の長期推移です。",
+    "insights": [
+      "事業所数と従業者数を比較することで、地域経済規模の変化を確認できます。",
+      "事業所数が減少していても従業者数が維持されている場合、事業所集約や規模拡大が進んでいる可能性があります。"
+    ],
+    "note": "事業所数と従業者数は単位が異なるため、左右2軸で表示しています。",
+    "dataFile": "industry_summary.json",
+    "datasets": [
+      {
+        "label": "事業所数",
+        "field": "businesses",
+        "axis": "y",
+        "unit": "事業所"
+      },
+      {
+        "label": "従業者数",
+        "field": "employees",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "事業所数",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "従業者数",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 4,
+    "highlight": "事業所数と従業者数を同時に見ることで、地域経済の規模と働く場の変化が読み取れます。",
+    "timeline": true,
+    "storyStep": 1,
+    "storyRole": "detail",
+    "eventGroups": [
+      "産業"
+    ],
+    "mayorBands": true,
+    "milestones": [
+      {
+        "year": 1991,
+        "label": "バブル後",
+        "description": "景気環境の変化を読む節目です。"
+      },
+      {
+        "year": 2009,
+        "label": "金融危機後",
+        "description": "リーマンショック後の地域経済を見る節目です。"
+      }
+    ],
+    "spanGaps": true
+  },
+  {
+    "id": "employees_per_business",
+    "group": "産業",
+    "groupDescription": "地域の働く場と経済規模の変化を見ます。",
+    "title": "1事業所あたり従業者数を見る",
+    "description": "従業者数 ÷ 事業所数で計算した、1事業所あたり従業者数です。",
+    "insights": [
+      "数値が上昇している場合、事業所の集約化や大規模化が進んでいる可能性があります。",
+      "地域経済構造の変化を見るための補助指標です。"
+    ],
+    "note": "従業者数 ÷ 事業所数で算出しています。",
+    "dataFile": "industry_summary.json",
+    "datasets": [
+      {
+        "label": "1事業所あたり従業者数",
+        "field": "employees_per_business",
+        "axis": "y",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人数",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 5,
+    "timeline": true,
+    "storyStep": 1,
+    "storyRole": "detail",
+    "eventGroups": [
+      "産業"
+    ],
+    "mayorBands": true,
+    "spanGaps": true
+  },
+  {
     "id": "population_households",
     "group": "人口・世帯",
     "groupDescription": "まちの規模と、暮らしの単位の変化を見ます。",
@@ -38,10 +252,10 @@
       }
     },
     "view": "primary",
-    "priority": 10,
-    "highlight": "人口だけを見ると変化は穏やかですが、世帯数を重ねると、暮らしの単位が小さくなっていることが見えてきます。",
+    "priority": 1,
+    "highlight": "人口の変化は、学校や財政にも少しずつ表れていきます。まずは人口構造の変化から見ていきます。",
     "timeline": true,
-    "storyStep": 1,
+    "storyStep": 2,
     "storyRole": "primary",
     "eventGroups": [
       "人口・世帯"
@@ -62,43 +276,12 @@
     "readingHints": [
       "人口が大きく変わらなくても、世帯数は増える場合があります。",
       "単身世帯や核家族化など、暮らし方の変化も背景にあります。"
-    ]
-  },
-  {
-    "id": "people_per_household",
-    "group": "人口・世帯",
-    "groupDescription": "まちの規模と、暮らしの単位の変化を見ます。",
-    "title": "1世帯あたり人数は減り続けている",
-    "description": "総人口を世帯数で割って算出した、1世帯あたり人数の長期推移です。",
-    "insights": [
-      "1930年と比較すると、1世帯あたり人数は大きく減少しています。",
-      "核家族化や単身世帯増加など、世帯構造変化が反映されています。"
     ],
-    "note": "総人口 ÷ 世帯数で算出しています。",
-    "dataFile": "population_summary.json",
-    "datasets": [
-      {
-        "label": "1世帯あたり人数",
-        "field": "people_per_household",
-        "axis": "y",
-        "unit": "人"
-      }
-    ],
-    "axes": {
-      "y": {
-        "label": "人数",
-        "beginAtZero": false
-      }
-    },
-    "view": "detail",
-    "priority": 20,
-    "timeline": false,
-    "storyStep": 1,
-    "storyRole": "detail",
-    "eventGroups": [
-      "人口・世帯"
-    ],
-    "mayorBands": false
+    "isStepRepresentative": true,
+    "summaryLabel": "総人口",
+    "summaryField": "total",
+    "summaryUnit": "人",
+    "spanGaps": true
   },
   {
     "id": "age_rates",
@@ -146,11 +329,11 @@
       }
     },
     "view": "primary",
-    "priority": 10,
+    "priority": 2,
     "highlight": "割合で見ると、単なる人口増減ではなく、地域を支える年齢のバランスそのものが変わっていることが分かります。",
     "timeline": true,
     "storyStep": 2,
-    "storyRole": "primary",
+    "storyRole": "detail",
     "eventGroups": [
       "年齢構成",
       "人口・世帯"
@@ -167,7 +350,8 @@
         "label": "高齢化が進行",
         "description": "年齢構成の変化がはっきり見える時期です。"
       }
-    ]
+    ],
+    "spanGaps": true
   },
   {
     "id": "age_groups",
@@ -209,7 +393,7 @@
       }
     },
     "view": "detail",
-    "priority": 20,
+    "priority": 3,
     "timeline": false,
     "storyStep": 2,
     "storyRole": "detail",
@@ -217,7 +401,113 @@
       "年齢構成",
       "人口・世帯"
     ],
-    "mayorBands": false
+    "mayorBands": false,
+    "spanGaps": true
+  },
+  {
+    "id": "elderly_population_vs_welfare",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "高齢者人口と民生費を重ねて見る",
+    "description": "65歳以上人口と民生費を重ねて表示し、人口構造の変化と福祉関連支出の関係を確認します。",
+    "highlight": "民生費の増加は単独で見るより、高齢者人口の増加と重ねることで背景が見えやすくなります。",
+    "insights": [
+      "65歳以上人口の増加は、福祉・医療・介護などの行政需要と関係します。",
+      "民生費が増えている背景を、人口構造の変化とあわせて読むためのグラフです。"
+    ],
+    "note": "人口は主に5年刻み、民生費は毎年データです。線は見やすさのため欠損年をまたいで接続しています。",
+    "sources": [
+      {
+        "dataFile": "population_age_groups.json",
+        "label": "65歳以上人口",
+        "field": "elderly",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "dataFile": "finance_expenditure_purpose.json",
+        "label": "民生費",
+        "field": "welfare_amount",
+        "axis": "y1",
+        "unit": "千円"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "65歳以上人口（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "民生費（千円）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 4,
+    "timeline": false,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "財政",
+      "年齢構成"
+    ],
+    "mayorBands": true,
+    "spanGaps": true,
+    "milestones": [
+      {
+        "year": 2000,
+        "label": "高齢者増",
+        "description": "65歳以上人口の増加と民生費の動きを重ねて見る節目です。"
+      },
+      {
+        "year": 2015,
+        "label": "民生費拡大",
+        "description": "高齢化と福祉関連支出の関係を確認する時期です。"
+      }
+    ],
+    "readingHints": [
+      "高齢者人口の増加は、福祉需要の増加と関係しやすい指標です。",
+      "ただし制度変更や支援対象拡大も民生費へ影響します。"
+    ],
+    "focusQuestion": "民生費の増加は、高齢化とどのように重なって見えるか？"
+  },
+  {
+    "id": "people_per_household",
+    "group": "人口・世帯",
+    "groupDescription": "まちの規模と、暮らしの単位の変化を見ます。",
+    "title": "1世帯あたり人数は減り続けている",
+    "description": "総人口を世帯数で割って算出した、1世帯あたり人数の長期推移です。",
+    "insights": [
+      "1930年と比較すると、1世帯あたり人数は大きく減少しています。",
+      "核家族化や単身世帯増加など、世帯構造変化が反映されています。"
+    ],
+    "note": "総人口 ÷ 世帯数で算出しています。",
+    "dataFile": "population_summary.json",
+    "datasets": [
+      {
+        "label": "1世帯あたり人数",
+        "field": "people_per_household",
+        "axis": "y",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人数",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 4,
+    "timeline": false,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "人口・世帯"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
   },
   {
     "id": "population_dynamics_natural",
@@ -271,13 +561,14 @@
     "view": "primary",
     "priority": 10,
     "timeline": true,
-    "storyStep": 3,
-    "storyRole": "primary",
+    "storyStep": 2,
+    "storyRole": "detail",
     "eventGroups": [
       "人口・世帯",
       "年齢構成"
     ],
-    "mayorBands": false
+    "mayorBands": false,
+    "spanGaps": true
   },
   {
     "id": "population_dynamics_social",
@@ -331,12 +622,13 @@
     "view": "detail",
     "priority": 20,
     "timeline": false,
-    "storyStep": 3,
+    "storyStep": 2,
     "storyRole": "detail",
     "eventGroups": [
       "人口・世帯"
     ],
-    "mayorBands": false
+    "mayorBands": false,
+    "spanGaps": true
   },
   {
     "id": "elementary_vs_junior_high",
@@ -349,7 +641,7 @@
       "出生数減少が、数年後の教育規模へ影響していることがわかります。",
       "学齢人口の変化を連続的に確認できます。"
     ],
-    "note": "学校別ではなく、市全体の総数行を使用しています。",
+    "note": "学校別ではなく、市全体の総数行を使用しています。 データの集計年が異なる場合があります。線は見やすさのため欠損年をまたいで接続しています。",
     "sources": [
       {
         "dataFile": "education_elementary.json",
@@ -373,10 +665,10 @@
       }
     },
     "view": "primary",
-    "priority": 10,
+    "priority": 1,
     "highlight": "小学校の変化を数年後に追うように、中学校の規模にも変化が現れます。",
     "timeline": true,
-    "storyStep": 4,
+    "storyStep": 3,
     "storyRole": "primary",
     "eventGroups": [
       "教育",
@@ -394,7 +686,12 @@
         "label": "学校規模縮小",
         "description": "小中学校ともに規模縮小が見えます。"
       }
-    ]
+    ],
+    "spanGaps": true,
+    "isStepRepresentative": true,
+    "summaryLabel": "小学校児童数",
+    "summaryField": "total",
+    "summaryUnit": "人"
   },
   {
     "id": "young_population_vs_elementary",
@@ -407,7 +704,7 @@
       "人口構造変化が、教育現場の規模変化へ直接影響していることがわかります。",
       "人口減少は、学校再編や地域コミュニティ維持とも関係する重要な指標です。"
     ],
-    "note": "15歳未満人口と小学校児童数は出典・集計方法が異なるため、左右2軸で表示しています。",
+    "note": "15歳未満人口と小学校児童数は出典・集計方法が異なるため、左右2軸で表示しています。 データの集計年が異なる場合があります。線は見やすさのため欠損年をまたいで接続しています。",
     "sources": [
       {
         "dataFile": "population_age_groups.json",
@@ -436,111 +733,16 @@
       }
     },
     "view": "detail",
-    "priority": 20,
+    "priority": 2,
     "timeline": false,
-    "storyStep": 4,
+    "storyStep": 3,
     "storyRole": "detail",
     "eventGroups": [
       "教育",
       "年齢構成"
     ],
-    "mayorBands": false
-  },
-  {
-    "id": "industry_summary",
-    "group": "産業",
-    "groupDescription": "地域の働く場と経済規模の変化を見ます。",
-    "title": "事業所と従業者から働く場を見る",
-    "description": "経済センサス等に基づく、事業所数と従業者数の長期推移です。",
-    "insights": [
-      "事業所数と従業者数を比較することで、地域経済規模の変化を確認できます。",
-      "事業所数が減少していても従業者数が維持されている場合、事業所集約や規模拡大が進んでいる可能性があります。"
-    ],
-    "note": "事業所数と従業者数は単位が異なるため、左右2軸で表示しています。",
-    "dataFile": "industry_summary.json",
-    "datasets": [
-      {
-        "label": "事業所数",
-        "field": "businesses",
-        "axis": "y",
-        "unit": "事業所"
-      },
-      {
-        "label": "従業者数",
-        "field": "employees",
-        "axis": "y1",
-        "unit": "人"
-      }
-    ],
-    "axes": {
-      "y": {
-        "label": "事業所数",
-        "beginAtZero": false
-      },
-      "y1": {
-        "label": "従業者数",
-        "position": "right",
-        "beginAtZero": false
-      }
-    },
-    "view": "primary",
-    "priority": 10,
-    "highlight": "事業所数と従業者数を同時に見ることで、地域経済の規模と働く場の変化が読み取れます。",
-    "timeline": true,
-    "storyStep": 5,
-    "storyRole": "primary",
-    "eventGroups": [
-      "産業"
-    ],
-    "mayorBands": true,
-    "milestones": [
-      {
-        "year": 1991,
-        "label": "バブル後",
-        "description": "景気環境の変化を読む節目です。"
-      },
-      {
-        "year": 2009,
-        "label": "金融危機後",
-        "description": "リーマンショック後の地域経済を見る節目です。"
-      }
-    ]
-  },
-  {
-    "id": "employees_per_business",
-    "group": "産業",
-    "groupDescription": "地域の働く場と経済規模の変化を見ます。",
-    "title": "1事業所あたり従業者数を見る",
-    "description": "従業者数 ÷ 事業所数で計算した、1事業所あたり従業者数です。",
-    "insights": [
-      "数値が上昇している場合、事業所の集約化や大規模化が進んでいる可能性があります。",
-      "地域経済構造の変化を見るための補助指標です。"
-    ],
-    "note": "従業者数 ÷ 事業所数で算出しています。",
-    "dataFile": "industry_summary.json",
-    "datasets": [
-      {
-        "label": "1事業所あたり従業者数",
-        "field": "employees_per_business",
-        "axis": "y",
-        "unit": "人"
-      }
-    ],
-    "axes": {
-      "y": {
-        "label": "人数",
-        "beginAtZero": false
-      }
-    },
-    "view": "detail",
-    "priority": 20,
-    "timeline": false,
-    "storyStep": 5,
-    "storyRole": "detail",
-    "eventGroups": [
-      "産業"
-    ],
-    "mayorBands": true
+    "mayorBands": false,
+    "spanGaps": true
   },
   {
     "id": "finance_expenditure_purpose_ratio",
@@ -598,7 +800,7 @@
     "view": "primary",
     "priority": 1,
     "timeline": true,
-    "storyStep": 6,
+    "storyStep": 4,
     "storyRole": "primary",
     "eventGroups": [
       "財政"
@@ -626,7 +828,12 @@
       "教育費や土木費は、人口変化だけでは説明できない場合があります。",
       "このグラフは、以降の補助グラフを読むための入口です。"
     ],
-    "focusQuestion": "行政は、何にお金を使う自治体へ変わってきたのか？"
+    "focusQuestion": "行政は、何にお金を使う自治体へ変わってきたのか？",
+    "isStepRepresentative": true,
+    "summaryLabel": "民生費割合",
+    "summaryField": "welfare_ratio",
+    "summaryUnit": "%",
+    "spanGaps": true
   },
   {
     "id": "finance_expenditure_nature_ratio",
@@ -683,12 +890,13 @@
     "view": "primary",
     "priority": 2,
     "timeline": true,
-    "storyStep": 6,
+    "storyStep": 4,
     "storyRole": "primary",
     "eventGroups": [
       "財政"
     ],
-    "mayorBands": true
+    "mayorBands": true,
+    "spanGaps": true
   },
   {
     "id": "finance_revenue_structure_ratio",
@@ -741,7 +949,7 @@
         "beginAtZero": false
       }
     },
-    "storyStep": 6,
+    "storyStep": 4,
     "storyRole": "primary",
     "priority": 3,
     "timeline": true,
@@ -749,75 +957,8 @@
       "財政"
     ],
     "mayorBands": true,
-    "groupDescription": "行政サービスや投資規模の変化を見ます。"
-  },
-  {
-    "id": "elderly_population_vs_welfare",
-    "group": "財政",
     "groupDescription": "行政サービスや投資規模の変化を見ます。",
-    "title": "高齢者人口と民生費を重ねて見る",
-    "description": "65歳以上人口と民生費を重ねて表示し、人口構造の変化と福祉関連支出の関係を確認します。",
-    "highlight": "民生費の増加は単独で見るより、高齢者人口の増加と重ねることで背景が見えやすくなります。",
-    "insights": [
-      "65歳以上人口の増加は、福祉・医療・介護などの行政需要と関係します。",
-      "民生費が増えている背景を、人口構造の変化とあわせて読むためのグラフです。"
-    ],
-    "note": "人口は主に5年刻み、民生費は毎年データです。線は見やすさのため欠損年をまたいで接続しています。",
-    "sources": [
-      {
-        "dataFile": "population_age_groups.json",
-        "label": "65歳以上人口",
-        "field": "elderly",
-        "axis": "y",
-        "unit": "人"
-      },
-      {
-        "dataFile": "finance_expenditure_purpose.json",
-        "label": "民生費",
-        "field": "welfare_amount",
-        "axis": "y1",
-        "unit": "千円"
-      }
-    ],
-    "axes": {
-      "y": {
-        "label": "65歳以上人口（人）",
-        "beginAtZero": false
-      },
-      "y1": {
-        "label": "民生費（千円）",
-        "position": "right",
-        "beginAtZero": false
-      }
-    },
-    "view": "detail",
-    "priority": 4,
-    "timeline": false,
-    "storyStep": 6,
-    "storyRole": "detail",
-    "eventGroups": [
-      "財政",
-      "年齢構成"
-    ],
-    "mayorBands": true,
-    "spanGaps": true,
-    "milestones": [
-      {
-        "year": 2000,
-        "label": "高齢者増",
-        "description": "65歳以上人口の増加と民生費の動きを重ねて見る節目です。"
-      },
-      {
-        "year": 2015,
-        "label": "民生費拡大",
-        "description": "高齢化と福祉関連支出の関係を確認する時期です。"
-      }
-    ],
-    "readingHints": [
-      "高齢者人口の増加は、福祉需要の増加と関係しやすい指標です。",
-      "ただし制度変更や支援対象拡大も民生費へ影響します。"
-    ],
-    "focusQuestion": "民生費の増加は、高齢化とどのように重なって見えるか？"
+    "spanGaps": true
   },
   {
     "id": "young_population_vs_education_spending",
@@ -862,7 +1003,7 @@
     "view": "detail",
     "priority": 5,
     "timeline": false,
-    "storyStep": 6,
+    "storyStep": 4,
     "storyRole": "detail",
     "eventGroups": [
       "財政",
@@ -937,13 +1078,14 @@
     "priority": 6,
     "highlight": "財政規模だけでなく、人口で割った1人あたり歳出を見ることで、行政規模の重みが分かります。",
     "timeline": false,
-    "storyStep": 6,
+    "storyStep": 4,
     "storyRole": "detail",
     "eventGroups": [
       "財政"
     ],
     "mayorBands": true,
-    "focusQuestion": "歳入・歳出の規模そのものはどう変わったか？"
+    "focusQuestion": "歳入・歳出の規模そのものはどう変わったか？",
+    "spanGaps": true
   },
   {
     "id": "finance_balance",
@@ -974,13 +1116,14 @@
     "view": "detail",
     "priority": 7,
     "timeline": false,
-    "storyStep": 6,
+    "storyStep": 4,
     "storyRole": "detail",
     "eventGroups": [
       "財政"
     ],
     "mayorBands": true,
-    "focusQuestion": "年度ごとの財政余力はどう揺れているか？"
+    "focusQuestion": "年度ごとの財政余力はどう揺れているか？",
+    "spanGaps": true
   },
   {
     "id": "vehicle_total",
@@ -1024,8 +1167,8 @@
       }
     },
     "timeline": true,
-    "storyStep": 7,
-    "storyRole": "primary",
+    "storyStep": 8,
+    "storyRole": "detail",
     "eventGroups": [
       "暮らし・交通"
     ],
@@ -1045,7 +1188,8 @@
     "readingHints": [
       "人口が横ばいでも、自動車依存が続くと保有台数は維持されます。",
       "公共交通だけではなく、生活圏の広がりも背景にあります。"
-    ]
+    ],
+    "spanGaps": true
   },
   {
     "id": "kei_ratio",
@@ -1078,11 +1222,12 @@
       }
     },
     "timeline": false,
-    "storyStep": 7,
+    "storyStep": 8,
     "storyRole": "detail",
     "eventGroups": [
       "暮らし・交通"
     ],
-    "mayorBands": false
+    "mayorBands": false,
+    "spanGaps": true
   }
 ]

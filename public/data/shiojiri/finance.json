@@ -1,0 +1,74 @@
+[
+  {
+    "year": 2013,
+    "revenue": 27469526,
+    "expenditure": 26701299,
+    "debt": 27201317
+  },
+  {
+    "year": 2014,
+    "revenue": 29436066,
+    "expenditure": 28720438,
+    "debt": 28048254
+  },
+  {
+    "year": 2015,
+    "revenue": 28533015,
+    "expenditure": 27577390,
+    "debt": 27754196
+  },
+  {
+    "year": 2016,
+    "revenue": 27640903,
+    "expenditure": 27115109,
+    "debt": 27120958
+  },
+  {
+    "year": 2017,
+    "revenue": 26950367,
+    "expenditure": 26495935,
+    "debt": 26475128
+  },
+  {
+    "year": 2018,
+    "revenue": 27504935,
+    "expenditure": 26744241,
+    "debt": 26396478
+  },
+  {
+    "year": 2019,
+    "revenue": 29343784,
+    "expenditure": 28583516,
+    "debt": 27430109
+  },
+  {
+    "year": 2020,
+    "revenue": 40455268,
+    "expenditure": 39228298,
+    "debt": 28724642
+  },
+  {
+    "year": 2021,
+    "revenue": 35327133,
+    "expenditure": 33868611,
+    "debt": 28893993
+  },
+  {
+    "year": 2022,
+    "revenue": 34862534,
+    "expenditure": 34160656,
+    "debt": 28578499
+  },
+  {
+    "year": 2023,
+    "revenue": 33280447,
+    "expenditure": 32709082,
+    "debt": 27475420
+  },
+  {
+    "year": 2024,
+    "revenue": 34415924,
+    "expenditure": 33871631,
+    "debt": 27358631
+  }
+]

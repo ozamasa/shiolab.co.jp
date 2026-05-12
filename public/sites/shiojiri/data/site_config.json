@@ -1,0 +1,15 @@
+{
+  "site": {
+    "id": "shiojiri",
+    "title": "塩尻市の構造変化を読む",
+    "eyebrow": "SHIOJIRI DATA STORY",
+    "footer": "Shiojiri Data Story"
+  },
+  "dataBasePath": "./data",
+  "dataFiles": {
+    "steps": "story_steps.json",
+    "sections": "sections.json",
+    "timelineEvents": "timeline_events.json",
+    "mayors": "mayors.json"
+  }
+}

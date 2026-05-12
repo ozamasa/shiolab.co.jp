@@ -1,0 +1,15 @@
+{
+  "site": {
+    "id": "nagano",
+    "title": "長野県の構造変化を読む",
+    "eyebrow": "NAGANO DATA STORY",
+    "footer": "Nagano Data Story"
+  },
+  "dataBasePath": "./data",
+  "dataFiles": {
+    "steps": "story_steps.json",
+    "sections": "sections.json",
+    "timelineEvents": "timeline_events.json",
+    "mayors": "mayors.json"
+  }
+}

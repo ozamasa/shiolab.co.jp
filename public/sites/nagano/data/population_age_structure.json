@@ -1,0 +1,65 @@
+[
+  {
+    "year": 1960,
+    "working_age_ratio": 64.2,
+    "aging_index": 23.8,
+    "dependency_index": 55.8,
+    "label": "1960",
+    "working_age_population_ratio": 64.2,
+    "dependency_population_index": 55.8
+  },
+  {
+    "year": 1970,
+    "working_age_ratio": 68.6,
+    "aging_index": 38.3,
+    "dependency_index": 45.8,
+    "label": "1970",
+    "working_age_population_ratio": 68.6,
+    "dependency_population_index": 45.8
+  },
+  {
+    "year": 1980,
+    "working_age_ratio": 66.0,
+    "aging_index": 45.1,
+    "dependency_index": 51.6,
+    "label": "1980",
+    "working_age_population_ratio": 66.0,
+    "dependency_population_index": 51.6
+  },
+  {
+    "year": 1990,
+    "working_age_ratio": 67.5,
+    "aging_index": 73.5,
+    "dependency_index": 48.1,
+    "label": "1990",
+    "working_age_population_ratio": 67.5,
+    "dependency_population_index": 48.1
+  },
+  {
+    "year": 2000,
+    "working_age_ratio": 66.6,
+    "aging_index": 118.0,
+    "dependency_index": 50.2,
+    "label": "2000",
+    "working_age_population_ratio": 66.6,
+    "dependency_population_index": 50.2
+  },
+  {
+    "year": 2010,
+    "working_age_ratio": 62.3,
+    "aging_index": 168.9,
+    "dependency_index": 60.4,
+    "label": "2010",
+    "working_age_population_ratio": 62.3,
+    "dependency_population_index": 60.4
+  },
+  {
+    "year": 2020,
+    "working_age_ratio": 58.7,
+    "aging_index": 229.1,
+    "dependency_index": 70.3,
+    "label": "2020",
+    "working_age_population_ratio": 58.7,
+    "dependency_population_index": 70.3
+  }
+]

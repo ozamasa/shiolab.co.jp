@@ -1,0 +1,374 @@
+[
+  {
+    "year": 1964,
+    "total": 2778,
+    "male": 1444,
+    "female": 1334
+  },
+  {
+    "year": 1965,
+    "total": 2551,
+    "male": 1332,
+    "female": 1219
+  },
+  {
+    "year": 1966,
+    "total": 2418,
+    "male": 1233,
+    "female": 1185
+  },
+  {
+    "year": 1967,
+    "total": 2316,
+    "male": 1197,
+    "female": 1119
+  },
+  {
+    "year": 1968,
+    "total": 2188,
+    "male": 1120,
+    "female": 1068
+  },
+  {
+    "year": 1969,
+    "total": 2112,
+    "male": 1089,
+    "female": 1023
+  },
+  {
+    "year": 1970,
+    "total": 2057,
+    "male": 1030,
+    "female": 1027
+  },
+  {
+    "year": 1971,
+    "total": 2037,
+    "male": 1035,
+    "female": 1002
+  },
+  {
+    "year": 1972,
+    "total": 2015,
+    "male": 1012,
+    "female": 1003
+  },
+  {
+    "year": 1973,
+    "total": 2023,
+    "male": 1053,
+    "female": 970
+  },
+  {
+    "year": 1974,
+    "total": 1990,
+    "male": 1033,
+    "female": 957
+  },
+  {
+    "year": 1975,
+    "total": 2018,
+    "male": 1038,
+    "female": 980
+  },
+  {
+    "year": 1976,
+    "total": 2014,
+    "male": 1006,
+    "female": 1008
+  },
+  {
+    "year": 1977,
+    "total": 2073,
+    "male": 1038,
+    "female": 1035
+  },
+  {
+    "year": 1978,
+    "total": 2109,
+    "male": 1075,
+    "female": 1034
+  },
+  {
+    "year": 1979,
+    "total": 2187,
+    "male": 1141,
+    "female": 1046
+  },
+  {
+    "year": 1980,
+    "total": 2298,
+    "male": 1179,
+    "female": 1119
+  },
+  {
+    "year": 1981,
+    "total": 2413,
+    "male": 1209,
+    "female": 1204
+  },
+  {
+    "year": 1982,
+    "total": 2521,
+    "male": 1247,
+    "female": 1274
+  },
+  {
+    "year": 1983,
+    "total": 2605,
+    "male": 1302,
+    "female": 1303
+  },
+  {
+    "year": 1984,
+    "total": 2688,
+    "male": 1357,
+    "female": 1331
+  },
+  {
+    "year": 1985,
+    "total": 2732,
+    "male": 1377,
+    "female": 1355
+  },
+  {
+    "year": 1986,
+    "total": 2899,
+    "male": 1441,
+    "female": 1458
+  },
+  {
+    "year": 1987,
+    "total": 3004,
+    "male": 1509,
+    "female": 1495
+  },
+  {
+    "year": 1988,
+    "total": 3011,
+    "male": 1559,
+    "female": 1452
+  },
+  {
+    "year": 1989,
+    "total": 2883,
+    "male": 1516,
+    "female": 1367
+  },
+  {
+    "year": 1990,
+    "total": 2750,
+    "male": 1454,
+    "female": 1296
+  },
+  {
+    "year": 1991,
+    "total": 2650,
+    "male": 1364,
+    "female": 1286
+  },
+  {
+    "year": 1992,
+    "total": 2574,
+    "male": 1320,
+    "female": 1254
+  },
+  {
+    "year": 1993,
+    "total": 2477,
+    "male": 1284,
+    "female": 1193
+  },
+  {
+    "year": 1994,
+    "total": 2371,
+    "male": 1227,
+    "female": 1144
+  },
+  {
+    "year": 1995,
+    "total": 2278,
+    "male": 1209,
+    "female": 1069
+  },
+  {
+    "year": 1996,
+    "total": 2226,
+    "male": 1166,
+    "female": 1060
+  },
+  {
+    "year": 1997,
+    "total": 2197,
+    "male": 1155,
+    "female": 1042
+  },
+  {
+    "year": 1998,
+    "total": 2168,
+    "male": 1111,
+    "female": 1057
+  },
+  {
+    "year": 1999,
+    "total": 2146,
+    "male": 1103,
+    "female": 1043
+  },
+  {
+    "year": 2000,
+    "total": 2054,
+    "male": 1063,
+    "female": 991
+  },
+  {
+    "year": 2001,
+    "total": 2011,
+    "male": 1048,
+    "female": 963
+  },
+  {
+    "year": 2002,
+    "total": 1903,
+    "male": 992,
+    "female": 911
+  },
+  {
+    "year": 2003,
+    "total": 1932,
+    "male": 986,
+    "female": 946
+  },
+  {
+    "year": 2004,
+    "total": 1916,
+    "male": 965,
+    "female": 951
+  },
+  {
+    "year": 2005,
+    "total": 1989,
+    "male": 995,
+    "female": 994
+  },
+  {
+    "year": 2006,
+    "total": 1964,
+    "male": 994,
+    "female": 970
+  },
+  {
+    "year": 2007,
+    "total": 1995,
+    "male": 1042,
+    "female": 953
+  },
+  {
+    "year": 2008,
+    "total": 2038,
+    "male": 1070,
+    "female": 968
+  },
+  {
+    "year": 2009,
+    "total": 2054,
+    "male": 1088,
+    "female": 966
+  },
+  {
+    "year": 2010,
+    "total": 2045,
+    "male": 1062,
+    "female": 983
+  },
+  {
+    "year": 2011,
+    "total": 2041,
+    "male": 1066,
+    "female": 975
+  },
+  {
+    "year": 2012,
+    "total": 2034,
+    "male": 1052,
+    "female": 982
+  },
+  {
+    "year": 2013,
+    "total": 1979,
+    "male": 997,
+    "female": 982
+  },
+  {
+    "year": 2014,
+    "total": 1938,
+    "male": 979,
+    "female": 959
+  },
+  {
+    "year": 2015,
+    "total": 1901,
+    "male": 963,
+    "female": 938
+  },
+  {
+    "year": 2016,
+    "total": 1888,
+    "male": 965,
+    "female": 923
+  },
+  {
+    "year": 2017,
+    "total": 1825,
+    "male": 933,
+    "female": 892
+  },
+  {
+    "year": 2018,
+    "total": 1801,
+    "male": 913,
+    "female": 888
+  },
+  {
+    "year": 2019,
+    "total": 1774,
+    "male": 891,
+    "female": 883
+  },
+  {
+    "year": 2020,
+    "total": 1829,
+    "male": 937,
+    "female": 892
+  },
+  {
+    "year": 2021,
+    "total": 1786,
+    "male": 925,
+    "female": 861
+  },
+  {
+    "year": 2022,
+    "total": 1667,
+    "male": 879,
+    "female": 788
+  },
+  {
+    "year": 2023,
+    "total": 1568,
+    "male": 804,
+    "female": 764
+  },
+  {
+    "year": 2024,
+    "total": 1491,
+    "male": 765,
+    "female": 726
+  },
+  {
+    "year": 2025,
+    "total": 1498,
+    "male": 771,
+    "female": 727
+  }
+]

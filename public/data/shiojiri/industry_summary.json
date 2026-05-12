@@ -1,0 +1,122 @@
+[
+  {
+    "year": 1960,
+    "businesses": 1352,
+    "employees": 8648,
+    "employees_per_business": 6.4
+  },
+  {
+    "year": 1963,
+    "businesses": 1537,
+    "employees": 11044,
+    "employees_per_business": 7.19
+  },
+  {
+    "year": 1966,
+    "businesses": 1689,
+    "employees": 12888,
+    "employees_per_business": 7.63
+  },
+  {
+    "year": 1969,
+    "businesses": 1835,
+    "employees": 14410,
+    "employees_per_business": 7.85
+  },
+  {
+    "year": 1972,
+    "businesses": 1925,
+    "employees": 17084,
+    "employees_per_business": 8.87
+  },
+  {
+    "year": 1975,
+    "businesses": 2155,
+    "employees": 18132,
+    "employees_per_business": 8.41
+  },
+  {
+    "year": 1978,
+    "businesses": 2490,
+    "employees": 20125,
+    "employees_per_business": 8.08
+  },
+  {
+    "year": 1981,
+    "businesses": 2698,
+    "employees": 21556,
+    "employees_per_business": 7.99
+  },
+  {
+    "year": 1986,
+    "businesses": 2805,
+    "employees": 24533,
+    "employees_per_business": 8.75
+  },
+  {
+    "year": 1991,
+    "businesses": 3041,
+    "employees": 26967,
+    "employees_per_business": 8.87
+  },
+  {
+    "year": 1996,
+    "businesses": 3210,
+    "employees": 29376,
+    "employees_per_business": 9.15
+  },
+  {
+    "year": 1999,
+    "businesses": 2972,
+    "employees": 26262,
+    "employees_per_business": 8.84
+  },
+  {
+    "year": 2001,
+    "businesses": 3043,
+    "employees": 28998,
+    "employees_per_business": 9.53
+  },
+  {
+    "year": 2004,
+    "businesses": 2764,
+    "employees": 25751,
+    "employees_per_business": 9.32
+  },
+  {
+    "year": 2006,
+    "businesses": 3095,
+    "employees": 30044,
+    "employees_per_business": 9.71
+  },
+  {
+    "year": 2009,
+    "businesses": 3239,
+    "employees": 32507,
+    "employees_per_business": 10.04
+  },
+  {
+    "year": 2012,
+    "businesses": 2931,
+    "employees": 28511,
+    "employees_per_business": 9.73
+  },
+  {
+    "year": 2014,
+    "businesses": 3061,
+    "employees": 31854,
+    "employees_per_business": 10.41
+  },
+  {
+    "year": 2016,
+    "businesses": 2876,
+    "employees": 29993,
+    "employees_per_business": 10.43
+  },
+  {
+    "year": 2021,
+    "businesses": 2892,
+    "employees": 33403,
+    "employees_per_business": 11.55
+  }
+]

@@ -1,0 +1,1233 @@
+[
+  {
+    "id": "industry_workers_vs_population",
+    "group": "産業・雇用",
+    "title": "働く場所と人口を重ねて見る",
+    "description": "製造業従業者数と人口の推移を重ね、働く場所の変化と人口構造の関係を見ます。",
+    "storyStep": 1,
+    "storyRole": "primary",
+    "priority": 1,
+    "chartType": "line",
+    "layout": "dualAxis",
+    "dataFile": "industry_manufacturing.json",
+    "datasets": [
+      {
+        "label": "製造業従業者数",
+        "field": "employees_total",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "人口",
+        "field": "population",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "highlight": "製造業従業者数の増加は、人口や世帯の変化を考える前段として見ることができます。",
+    "timeline": true,
+    "mayorBands": true,
+    "axes": {
+      "y": {
+        "label": "製造業従業者数（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "人口（人）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "spanGaps": true,
+    "eventGroups": [
+      "産業"
+    ],
+    "note": "製造業従業者数は工業統計等、人口は人口統計に基づくため、集計年や出典が異なります。線は見やすさのため欠損年をまたいで接続しています。市長任期帯は時期を読むための補助情報です。",
+    "isStepRepresentative": true,
+    "summaryLabel": "製造業従業者数",
+    "summaryField": "employees_total",
+    "summaryUnit": "人"
+  },
+  {
+    "id": "industry_shipments",
+    "group": "産業・雇用",
+    "title": "製造品出荷額から地域経済の規模を見る",
+    "description": "製造品出荷額等の推移を表示し、地域の工業規模の変化を見ます。",
+    "storyStep": 1,
+    "storyRole": "detail",
+    "priority": 2,
+    "chartType": "line",
+    "layout": "single",
+    "dataFile": "industry_manufacturing.json",
+    "datasets": [
+      {
+        "label": "製造品出荷額等",
+        "field": "shipments",
+        "axis": "y",
+        "unit": "万円"
+      }
+    ],
+    "highlight": "製造品出荷額等の変化から、地域経済や産業活動の規模変化を見ます。",
+    "timeline": true,
+    "mayorBands": true,
+    "axes": {
+      "y": {
+        "label": "製造品出荷額等（万円）",
+        "beginAtZero": false
+      }
+    },
+    "eventGroups": [
+      "産業"
+    ],
+    "note": "製造品出荷額等は万円単位です。市長任期帯は時期を読むための補助情報であり、因果関係を示すものではありません。",
+    "spanGaps": true
+  },
+  {
+    "id": "industry_businesses",
+    "group": "産業・雇用",
+    "groupDescription": "人口変化の前段として、働く場所と地域経済の変化を見ます。",
+    "title": "製造業事業所数を見る",
+    "description": "従業者4人以上の製造業事業所数の推移です。",
+    "highlight": "事業所数の変化から、地域の産業構造の変化を見ます。",
+    "note": "従業者4人以上の製造業事業所数です。市長任期帯は時期を読むための補助情報です。",
+    "dataFile": "industry_manufacturing.json",
+    "datasets": [
+      {
+        "label": "事業所数",
+        "field": "businesses",
+        "axis": "y",
+        "unit": "事業所"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "事業所数",
+        "beginAtZero": false
+      }
+    },
+    "storyStep": 1,
+    "storyRole": "detail",
+    "priority": 3,
+    "timeline": true,
+    "eventGroups": [
+      "産業"
+    ],
+    "mayorBands": true,
+    "spanGaps": true
+  },
+  {
+    "id": "industry_summary",
+    "group": "産業",
+    "groupDescription": "地域の働く場と経済規模の変化を見ます。",
+    "title": "事業所と従業者から働く場を見る",
+    "description": "経済センサス等に基づく、事業所数と従業者数の長期推移です。",
+    "insights": [
+      "事業所数と従業者数を比較することで、地域経済規模の変化を確認できます。",
+      "事業所数が減少していても従業者数が維持されている場合、事業所集約や規模拡大が進んでいる可能性があります。"
+    ],
+    "note": "事業所数と従業者数は単位が異なるため、左右2軸で表示しています。",
+    "dataFile": "industry_summary.json",
+    "datasets": [
+      {
+        "label": "事業所数",
+        "field": "businesses",
+        "axis": "y",
+        "unit": "事業所"
+      },
+      {
+        "label": "従業者数",
+        "field": "employees",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "事業所数",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "従業者数",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 4,
+    "highlight": "事業所数と従業者数を同時に見ることで、地域経済の規模と働く場の変化が読み取れます。",
+    "timeline": true,
+    "storyStep": 1,
+    "storyRole": "detail",
+    "eventGroups": [
+      "産業"
+    ],
+    "mayorBands": true,
+    "milestones": [
+      {
+        "year": 1991,
+        "label": "バブル後",
+        "description": "景気環境の変化を読む節目です。"
+      },
+      {
+        "year": 2009,
+        "label": "金融危機後",
+        "description": "リーマンショック後の地域経済を見る節目です。"
+      }
+    ],
+    "spanGaps": true
+  },
+  {
+    "id": "employees_per_business",
+    "group": "産業",
+    "groupDescription": "地域の働く場と経済規模の変化を見ます。",
+    "title": "1事業所あたり従業者数を見る",
+    "description": "従業者数 ÷ 事業所数で計算した、1事業所あたり従業者数です。",
+    "insights": [
+      "数値が上昇している場合、事業所の集約化や大規模化が進んでいる可能性があります。",
+      "地域経済構造の変化を見るための補助指標です。"
+    ],
+    "note": "従業者数 ÷ 事業所数で算出しています。",
+    "dataFile": "industry_summary.json",
+    "datasets": [
+      {
+        "label": "1事業所あたり従業者数",
+        "field": "employees_per_business",
+        "axis": "y",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人数",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 5,
+    "timeline": true,
+    "storyStep": 1,
+    "storyRole": "detail",
+    "eventGroups": [
+      "産業"
+    ],
+    "mayorBands": true,
+    "spanGaps": true
+  },
+  {
+    "id": "population_households",
+    "group": "人口・世帯",
+    "groupDescription": "まちの規模と、暮らしの単位の変化を見ます。",
+    "title": "人口は横ばい、世帯数は増えている",
+    "description": "1930年から2020年までの総人口と世帯数を重ねて表示しています。人口変化だけでなく、世帯構造の変化を見るための基礎グラフです。",
+    "insights": [
+      "人口は2000年代まで増加しましたが、近年は横ばいから微減傾向です。",
+      "一方で世帯数は増加を続けており、世帯規模縮小が進んでいます。",
+      "人口減少と世帯増加が同時進行している点が特徴です。"
+    ],
+    "note": "人口と世帯数は単位が異なるため、左右2軸で表示しています。",
+    "dataFile": "population_summary.json",
+    "datasets": [
+      {
+        "label": "総人口",
+        "field": "total",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "世帯数",
+        "field": "households",
+        "axis": "y1",
+        "unit": "世帯"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人口（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "世帯数（世帯）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 1,
+    "highlight": "人口の変化は、学校や財政にも少しずつ表れていきます。まずは人口構造の変化から見ていきます。",
+    "timeline": true,
+    "storyStep": 2,
+    "storyRole": "primary",
+    "eventGroups": [
+      "人口・世帯"
+    ],
+    "mayorBands": false,
+    "milestones": [
+      {
+        "year": 2005,
+        "label": "人口ピーク付近",
+        "description": "人口増加が一段落し、横ばいから微減へ移る時期です。"
+      },
+      {
+        "year": 2020,
+        "label": "世帯増は継続",
+        "description": "人口は伸びにくい一方で、世帯数は増加しています。"
+      }
+    ],
+    "readingHints": [
+      "人口が大きく変わらなくても、世帯数は増える場合があります。",
+      "単身世帯や核家族化など、暮らし方の変化も背景にあります。"
+    ],
+    "isStepRepresentative": true,
+    "summaryLabel": "総人口",
+    "summaryField": "total",
+    "summaryUnit": "人",
+    "spanGaps": true
+  },
+  {
+    "id": "age_rates",
+    "group": "年齢構成",
+    "groupDescription": "地域を支える年齢のバランスの変化を見ます。",
+    "title": "高齢者割合が広がっている",
+    "description": "15歳未満・15〜64歳・65歳以上の割合を100%積み上げ面で表示しています。",
+    "chartType": "stackedArea",
+    "insights": [
+      "線の上下ではなく、面の広がりとして構成比の変化を確認できます。",
+      "65歳以上の割合が広がり、15歳未満と15〜64歳の割合が縮小していることが見えます。",
+      "人口の実数変化ではなく、人口構成の入れ替わりを見るためのグラフです。"
+    ],
+    "note": "各年齢区分人口 ÷ 総人口 × 100で算出しています。",
+    "dataFile": "population_age_groups.json",
+    "datasets": [
+      {
+        "label": "15歳未満",
+        "calc": "young / total * 100",
+        "digits": 1,
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "15〜64歳",
+        "calc": "working / total * 100",
+        "digits": 1,
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "65歳以上",
+        "calc": "elderly / total * 100",
+        "digits": 1,
+        "axis": "y",
+        "unit": "%"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "構成比（%）",
+        "beginAtZero": true,
+        "max": 100,
+        "stacked": true
+      }
+    },
+    "view": "primary",
+    "priority": 2,
+    "highlight": "割合で見ると、単なる人口増減ではなく、地域を支える年齢のバランスそのものが変わっていることが分かります。",
+    "timeline": true,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "年齢構成",
+      "人口・世帯"
+    ],
+    "mayorBands": false,
+    "milestones": [
+      {
+        "year": 2000,
+        "label": "高齢化20%前後",
+        "description": "65歳以上割合が大きく存在感を増し始める時期です。"
+      },
+      {
+        "year": 2020,
+        "label": "高齢化が進行",
+        "description": "年齢構成の変化がはっきり見える時期です。"
+      }
+    ],
+    "spanGaps": true
+  },
+  {
+    "id": "age_groups",
+    "group": "年齢構成",
+    "groupDescription": "地域を支える年齢のバランスの変化を見ます。",
+    "title": "年齢3区分の実数も変化している",
+    "description": "15歳未満、15〜64歳、65歳以上人口の推移を表示しています。実数の変化を見るため、折れ線で表示しています。",
+    "insights": [
+      "65歳以上人口は長期的に増加しています。",
+      "15〜64歳人口は近年減少傾向にあります。",
+      "少子高齢化の進行を確認できます。"
+    ],
+    "note": "年齢不詳は3区分の合計には含めていません。",
+    "dataFile": "population_age_groups.json",
+    "datasets": [
+      {
+        "label": "15歳未満",
+        "field": "young",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "15〜64歳",
+        "field": "working",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "65歳以上",
+        "field": "elderly",
+        "axis": "y",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人口（人）",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 3,
+    "timeline": false,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "年齢構成",
+      "人口・世帯"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
+  },
+  {
+    "id": "elderly_population_vs_welfare",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "高齢者人口と民生費を重ねて見る",
+    "description": "65歳以上人口と民生費を重ねて表示し、人口構造の変化と福祉関連支出の関係を確認します。",
+    "highlight": "民生費の増加は単独で見るより、高齢者人口の増加と重ねることで背景が見えやすくなります。",
+    "insights": [
+      "65歳以上人口の増加は、福祉・医療・介護などの行政需要と関係します。",
+      "民生費が増えている背景を、人口構造の変化とあわせて読むためのグラフです。"
+    ],
+    "note": "人口は主に5年刻み、民生費は毎年データです。線は見やすさのため欠損年をまたいで接続しています。",
+    "sources": [
+      {
+        "dataFile": "population_age_groups.json",
+        "label": "65歳以上人口",
+        "field": "elderly",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "dataFile": "finance_expenditure_purpose.json",
+        "label": "民生費",
+        "field": "welfare_amount",
+        "axis": "y1",
+        "unit": "千円"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "65歳以上人口（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "民生費（千円）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 4,
+    "timeline": false,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "財政",
+      "年齢構成"
+    ],
+    "mayorBands": true,
+    "spanGaps": true,
+    "milestones": [
+      {
+        "year": 2000,
+        "label": "高齢者増",
+        "description": "65歳以上人口の増加と民生費の動きを重ねて見る節目です。"
+      },
+      {
+        "year": 2015,
+        "label": "民生費拡大",
+        "description": "高齢化と福祉関連支出の関係を確認する時期です。"
+      }
+    ],
+    "readingHints": [
+      "高齢者人口の増加は、福祉需要の増加と関係しやすい指標です。",
+      "ただし制度変更や支援対象拡大も民生費へ影響します。"
+    ],
+    "focusQuestion": "民生費の増加は、高齢化とどのように重なって見えるか？"
+  },
+  {
+    "id": "people_per_household",
+    "group": "人口・世帯",
+    "groupDescription": "まちの規模と、暮らしの単位の変化を見ます。",
+    "title": "1世帯あたり人数は減り続けている",
+    "description": "総人口を世帯数で割って算出した、1世帯あたり人数の長期推移です。",
+    "insights": [
+      "1930年と比較すると、1世帯あたり人数は大きく減少しています。",
+      "核家族化や単身世帯増加など、世帯構造変化が反映されています。"
+    ],
+    "note": "総人口 ÷ 世帯数で算出しています。",
+    "dataFile": "population_summary.json",
+    "datasets": [
+      {
+        "label": "1世帯あたり人数",
+        "field": "people_per_household",
+        "axis": "y",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人数",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 4,
+    "timeline": false,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "人口・世帯"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
+  },
+  {
+    "id": "population_dynamics_natural",
+    "group": "人口動態",
+    "groupDescription": "人口増減の内訳を、出生・死亡・転入・転出から見ます。",
+    "title": "出生・死亡と自然増減を見る",
+    "description": "月別人口動態の各年合計行から、出生数・死亡数・自然増減を表示しています。",
+    "highlight": "人口が増えたか減ったかだけでなく、出生と死亡の差を見ることで、人口変化の土台が分かります。",
+    "focusQuestion": "人口の変化は、出生と死亡だけでどこまで説明できるのか？",
+    "readingHints": [
+      "出生数と死亡数の差が自然増減です。",
+      "自然増減がマイナスでも、転入超過があれば人口全体は支えられる場合があります。"
+    ],
+    "insights": [
+      "出生数と死亡数を重ねることで、自然増減の背景が見えます。",
+      "子ども人口や学校規模の変化を見る前提になります。"
+    ],
+    "note": "月別人口動態のうち、各年の「合計」行のみを使用しています。",
+    "dataFile": "population_dynamics.json",
+    "datasets": [
+      {
+        "label": "出生",
+        "field": "births",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "死亡",
+        "field": "deaths",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "自然増減",
+        "field": "natural_change",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "出生・死亡（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "自然増減（人）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 10,
+    "timeline": true,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "人口・世帯",
+      "年齢構成"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
+  },
+  {
+    "id": "population_dynamics_social",
+    "group": "人口動態",
+    "groupDescription": "人口増減の内訳を、出生・死亡・転入・転出から見ます。",
+    "title": "転入・転出と社会増減を見る",
+    "description": "月別人口動態の各年合計行から、転入数・転出数・社会増減を表示しています。",
+    "highlight": "自然増減だけでなく、転入・転出による社会増減を見ることで、人口が支えられている時期が分かります。",
+    "focusQuestion": "人口の横ばいは、転入によって支えられているのか？",
+    "readingHints": [
+      "転入が転出を上回ると、社会増になります。",
+      "自然減の時期でも、社会増が大きいと人口減少が緩やかになる場合があります。"
+    ],
+    "insights": [
+      "転入・転出は、住宅、働く場、交通などの地域条件とも関係します。",
+      "人口の見かけの増減だけでは見えない、まちの流動性を確認できます。"
+    ],
+    "note": "月別人口動態のうち、各年の「合計」行のみを使用しています。",
+    "dataFile": "population_dynamics.json",
+    "datasets": [
+      {
+        "label": "転入",
+        "field": "move_in",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "転出",
+        "field": "move_out",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "label": "社会増減",
+        "field": "social_change",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "転入・転出（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "社会増減（人）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 20,
+    "timeline": false,
+    "storyStep": 2,
+    "storyRole": "detail",
+    "eventGroups": [
+      "人口・世帯"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
+  },
+  {
+    "id": "elementary_vs_junior_high",
+    "group": "教育",
+    "groupDescription": "子どもの数の変化が、学校規模にどう表れるかを見ます。",
+    "title": "子どもの減少が学校規模に表れている",
+    "description": "小学校児童数と中学校生徒数を重ねて表示し、学齢人口変化の流れを確認します。",
+    "insights": [
+      "小学校児童数の減少後を追うように、中学校生徒数も減少しています。",
+      "出生数減少が、数年後の教育規模へ影響していることがわかります。",
+      "学齢人口の変化を連続的に確認できます。"
+    ],
+    "note": "学校別ではなく、市全体の総数行を使用しています。 データの集計年が異なる場合があります。線は見やすさのため欠損年をまたいで接続しています。",
+    "sources": [
+      {
+        "dataFile": "education_elementary.json",
+        "label": "小学校児童数",
+        "field": "total",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "dataFile": "education_junior_high.json",
+        "label": "中学校生徒数",
+        "field": "total",
+        "axis": "y",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "人数（人）",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 1,
+    "highlight": "小学校の変化を数年後に追うように、中学校の規模にも変化が現れます。",
+    "timeline": true,
+    "storyStep": 3,
+    "storyRole": "primary",
+    "eventGroups": [
+      "教育",
+      "年齢構成"
+    ],
+    "mayorBands": false,
+    "milestones": [
+      {
+        "year": 1985,
+        "label": "児童数の山",
+        "description": "小学校児童数が高い水準にあった時期です。"
+      },
+      {
+        "year": 2020,
+        "label": "学校規模縮小",
+        "description": "小中学校ともに規模縮小が見えます。"
+      }
+    ],
+    "spanGaps": true,
+    "isStepRepresentative": true,
+    "summaryLabel": "小学校児童数",
+    "summaryField": "total",
+    "summaryUnit": "人"
+  },
+  {
+    "id": "young_population_vs_elementary",
+    "group": "教育",
+    "groupDescription": "子どもの数の変化が、学校規模にどう表れるかを見ます。",
+    "title": "子ども人口と小学校児童数を重ねて見る",
+    "description": "15歳未満人口と小学校児童数を比較し、人口構造変化と教育規模変化の関係を確認します。",
+    "insights": [
+      "15歳未満人口の減少に対して、小学校児童数も長期的に減少しています。",
+      "人口構造変化が、教育現場の規模変化へ直接影響していることがわかります。",
+      "人口減少は、学校再編や地域コミュニティ維持とも関係する重要な指標です。"
+    ],
+    "note": "15歳未満人口と小学校児童数は出典・集計方法が異なるため、左右2軸で表示しています。 データの集計年が異なる場合があります。線は見やすさのため欠損年をまたいで接続しています。",
+    "sources": [
+      {
+        "dataFile": "population_age_groups.json",
+        "label": "15歳未満人口",
+        "field": "young",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "dataFile": "education_elementary.json",
+        "label": "小学校児童数",
+        "field": "total",
+        "axis": "y1",
+        "unit": "人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "15歳未満人口（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "小学校児童数（人）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 2,
+    "timeline": false,
+    "storyStep": 3,
+    "storyRole": "detail",
+    "eventGroups": [
+      "教育",
+      "年齢構成"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
+  },
+  {
+    "id": "finance_expenditure_purpose_ratio",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "財政は何を支えるようになったか",
+    "description": "一般会計歳出当初予算額を目的別に分け、民生費・教育費・土木費・公債費などの構成比を表示しています。",
+    "highlight": "歳出の変化からは、行政が何を支えるようになってきたかが見えてきます。",
+    "insights": [
+      "民生費は高齢化や福祉需要と関係しやすい項目です。",
+      "教育費は子ども人口や学校規模の変化とあわせて見ると意味が出ます。",
+      "土木費や公債費は都市基盤整備や過去の投資との関係を見る入口になります。",
+      "このグラフだけで理由を断定せず、人口構造との重ね合わせで背景を確認します。"
+    ],
+    "note": "一般会計歳出当初予算額の目的別構成比です。主要項目のみ表示しています。",
+    "dataFile": "finance_expenditure_purpose.json",
+    "datasets": [
+      {
+        "label": "民生費",
+        "field": "welfare_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "教育費",
+        "field": "education_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "土木費",
+        "field": "civil_engineering_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "公債費",
+        "field": "debt_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "総務費",
+        "field": "general_affairs_ratio",
+        "axis": "y",
+        "unit": "%"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "構成比（%）",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 1,
+    "timeline": true,
+    "storyStep": 4,
+    "storyRole": "primary",
+    "eventGroups": [
+      "財政"
+    ],
+    "mayorBands": true,
+    "milestones": [
+      {
+        "year": 1995,
+        "label": "民生費に注目",
+        "description": "福祉関連支出の構成比を意識して見る節目です。"
+      },
+      {
+        "year": 2010,
+        "label": "支出構造の変化",
+        "description": "目的別歳出の内訳が変化していることを確認する時期です。"
+      },
+      {
+        "year": 2020,
+        "label": "コロナ期",
+        "description": "社会情勢の変化が財政にも表れやすい時期です。"
+      }
+    ],
+    "readingHints": [
+      "民生費の増加は、高齢化だけでなく制度変更や支援対象の拡大にも影響されます。",
+      "教育費や土木費は、人口変化だけでは説明できない場合があります。",
+      "このグラフは、以降の補助グラフを読むための入口です。"
+    ],
+    "focusQuestion": "行政は、何にお金を使う自治体へ変わってきたのか？",
+    "isStepRepresentative": true,
+    "summaryLabel": "民生費割合",
+    "summaryField": "welfare_ratio",
+    "summaryUnit": "%",
+    "spanGaps": true
+  },
+  {
+    "id": "finance_expenditure_nature_ratio",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "財政はどう使われるようになったか",
+    "description": "普通建設事業費・扶助費・人件費・公債費の構成比を表示しています。",
+    "highlight": "税金の使い方の変化から、地域が重視してきた支出構造の変化を見ることができます。",
+    "focusQuestion": "支出の性質は、建設中心から生活を支える方向へ変わっているのか？",
+    "readingHints": [
+      "普通建設事業費は、道路・施設など都市基盤整備の時期に大きくなりやすい項目です。",
+      "扶助費は、福祉や生活支援など、社会保障に近い支出と関係します。",
+      "目的別歳出と合わせて見ると、自治体が何を支え、どう使っているかが見えやすくなります。"
+    ],
+    "insights": [
+      "高度成長期には普通建設事業費の割合が高くなっています。",
+      "近年は扶助費の割合が上昇しています。",
+      "人口構造や高齢化の変化が、財政支出の性質にも表れています。"
+    ],
+    "note": "普通会計性質別歳出内訳をもとに作成しています。",
+    "dataFile": "finance_expenditure_nature.json",
+    "datasets": [
+      {
+        "label": "普通建設事業費",
+        "field": "construction_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "扶助費",
+        "field": "support_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "人件費",
+        "field": "personnel_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "公債費",
+        "field": "debt_ratio",
+        "axis": "y",
+        "unit": "%"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "構成比（%）",
+        "beginAtZero": false
+      }
+    },
+    "view": "primary",
+    "priority": 2,
+    "timeline": true,
+    "storyStep": 4,
+    "storyRole": "primary",
+    "eventGroups": [
+      "財政"
+    ],
+    "mayorBands": true,
+    "spanGaps": true
+  },
+  {
+    "id": "finance_revenue_structure_ratio",
+    "group": "財政",
+    "title": "財政は何で支えられているか",
+    "description": "市税・地方税、地方交付税、国庫支出金、市債・地方債の構成比を表示しています。",
+    "highlight": "歳出が「何を支えるか」を示す一方で、歳入はそれを何で支えているかを示します。市税・地方税と交付税・国庫支出金・市債を並べることで、財政の支え方が見えます。",
+    "focusQuestion": "自治体の財政は、どの収入で支えられているのか？",
+    "readingHints": [
+      "市税・地方税は、人口規模や地域経済の動きと関係しやすい収入です。",
+      "地方交付税や国庫支出金は、自治体財政を制度的に支える収入です。",
+      "市債・地方債は、大型事業や投資の時期に増えることがあります。",
+      "名称は年度により「地方税/市税」「地方債/市債」と揺れるため、同じ系列として扱っています。"
+    ],
+    "insights": [
+      "市税・地方税の割合だけでなく、交付税や国庫支出金の比率を見ることで財政構造が見えます。",
+      "歳出側の目的別・性質別グラフと合わせると、支出と収入の両面から財政を読めます。"
+    ],
+    "note": "普通会計性質別歳入内訳をもとに作成しています。年度により「地方税/市税」「地方債/市債」の名称揺れがありますが、同じ系列として集計しています。",
+    "dataFile": "finance_revenue_structure.json",
+    "datasets": [
+      {
+        "label": "市税・地方税",
+        "field": "tax_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "地方交付税",
+        "field": "grant_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "国庫支出金",
+        "field": "national_ratio",
+        "axis": "y",
+        "unit": "%"
+      },
+      {
+        "label": "市債・地方債",
+        "field": "bond_ratio",
+        "axis": "y",
+        "unit": "%"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "構成比（%）",
+        "beginAtZero": false
+      }
+    },
+    "storyStep": 4,
+    "storyRole": "primary",
+    "priority": 3,
+    "timeline": true,
+    "eventGroups": [
+      "財政"
+    ],
+    "mayorBands": true,
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "spanGaps": true
+  },
+  {
+    "id": "young_population_vs_education_spending",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "子ども人口と教育費を重ねて見る",
+    "description": "15歳未満人口と教育費を重ねて表示し、子ども人口の変化と教育関連支出の関係を確認します。",
+    "highlight": "子ども人口が減る一方で、教育費が単純に同じ方向へ動くとは限りません。学校施設や教育環境への投資も含めて読む必要があります。",
+    "insights": [
+      "15歳未満人口の変化は、教育規模や学校運営と関係します。",
+      "教育費は児童生徒数だけでなく、施設整備や制度変更の影響も受けます。",
+      "子ども人口と教育費を重ねることで、人口構造と財政支出のズレを確認できます。"
+    ],
+    "note": "人口は主に5年刻み、教育費は毎年データです。線は見やすさのため欠損年をまたいで接続しています。",
+    "sources": [
+      {
+        "dataFile": "population_age_groups.json",
+        "label": "15歳未満人口",
+        "field": "young",
+        "axis": "y",
+        "unit": "人"
+      },
+      {
+        "dataFile": "finance_expenditure_purpose.json",
+        "label": "教育費",
+        "field": "education_amount",
+        "axis": "y1",
+        "unit": "千円"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "15歳未満人口（人）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "教育費（千円）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 5,
+    "timeline": false,
+    "storyStep": 4,
+    "storyRole": "detail",
+    "eventGroups": [
+      "財政",
+      "教育",
+      "年齢構成"
+    ],
+    "mayorBands": true,
+    "spanGaps": true,
+    "milestones": [
+      {
+        "year": 2000,
+        "label": "子ども減少",
+        "description": "子ども人口の減少と教育費の動きを重ねて見る節目です。"
+      },
+      {
+        "year": 2015,
+        "label": "教育費のズレ",
+        "description": "子ども人口と教育費が単純に連動しないことを確認する時期です。"
+      }
+    ],
+    "readingHints": [
+      "子ども人口が減っても、教育費が同じように減るとは限りません。",
+      "施設更新や教育環境整備など、固定的な支出も存在します。"
+    ],
+    "focusQuestion": "子どもが減っても、教育費は同じように減るのか？"
+  },
+  {
+    "id": "finance_summary",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "歳入・歳出と1人あたり歳出を見る",
+    "description": "歳入・歳出決算額と、1人あたり歳出額を並べて確認します。",
+    "insights": [
+      "歳入・歳出とも長期的には拡大しています。",
+      "人口や産業の変化とあわせて見ることで、市の財政規模の変化を確認できます。",
+      "単純な増減だけでなく、人口規模との関係を見ることが重要です。"
+    ],
+    "note": "歳入・歳出は千円、1人あたり歳出は千円/人のため、左右2軸で表示しています。",
+    "dataFile": "finance_summary.json",
+    "datasets": [
+      {
+        "label": "歳入決算額",
+        "field": "revenue",
+        "axis": "y",
+        "unit": "千円"
+      },
+      {
+        "label": "歳出決算額",
+        "field": "expenditure",
+        "axis": "y",
+        "unit": "千円"
+      },
+      {
+        "label": "1人あたり歳出額",
+        "field": "expenditure_per_person",
+        "axis": "y1",
+        "unit": "千円/人"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "金額（千円）",
+        "beginAtZero": false
+      },
+      "y1": {
+        "label": "1人あたり歳出額（千円/人）",
+        "position": "right",
+        "beginAtZero": false
+      }
+    },
+    "view": "detail",
+    "priority": 6,
+    "highlight": "財政規模だけでなく、人口で割った1人あたり歳出を見ることで、行政規模の重みが分かります。",
+    "timeline": false,
+    "storyStep": 4,
+    "storyRole": "detail",
+    "eventGroups": [
+      "財政"
+    ],
+    "mayorBands": true,
+    "focusQuestion": "歳入・歳出の規模そのものはどう変わったか？",
+    "spanGaps": true
+  },
+  {
+    "id": "finance_balance",
+    "group": "財政",
+    "groupDescription": "行政サービスや投資規模の変化を見ます。",
+    "title": "歳入歳出差額を見る",
+    "description": "歳入決算額から歳出決算額を差し引いた差額です。",
+    "insights": [
+      "黒字幅の変化を見ることで、年度ごとの財政余力の推移を確認できます。",
+      "年度によって差額が大きく変動していることがわかります。"
+    ],
+    "note": "歳入決算額 − 歳出決算額で算出しています。",
+    "dataFile": "finance_summary.json",
+    "datasets": [
+      {
+        "label": "歳入歳出差額",
+        "field": "balance",
+        "axis": "y",
+        "unit": "千円"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "差額（千円）",
+        "beginAtZero": true
+      }
+    },
+    "view": "detail",
+    "priority": 7,
+    "timeline": false,
+    "storyStep": 4,
+    "storyRole": "detail",
+    "eventGroups": [
+      "財政"
+    ],
+    "mayorBands": true,
+    "focusQuestion": "年度ごとの財政余力はどう揺れているか？",
+    "spanGaps": true
+  },
+  {
+    "id": "vehicle_total",
+    "group": "暮らし・交通",
+    "groupDescription": "日常の移動手段と暮らしの基盤の変化を見ます。",
+    "view": "primary",
+    "priority": 10,
+    "title": "自動車保有は暮らしの基盤として残っている",
+    "description": "自動車保有台数の総数と、乗用車・軽自動車の推移を表示しています。",
+    "highlight": "人口が大きく増えていない時期でも、自動車保有台数は維持または増加しています。",
+    "insights": [
+      "乗用車と軽自動車を分けて見ることで、車の持ち方の変化が確認できます。",
+      "地方都市における移動手段として、自動車依存の強さを示す指標です。"
+    ],
+    "note": "令和元年度から軽二輪車は未調査のため、二輪車を含む合計の比較には注意が必要です。",
+    "dataFile": "vehicle_summary.json",
+    "datasets": [
+      {
+        "label": "合計",
+        "field": "total",
+        "axis": "y",
+        "unit": "台"
+      },
+      {
+        "label": "乗用車",
+        "field": "passenger",
+        "axis": "y",
+        "unit": "台"
+      },
+      {
+        "label": "軽三輪・軽四輪車",
+        "field": "kei",
+        "axis": "y",
+        "unit": "台"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "保有台数（台）",
+        "beginAtZero": false
+      }
+    },
+    "timeline": true,
+    "storyStep": 8,
+    "storyRole": "detail",
+    "eventGroups": [
+      "暮らし・交通"
+    ],
+    "mayorBands": false,
+    "milestones": [
+      {
+        "year": 2019,
+        "label": "二輪車集計注意",
+        "description": "令和元年度から軽二輪車が未調査になっています。"
+      },
+      {
+        "year": 2024,
+        "label": "車保有は維持",
+        "description": "人口が大きく増えなくても自動車保有は維持されています。"
+      }
+    ],
+    "readingHints": [
+      "人口が横ばいでも、自動車依存が続くと保有台数は維持されます。",
+      "公共交通だけではなく、生活圏の広がりも背景にあります。"
+    ],
+    "spanGaps": true
+  },
+  {
+    "id": "kei_ratio",
+    "group": "暮らし・交通",
+    "groupDescription": "日常の移動手段と暮らしの基盤の変化を見ます。",
+    "view": "detail",
+    "priority": 20,
+    "title": "軽自動車割合を見る",
+    "description": "自動車保有台数全体に占める、軽三輪・軽四輪車の割合です。",
+    "highlight": "暮らしに近い車の選択傾向が表れます。",
+    "insights": [
+      "軽自動車割合を見ることで、地域の車利用の変化を確認できます。",
+      "維持費や取り回しのしやすさなど、暮らしに近い車の選択傾向が表れます。"
+    ],
+    "note": "軽三輪・軽四輪車 ÷ 自動車保有台数合計 × 100で算出しています。",
+    "dataFile": "vehicle_summary.json",
+    "datasets": [
+      {
+        "label": "軽自動車割合",
+        "calc": "kei / total * 100",
+        "digits": 1,
+        "axis": "y",
+        "unit": "%"
+      }
+    ],
+    "axes": {
+      "y": {
+        "label": "割合（%）",
+        "beginAtZero": false
+      }
+    },
+    "timeline": false,
+    "storyStep": 8,
+    "storyRole": "detail",
+    "eventGroups": [
+      "暮らし・交通"
+    ],
+    "mayorBands": false,
+    "spanGaps": true
+  }
+]

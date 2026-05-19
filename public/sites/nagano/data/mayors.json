@@ -1,50 +1,50 @@
 [
   {
-    "id": "ono_mitsuhiro",
-    "name": "小野光洪",
-    "label": "小野市政",
-    "start": 1978,
-    "end": 1990,
+    "id": "yoshimura_goro",
+    "name": "吉村午良",
+    "label": "吉村県政",
+    "start": 1980,
+    "end": 2000,
     "appliesTo": [
       "産業",
       "財政"
     ],
-    "description": "長期推移を見る際の市政フェーズとして表示。"
+    "description": "長期推移を見る際の県政フェーズとして表示。"
   },
   {
-    "id": "misawa_mitsuhiro",
-    "name": "三沢光広",
-    "label": "三沢市政",
-    "start": 1990,
-    "end": 2002,
+    "id": "tanaka_yasuo",
+    "name": "田中康夫",
+    "label": "田中県政",
+    "start": 2000,
+    "end": 2006,
     "appliesTo": [
       "産業",
       "財政"
     ],
-    "description": "長期推移を見る際の市政フェーズとして表示。"
+    "description": "長期推移を見る際の県政フェーズとして表示。"
   },
   {
-    "id": "oguchi_toshiyuki",
-    "name": "小口利幸",
-    "label": "小口市政",
-    "start": 2002,
-    "end": 2022,
+    "id": "murai_hitoshi",
+    "name": "村井仁",
+    "label": "村井県政",
+    "start": 2006,
+    "end": 2010,
     "appliesTo": [
       "産業",
       "財政"
     ],
-    "description": "長期推移を見る際の市政フェーズとして表示。"
+    "description": "長期推移を見る際の県政フェーズとして表示。"
   },
   {
-    "id": "momose_keita",
-    "name": "百瀬敬",
-    "label": "百瀬市政",
-    "start": 2022,
+    "id": "abe_shuichi",
+    "name": "阿部守一",
+    "label": "阿部県政",
+    "start": 2010,
     "end": 2026,
     "appliesTo": [
       "産業",
       "財政"
     ],
-    "description": "長期推移を見る際の市政フェーズとして表示。"
+    "description": "長期推移を見る際の県政フェーズとして表示。"
   }
 ]

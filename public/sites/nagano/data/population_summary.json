@@ -1,154 +1,56 @@
 [
   {
-    "year": 1930,
-    "households": 6019,
-    "total": 30513,
-    "male": 14787,
-    "female": 15726,
-    "people_per_household": 5.07
-  },
-  {
-    "year": 1935,
-    "households": 6274,
-    "total": 31484,
-    "male": 15488,
-    "female": 15996,
-    "people_per_household": 5.02
-  },
-  {
-    "year": 1940,
-    "households": 6316,
-    "total": 31779,
-    "male": 15672,
-    "female": 16107,
-    "people_per_household": 5.03
-  },
-  {
-    "year": 1945,
-    "households": 7479,
-    "total": 39957,
-    "male": 19436,
-    "female": 20521,
-    "people_per_household": 5.34
-  },
-  {
-    "year": 1950,
-    "households": 7686,
-    "total": 40132,
-    "male": 19617,
-    "female": 20515,
-    "people_per_household": 5.22
-  },
-  {
-    "year": 1955,
-    "households": 7870,
-    "total": 38962,
-    "male": 19059,
-    "female": 19903,
-    "people_per_household": 4.95
-  },
-  {
-    "year": 1960,
-    "households": 8243,
-    "total": 38571,
-    "male": 18630,
-    "female": 19941,
-    "people_per_household": 4.68
-  },
-  {
-    "year": 1965,
-    "households": 9139,
-    "total": 39297,
-    "male": 18859,
-    "female": 20438,
-    "people_per_household": 4.3
-  },
-  {
-    "year": 1970,
-    "households": 10523,
-    "total": 42265,
-    "male": 20317,
-    "female": 21948,
-    "people_per_household": 4.02
-  },
-  {
-    "year": 1975,
-    "households": 12539,
-    "total": 47421,
-    "male": 23160,
-    "female": 24261,
-    "people_per_household": 3.78
-  },
-  {
     "year": 1980,
-    "households": 14826,
-    "total": 52711,
-    "male": 26009,
-    "female": 26702,
-    "people_per_household": 3.56
+    "total": 2083934,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 1985,
-    "households": 16118,
-    "total": 55960,
-    "male": 27752,
-    "female": 28208,
-    "people_per_household": 3.47
+    "total": 2136927,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 1990,
-    "households": 17191,
-    "total": 57331,
-    "male": 28370,
-    "female": 28961,
-    "people_per_household": 3.33
+    "total": 2156627,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 1995,
-    "households": 19974,
-    "total": 60481,
-    "male": 30131,
-    "female": 30350,
-    "people_per_household": 3.03
+    "total": 2193984,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 2000,
-    "households": 22395,
-    "total": 64128,
-    "male": 31904,
-    "female": 32224,
-    "people_per_household": 2.86
+    "total": 2215168,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 2005,
-    "households": 24860,
-    "total": 68346,
-    "male": 33909,
-    "female": 34437,
-    "people_per_household": 2.75
+    "total": 2196114,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 2010,
-    "households": 25092,
-    "total": 67670,
-    "male": 33533,
-    "female": 34137,
-    "people_per_household": 2.7
+    "total": 2152449,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 2015,
-    "households": 26350,
-    "total": 67135,
-    "male": 33347,
-    "female": 33788,
-    "people_per_household": 2.55
+    "total": 2098804,
+    "households": null,
+    "people_per_household": null
   },
   {
     "year": 2020,
-    "households": 27997,
-    "total": 67241,
-    "male": 33620,
-    "female": 33621,
-    "people_per_household": 2.4
+    "total": 2048011,
+    "households": null,
+    "people_per_household": null
   }
 ]

@@ -1,21 +1,47 @@
 [
   {
-    "id": "narakawa_merger",
+    "id": "nagano_shinkansen_open",
     "no": 1,
-    "year": 2005,
-    "label": "楢川村編入合併",
+    "year": 1997,
+    "label": "北陸新幹線 長野開業",
     "type": "event",
     "appliesTo": [
       "人口・世帯",
-      "年齢構成",
-      "教育",
+      "産業",
       "財政"
     ],
-    "description": "市域が変わるため、人口・世帯・年齢構成・財政規模を見るうえで重要な節目です。"
+    "description": "長野駅まで新幹線が開業し、広域交通や観光・産業の変化を見るうえでの節目です。"
+  },
+  {
+    "id": "nagano_olympics",
+    "no": 2,
+    "year": 1998,
+    "label": "長野オリンピック・パラリンピック",
+    "type": "event",
+    "appliesTo": [
+      "産業",
+      "財政",
+      "暮らし・交通"
+    ],
+    "description": "大型イベントと関連整備の時期として、産業・財政・交通を見る際の節目です。"
+  },
+  {
+    "id": "municipal_mergers_heisei",
+    "no": 3,
+    "year": 2005,
+    "label": "平成の市町村合併期",
+    "type": "period",
+    "start": 2003,
+    "end": 2010,
+    "appliesTo": [
+      "人口・世帯",
+      "財政"
+    ],
+    "description": "市町村区域や行政運営の変化が進んだ時期として、人口・財政を見る際の補助線です。"
   },
   {
     "id": "lehman_shock",
-    "no": 2,
+    "no": 4,
     "year": 2008,
     "label": "リーマンショック",
     "type": "event",
@@ -26,42 +52,32 @@
     "description": "世界金融危機により、地域経済や財政の推移を読む際の外部要因になります。"
   },
   {
-    "id": "east_japan_earthquake",
-    "no": 3,
-    "year": 2011,
-    "label": "東日本大震災",
+    "id": "hokuriku_shinkansen_kanazawa",
+    "no": 5,
+    "year": 2015,
+    "label": "北陸新幹線 金沢延伸",
     "type": "event",
     "appliesTo": [
-      "財政",
+      "産業",
+      "人口・世帯",
       "暮らし・交通"
     ],
-    "description": "全国的な防災・行政対応・社会経済への影響を考えるうえでの節目です。"
+    "description": "広域交通・観光・人流の変化を見る際の節目です。"
   },
   {
     "id": "covid19",
-    "no": 4,
+    "no": 6,
     "year": 2020,
-    "label": "新型コロナ",
-    "type": "event",
-    "appliesTo": [
-      "産業",
-      "財政",
-      "暮らし・交通"
-    ],
-    "description": "感染症対応や社会経済活動の変化が、財政・産業・交通に影響した時期です。"
-  },
-  {
-    "id": "covid_period",
-    "no": 5,
-    "start": 2020,
-    "end": 2022,
-    "label": "コロナ影響期",
+    "label": "新型コロナウイルス感染症",
     "type": "period",
+    "start": 2020,
+    "end": 2023,
     "appliesTo": [
-      "産業",
       "財政",
+      "産業",
+      "人口・世帯",
       "暮らし・交通"
     ],
-    "description": "社会・経済活動への影響が大きかった期間として、短期的な変動を見る補助線です。"
+    "description": "社会経済活動や行政支出、人口移動に影響した時期として表示します。"
   }
 ]

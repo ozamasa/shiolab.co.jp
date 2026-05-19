@@ -1,106 +1,110 @@
 [
   {
-    "year": 1960,
-    "total": 38571,
-    "young": 11152,
-    "working": 24761,
-    "elderly": 2658,
-    "unknown": 0
-  },
-  {
-    "year": 1965,
-    "total": 39297,
-    "young": 9404,
-    "working": 26793,
-    "elderly": 3100,
-    "unknown": 0
-  },
-  {
-    "year": 1970,
-    "total": 42265,
-    "young": 9601,
-    "working": 28991,
-    "elderly": 3673,
-    "unknown": 0
-  },
-  {
-    "year": 1975,
-    "total": 47421,
-    "young": 10972,
-    "working": 31874,
-    "elderly": 4575,
-    "unknown": 0
-  },
-  {
     "year": 1980,
-    "total": 52711,
-    "young": 12358,
-    "working": 34774,
-    "elderly": 5579,
-    "unknown": 0
+    "total": 2083934,
+    "young": 468613,
+    "working": 1362192,
+    "elderly": 253120,
+    "young_ratio": 22.48703768129851,
+    "working_age_ratio": 65.36665187086868,
+    "elderly_ratio": 12.146310447832816,
+    "aging_index": 54.01472003550904,
+    "dependency_index": 52.983206478969194
   },
   {
     "year": 1985,
-    "total": 55960,
-    "young": 12234,
-    "working": 37229,
-    "elderly": 6497,
-    "unknown": 0
+    "total": 2136927,
+    "young": 446549,
+    "working": 1398750,
+    "elderly": 291617,
+    "young_ratio": 20.896890659249124,
+    "working_age_ratio": 65.45648027344079,
+    "elderly_ratio": 13.646629067310087,
+    "aging_index": 65.30459143341493,
+    "dependency_index": 52.7732618409294
   },
   {
     "year": 1990,
-    "total": 57331,
-    "young": 10733,
-    "working": 38704,
-    "elderly": 7894,
-    "unknown": 0
+    "total": 2156627,
+    "young": 392889,
+    "working": 1416125,
+    "elderly": 347206,
+    "young_ratio": 18.221192642680244,
+    "working_age_ratio": 65.67627607572511,
+    "elderly_ratio": 16.102531281594644,
+    "aging_index": 88.3725428810682,
+    "dependency_index": 52.26198252272928
   },
   {
     "year": 1995,
-    "total": 60481,
-    "young": 9855,
-    "working": 40928,
-    "elderly": 9698,
-    "unknown": 0
+    "total": 2193984,
+    "young": 355267,
+    "working": 1421782,
+    "elderly": 416608,
+    "young_ratio": 16.195193687983124,
+    "working_age_ratio": 64.81332314030863,
+    "elderly_ratio": 18.99148317170825,
+    "aging_index": 117.26616882513714,
+    "dependency_index": 54.28926516160706
   },
   {
     "year": 2000,
-    "total": 64128,
-    "young": 9835,
-    "working": 42685,
-    "elderly": 11608,
-    "unknown": 0
+    "total": 2215168,
+    "young": 334306,
+    "working": 1404575,
+    "elderly": 475127,
+    "young_ratio": 15.099584102677136,
+    "working_age_ratio": 63.440376005868096,
+    "elderly_ratio": 21.460039891454773,
+    "aging_index": 142.1233839655884,
+    "dependency_index": 57.628321734332445
   },
   {
     "year": 2005,
-    "total": 68346,
-    "young": 10053,
-    "working": 44148,
-    "elderly": 14145,
-    "unknown": 0
+    "total": 2196114,
+    "young": 316368,
+    "working": 1356317,
+    "elderly": 521984,
+    "young_ratio": 14.415294515938395,
+    "working_age_ratio": 61.80052663978031,
+    "elderly_ratio": 23.7841788442813,
+    "aging_index": 164.9926667678147,
+    "dependency_index": 61.81091883387143
   },
   {
     "year": 2010,
-    "total": 67670,
-    "young": 9469,
-    "working": 42161,
-    "elderly": 15993,
-    "unknown": 47
+    "total": 2152449,
+    "young": 295742,
+    "working": 1281683,
+    "elderly": 569301,
+    "young_ratio": 13.776420465397074,
+    "working_age_ratio": 59.70407960773755,
+    "elderly_ratio": 26.519499926865375,
+    "aging_index": 192.4992053884805,
+    "dependency_index": 67.49274196505688
   },
   {
     "year": 2015,
-    "total": 67135,
-    "young": 8692,
-    "working": 40175,
-    "elderly": 18203,
-    "unknown": 65
+    "total": 2098804,
+    "young": 270658,
+    "working": 1198828,
+    "elderly": 629318,
+    "young_ratio": 12.89582,
+    "working_age_ratio": 57.11958,
+    "elderly_ratio": 29.9846,
+    "aging_index": 232.51409527891286,
+    "dependency_index": 75.07131965553023
   },
   {
     "year": 2020,
-    "total": 67241,
-    "young": 8360,
-    "working": 39154,
-    "elderly": 19155,
-    "unknown": 572
+    "total": 2048011,
+    "young": 245285,
+    "working": 1148164,
+    "elderly": 654562,
+    "young_ratio": 11.97674,
+    "working_age_ratio": 56.06239,
+    "elderly_ratio": 31.96086,
+    "aging_index": 266.85773691827876,
+    "dependency_index": 78.3726889190046
   }
 ]
